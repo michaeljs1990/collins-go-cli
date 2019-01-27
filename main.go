@@ -16,6 +16,8 @@ func main() {
 	}
 
 	app := cli.NewApp()
+	app.Name = "collins"
+	app.Usage = "Interface with http://tumblr.github.io/collins/"
 
 	cmds := []cli.Command{}
 	cmds = append(cmds, querySubcommand())
