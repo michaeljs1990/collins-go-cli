@@ -17,7 +17,18 @@ func main() {
 
 	app := cli.NewApp()
 	app.Name = "collins"
+  app.Version = "0.0.1"
 	app.Usage = "Interface with http://tumblr.github.io/collins/"
+  app.Flags = []cli.Flag{
+    cli.IntFlag{
+      Name:  "timeout",
+      Usage: "Timeout in seconds (0 == forever)",
+    },
+    cli.StringFlag{
+      Name:  "C, config",
+      Usage: "Use specific Collins config yaml for client",
+    },
+  }
 
 	cmds := []cli.Command{}
 	cmds = append(cmds, querySubcommand())
