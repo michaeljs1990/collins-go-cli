@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-  "strings"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
@@ -120,34 +119,27 @@ func querySubcommand() cli.Command {
 func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 	opts := collins.AssetFindOpts{}
 
-  if c.IsSet("status") {
-    status := strings.Split(c.String("status"), ":")
-    if len(status) == 2 {
-      opts.State = status[1]
-    }
-    opts.Status = status[0]
-  }
-
-  if c.IsSet("attribute") {
-    attribute := strings.Split(c.String("attribute"), ":")
-    opts.Attribute = strings.Join(attribute, ";")
-  }
-
-  return opts
-}
-
-// Render the output to the screen in the given format
-func queryOutputFormat(format string, assets []collins.Asset) {
-	for _, asset := range assets {
-		fmt.Printf("", asset.Metadata.Tag)
+	if c.IsSet("status") {
+		status := strings.Split(c.String("status"), ":")
+		if len(status) == 2 {
+			opts.State = status[1]
+		}
+		opts.Status = status[0]
 	}
+
+	if c.IsSet("attribute") {
+		attribute := strings.Split(c.String("attribute"), ":")
+		opts.Attribute = strings.Join(attribute, ";")
+	}
+
+	return opts
 }
 
 func queryRunCommand(c *cli.Context) error {
 	client := getCollinsClient(c)
 	opts := queryBuildOptions(c)
 
-  var allAssets []collins.Asset
+	var allAssets []collins.Asset
 	for {
 		assets, resp, err := client.Assets.Find(&opts)
 
@@ -155,7 +147,7 @@ func queryRunCommand(c *cli.Context) error {
 			log.Fatal(err.Error())
 		}
 
-    allAssets = append(allAssets, assets...)
+		allAssets = append(allAssets, assets...)
 
 		if resp.NextPage == resp.CurrentPage { // No more pages
 			break
@@ -164,7 +156,7 @@ func queryRunCommand(c *cli.Context) error {
 		}
 	}
 
-  queryOutputFormat("", allAssets)
+	formatAssets("table", []string{"tag", "hostname", "nodeclass", "status", "pool", "primary_role", "secondary_role"}, allAssets)
 
-  return nil
+	return nil
 }

@@ -14,7 +14,7 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 		log.Info("You can use COLLINS_CLIENT_CONFIG env to set the location of your config")
 		log.Fatal(err)
 	}
-  return collins
+	return collins
 }
 
 func main() {

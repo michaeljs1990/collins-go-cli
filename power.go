@@ -6,8 +6,8 @@ import (
 
 func powerSubcommand() cli.Command {
 	return cli.Command{
-		Name:    "power",
-		Usage:   "Control and show power status",
+		Name:  "power",
+		Usage: "Control and show power status",
 		Action: func(c *cli.Context) error {
 			return nil
 		},
