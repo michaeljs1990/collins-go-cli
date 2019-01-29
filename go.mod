@@ -1,6 +1,6 @@
 module cgit.xrt0x.com/xrt0x/collins-go-cli
 
-replace github.com/urfave/cli => github.com/michaeljs1990/cli v1.20.1-0.20190127222559-50b52ca9d52b
+replace github.com/urfave/cli => github.com/michaeljs1990/cli v1.20.1-0.20190128030917-b0494d5188b4
 
 require (
 	github.com/google/go-querystring v1.0.0 // indirect
