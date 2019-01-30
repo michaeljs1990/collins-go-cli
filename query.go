@@ -135,6 +135,33 @@ func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 	return opts
 }
 
+// This uses a "trick" of using a map to create a unique list that
+// we then turn into a slice before returning.
+func queryGetColumns(c *cli.Context) []string {
+	uniqueSet := UniqueOrderedSet{
+		"tag",
+		"hostname",
+		"nodeclass",
+		"status",
+		"pool",
+		"primary_role",
+		"secondary_role",
+	}
+
+	if c.IsSet("columns") {
+		uniqueSet = strings.Split(c.String("columns"), ",")
+	}
+
+	if c.IsSet("extra-columns") {
+		extras := strings.Split(c.String("extra-columns"), ",")
+		for _, column := range extras {
+			uniqueSet = uniqueSet.Add(column)
+		}
+	}
+
+	return uniqueSet
+}
+
 func queryRunCommand(c *cli.Context) error {
 	client := getCollinsClient(c)
 	opts := queryBuildOptions(c)
@@ -156,7 +183,8 @@ func queryRunCommand(c *cli.Context) error {
 		}
 	}
 
-	formatAssets("table", []string{"tag", "hostname", "nodeclass", "status", "pool", "primary_role", "secondary_role"}, allAssets)
+	columns := queryGetColumns(c)
+	formatAssets("table", columns, allAssets)
 
 	return nil
 }
