@@ -162,6 +162,19 @@ func queryGetColumns(c *cli.Context) []string {
 	return uniqueSet
 }
 
+func getOutputFormat(c *cli.Context) string {
+	switch {
+	case c.IsSet("link"):
+		return "link"
+	case c.IsSet("json"):
+		return "json"
+	case c.IsSet("yaml"):
+		return "yaml"
+	default:
+		return "table"
+	}
+}
+
 func queryRunCommand(c *cli.Context) error {
 	client := getCollinsClient(c)
 	opts := queryBuildOptions(c)
@@ -184,7 +197,8 @@ func queryRunCommand(c *cli.Context) error {
 	}
 
 	columns := queryGetColumns(c)
-	formatAssets("table", columns, allAssets)
+	format := getOutputFormat(c)
+	formatAssets(format, columns, allAssets)
 
 	return nil
 }

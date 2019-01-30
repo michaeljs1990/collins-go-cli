@@ -1,82 +1,240 @@
 package main
 
 import (
-	"flag"
 	"testing"
 
 	cli "github.com/urfave/cli"
 )
 
-func queryGetColumnsContext() (*cli.Context, *flag.FlagSet) {
-	set := flag.NewFlagSet("test", 0)
-	set.String("columns", "", "doc")
-	set.String("extra-columns", "", "doc")
-	return cli.NewContext(nil, set, nil), set
+// This is largely copied from the main file to create a wrapper in which we
+// can run tests in a sane way that allows for testing of short and long form flags
+func queryContext(fn func(*cli.Context), cmd []string) {
+	app := cli.App{
+		Commands: []cli.Command{
+			{
+				Name: "query",
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:     "t, tag",
+						Usage:    "Assets with tag[s] value[,...]",
+						Category: "Query options",
+					},
+					cli.BoolFlag{
+						Name:     "Z, remote-lookup",
+						Usage:    "Query remote datacenters for asset",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "T, type",
+						Usage:    "Only show asset with type value",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "n, nodeclass",
+						Usage:    "Assets in nodeclass value[,...]",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "p, pool",
+						Usage:    "Assets in pool value[,...]",
+						Category: "Query options",
+					},
+					cli.IntFlag{
+						Name:     "s, size",
+						Usage:    "Number of assets to return per page",
+						Value:    100,
+						Category: "Query options",
+					},
+					cli.IntFlag{
+						Name:     "limit",
+						Usage:    "Limit total results of assets",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "r, role",
+						Usage:    "Assets in primary role",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "R, secondary-role",
+						Usage:    "Assets in secondary role",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "i, ip-address",
+						Usage:    "Assets with IP address[es]",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "S, status",
+						Usage:    "Asset status (and optional state after :)",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "a, attribute",
+						Usage:    "Arbitrary attributes and values to match in query. : between key and value",
+						Category: "Query options",
+					},
+					cli.BoolFlag{
+						Name:     "H, show-header",
+						Usage:    "Show header fields in output",
+						Category: "Table formatting",
+					},
+					cli.StringFlag{
+						Name:     "c, columns",
+						Usage:    "Attributes to output as columns, comma separated",
+						Value:    "tag,hostname,nodeclass,status,pool,primary_role,secondary_role",
+						Category: "Table formatting",
+					},
+					cli.StringFlag{
+						Name:     "x, extra-columns",
+						Usage:    "Show these columns in addition to the default columns, comma separated",
+						Category: "Table formatting",
+					},
+					cli.StringFlag{
+						Name:     "f, field-separator",
+						Usage:    "Separator between columns in output",
+						Category: "Table formatting",
+					},
+					cli.BoolFlag{
+						Name:     "l, link",
+						Usage:    "Output link to assets found in web UI",
+						Category: "Robot formatting",
+					},
+					cli.BoolFlag{
+						Name:     "j, json",
+						Usage:    "Output results in JSON",
+						Category: "Robot formatting",
+					},
+					cli.BoolFlag{
+						Name:     "y, yaml",
+						Usage:    "Output results in YAML",
+						Category: "Robot formatting",
+					},
+				},
+				Action: func(ctx *cli.Context) error {
+					fn(ctx)
+					return nil
+				},
+			},
+		},
+	}
+
+	app.Run(cmd)
 }
 
 func TestQueryGetColumns(t *testing.T) {
 	// Simple check to see if columns flag override works
-	ctx, set := queryGetColumnsContext()
-	set.Parse([]string{"--columns", "test,in,order"})
-
-	out := queryGetColumns(ctx)
-	if out[0] != "test" || out[1] != "in" || out[2] != "order" || len(out) != 3 {
-		t.Error("Parsing columns flag failed test,in,order")
-	}
-
-	// Check to make sure setting only one field works
-	ctx, set = queryGetColumnsContext()
-	set.Parse([]string{"--columns", "first"})
-	out = queryGetColumns(ctx)
-	if out[0] != "first" || len(out) != 1 {
-		t.Error("Parsing columns flag failed first")
-	}
-
-	// Ensure that when nothing is set the default values are returned
-	defaults := []string{
-		"tag",
-		"hostname",
-		"nodeclass",
-		"status",
-		"pool",
-		"primary_role",
-		"secondary_role",
-	}
-
-	ctx, set = queryGetColumnsContext()
-	set.Parse([]string{""})
-	out = queryGetColumns(ctx)
-	for i, v := range defaults {
-		if out[i] != v {
-			t.Error("Failed getting default values when no flag is set. want: ", v, " got: ", out[i])
+	queryContext(func(ctx *cli.Context) {
+		out := queryGetColumns(ctx)
+		if out[0] != "test" || out[1] != "in" || out[2] != "order" || len(out) != 3 {
+			t.Error("Parsing columns flag failed test,in,order")
 		}
-	}
+	}, []string{"cmd", "query", "--columns", "test,in,order"})
 
-	if len(out) != 7 {
-		t.Error("Column not being set returned more flags than expected")
-	}
+	queryContext(func(ctx *cli.Context) {
+		out := queryGetColumns(ctx)
+		if out[0] != "first" || len(out) != 1 {
+			t.Error("Parsing columns flag failed first")
+		}
+	}, []string{"cmd", "query", "--columns", "first"})
 
-	// Make sure adding a single extra column works as we expect
-	ctx, set = queryGetColumnsContext()
-	set.Parse([]string{"--extra-columns", "thing"})
-	out = queryGetColumns(ctx)
-	if out[7] != "thing" {
-		t.Error("Adding one extra column seem to be broken")
-	}
+	queryContext(func(ctx *cli.Context) {
+		out := queryGetColumns(ctx)
+		defaults := []string{
+			"tag",
+			"hostname",
+			"nodeclass",
+			"status",
+			"pool",
+			"primary_role",
+			"secondary_role",
+		}
 
-	// Make sure adding two extra columns works as we expect
-	ctx, set = queryGetColumnsContext()
-	set.Parse([]string{"--extra-columns", "thing,two"})
-	out = queryGetColumns(ctx)
-	if out[7] != "thing" || out[8] != "two" {
-		t.Error("Adding two extra column seem to be broken")
-	}
+		for i, v := range defaults {
+			if out[i] != v {
+				t.Error("Failed getting default values when no flag is set. want: ", v, " got: ", out[i])
+			}
+		}
 
-	// Make sure adding columns and extra columns returns what we expect
-	ctx, set = queryGetColumnsContext()
-	set.Parse([]string{"--columns", "doing,this", "--extra-columns", "thing"})
-	out = queryGetColumns(ctx)
-	if out[0] != "doing" || out[1] != "this" || out[2] != "thing" || len(out) != 3 {
-		t.Error("Setting both columns and extra didn't return what we expect")
-	}
+		if len(out) != 7 {
+			t.Error("Column not being set returned more flags than expected")
+		}
+
+	}, []string{"cmd", "query"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryGetColumns(ctx)
+		if out[7] != "thing" {
+			t.Error("Adding one extra column seem to be broken")
+		}
+	}, []string{"cmd", "query", "--extra-columns", "thing"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryGetColumns(ctx)
+		if out[7] != "thing" || out[8] != "two" {
+			t.Error("Adding two extra column seem to be broken")
+		}
+	}, []string{"cmd", "query", "--extra-columns", "thing,two"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryGetColumns(ctx)
+		if out[0] != "doing" || out[1] != "this" || out[2] != "thing" || len(out) != 3 {
+			t.Error("Setting both columns and extra didn't return what we expect")
+		}
+	}, []string{"cmd", "query", "--extra-columns", "thing", "--columns", "doing,this"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryGetColumns(ctx)
+		if out[0] != "thing" || len(out) != 1 {
+			t.Error("Columns short flag doesn't seem to be working")
+		}
+
+	}, []string{"cmd", "query", "-c", "thing"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryGetColumns(ctx)
+		if out[0] != "thing" || out[1] != "lol" || len(out) != 2 {
+			t.Error("Columns short flag doesn't seem to be working")
+		}
+
+	}, []string{"cmd", "query", "-c", "thing", "-x", "lol"})
+
+}
+
+func TestGetOutputFormat(t *testing.T) {
+	queryContext(func(ctx *cli.Context) {
+		out := getOutputFormat(ctx)
+		if out != "link" {
+			t.Error("Expected to get link formatter got ", out)
+		}
+	}, []string{"cmd", "query", "--link"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := getOutputFormat(ctx)
+		if out != "link" {
+			t.Error("Expected to get link formatter (short form) got ", out)
+		}
+	}, []string{"cmd", "query", "-l"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := getOutputFormat(ctx)
+		if out != "json" {
+			t.Error("Expected to get json formatter (short form) got ", out)
+		}
+	}, []string{"cmd", "query", "-j"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := getOutputFormat(ctx)
+		if out != "table" {
+			t.Error("Expected to get table formatter got ", out)
+		}
+	}, []string{"cmd", "query"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := getOutputFormat(ctx)
+		if out != "yaml" {
+			t.Error("Expected to get yaml formatter got ", out)
+		}
+	}, []string{"cmd", "query", "--yaml"})
 }
