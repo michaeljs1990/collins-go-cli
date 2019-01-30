@@ -124,7 +124,6 @@ func querySubcommand() cli.Command {
 
 func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 	opts := collins.AssetFindOpts{}
-	cql := []string{}
 
 	if c.IsSet("status") {
 		status := strings.Split(c.String("status"), ":")
@@ -139,6 +138,22 @@ func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 		opts.Attribute = strings.Join(attribute, ";")
 	}
 
+	if c.IsSet("type") {
+		opts.Type = c.String("type")
+	}
+
+	if c.IsSet("remote-lookup") {
+		opts.RemoteLookup = true
+	}
+
+	opts.Query = buildOptionsQuery(c)
+
+	return opts
+}
+
+// This is broke out of build options just for the sake of making testing easier
+func buildOptionsQuery(c *cli.Context) string {
+	cql := []string{}
 	// The go client isn't as friendly as the ruby one which is fine we will just
 	// take everything else and convert it into CQL to talk to collins.
 	if c.IsSet("tag") {
@@ -149,14 +164,28 @@ func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 		cql = append(cql, "(NODECLASS = "+c.String("nodeclass")+")")
 	}
 
+	if c.IsSet("pool") {
+		cql = append(cql, "(POOL = "+c.String("pool")+")")
+	}
+
+	if c.IsSet("role") {
+		cql = append(cql, "(PRIMARY_ROLE = "+c.String("role")+")")
+	}
+
+	if c.IsSet("secondary-role") {
+		cql = append(cql, "(SECONDARY_ROLE = "+c.String("secondary-role")+")")
+	}
+
+	if c.IsSet("ip-address") {
+		cql = append(cql, "(IP_ADDRESS = "+c.String("ip-address")+")")
+	}
+
 	operation := c.String("operation")
 	if operation != "AND" && operation != "OR" {
 		log.Fatal("Operation (or o) flag may only be set to AND or OR")
 	}
 
-	opts.Query = strings.Join(cql, " "+operation+" ")
-
-	return opts
+	return strings.Join(cql, " "+operation+" ")
 }
 
 // This uses a "trick" of using a map to create a unique list that

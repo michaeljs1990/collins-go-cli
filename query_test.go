@@ -3,6 +3,8 @@ package main
 import (
 	"testing"
 
+	monkey "github.com/bouk/monkey"
+	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
 )
 
@@ -73,6 +75,12 @@ func queryContext(fn func(*cli.Context), cmd []string) {
 					cli.StringFlag{
 						Name:     "a, attribute",
 						Usage:    "Arbitrary attributes and values to match in query. : between key and value",
+						Category: "Query options",
+					},
+					cli.StringFlag{
+						Name:     "o, operation",
+						Usage:    "Sets if your query will be joined with AND or OR",
+						Value:    "AND",
 						Category: "Query options",
 					},
 					cli.BoolFlag{
@@ -237,4 +245,57 @@ func TestGetOutputFormat(t *testing.T) {
 			t.Error("Expected to get yaml formatter got ", out)
 		}
 	}, []string{"cmd", "query", "--yaml"})
+}
+
+func TestBuildOptionsQuery(t *testing.T) {
+	queryContext(func(ctx *cli.Context) {
+		out := buildOptionsQuery(ctx)
+		expected := "(NODECLASS = somenode)"
+		if out != expected {
+			t.Error("Expected ", expected, " got ", out)
+		}
+	}, []string{"cmd", "query", "-n", "somenode"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := buildOptionsQuery(ctx)
+		expected := "(NODECLASS = snode) AND (PRIMARY_ROLE = arole) AND (SECONDARY_ROLE = srole)"
+		if out != expected {
+			t.Error("Expected ", expected, " got ", out)
+		}
+	}, []string{"cmd", "query", "-n", "snode", "-r", "arole", "-R", "srole"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := buildOptionsQuery(ctx)
+		expected := "(NODECLASS = snode) OR (PRIMARY_ROLE = arole2) OR (SECONDARY_ROLE = srole2)"
+		if out != expected {
+			t.Error("Expected ", expected, " got ", out)
+		}
+	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-o", "OR"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := buildOptionsQuery(ctx)
+		expected := "(TAG = U001) OR (NODECLASS = snode) OR (POOL = DEV) OR (PRIMARY_ROLE = arole2) OR (SECONDARY_ROLE = srole2) OR (IP_ADDRESS = 10.0.0.5)"
+		if out != expected {
+			t.Error("Expected ", expected, " got ", out)
+		}
+	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-o", "OR", "-t", "U001", "--pool", "DEV", "-i", "10.0.0.5"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := buildOptionsQuery(ctx)
+		expected := "(TAG = U001) AND (NODECLASS = snode) AND (POOL = DEV) AND (PRIMARY_ROLE = arole2) AND (SECONDARY_ROLE = srole2) AND (IP_ADDRESS = 10.0.0.5)"
+		if out != expected {
+			t.Error("Expected ", expected, " got ", out)
+		}
+	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-t", "U001", "--pool", "DEV", "-i", "10.0.0.5"})
+
+	queryContext(func(ctx *cli.Context) {
+		hitFatalError := false
+		monkey.Patch(log.Fatal, func(v ...interface{}) {
+			hitFatalError = true
+		})
+		buildOptionsQuery(ctx)
+		if hitFatalError == false {
+			t.Error("LOL should throw a fatal error")
+		}
+	}, []string{"cmd", "query", "-o", "LOL"})
 }
