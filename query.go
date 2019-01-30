@@ -75,6 +75,12 @@ func querySubcommand() cli.Command {
 				Usage:    "Arbitrary attributes and values to match in query. : between key and value",
 				Category: "Query options",
 			},
+			cli.StringFlag{
+				Name:     "o, operation",
+				Usage:    "Sets if your query will be joined with AND or OR",
+				Value:    "AND",
+				Category: "Query options",
+			},
 			cli.BoolFlag{
 				Name:     "H, show-header",
 				Usage:    "Show header fields in output",
@@ -118,6 +124,7 @@ func querySubcommand() cli.Command {
 
 func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 	opts := collins.AssetFindOpts{}
+	cql := []string{}
 
 	if c.IsSet("status") {
 		status := strings.Split(c.String("status"), ":")
@@ -131,6 +138,23 @@ func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 		attribute := strings.Split(c.String("attribute"), ":")
 		opts.Attribute = strings.Join(attribute, ";")
 	}
+
+	// The go client isn't as friendly as the ruby one which is fine we will just
+	// take everything else and convert it into CQL to talk to collins.
+	if c.IsSet("tag") {
+		cql = append(cql, "(TAG = "+c.String("tag")+")")
+	}
+
+	if c.IsSet("nodeclass") {
+		cql = append(cql, "(NODECLASS = "+c.String("nodeclass")+")")
+	}
+
+	operation := c.String("operation")
+	if operation != "AND" && operation != "OR" {
+		log.Fatal("Operation (or o) flag may only be set to AND or OR")
+	}
+
+	opts.Query = strings.Join(cql, " "+operation+" ")
 
 	return opts
 }
