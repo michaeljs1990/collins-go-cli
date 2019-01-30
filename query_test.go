@@ -299,3 +299,39 @@ func TestBuildOptionsQuery(t *testing.T) {
 		}
 	}, []string{"cmd", "query", "-o", "LOL"})
 }
+
+func TestQueryBuildOptions(t *testing.T) {
+	queryContext(func(ctx *cli.Context) {
+		out := queryBuildOptions(ctx)
+		expected := "(NODECLASS = somenode)"
+		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
+			t.Error("Building simple query options failed")
+		}
+	}, []string{"cmd", "query", "-n", "somenode", "-S", "allocated:running"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryBuildOptions(ctx)
+		expected := "(NODECLASS = somenode)"
+
+		if out.Type != "SOME_TYPE" {
+			t.Error("1 - Want: ", "SOME_TYPE", "Got: ", out.Type)
+		}
+
+		if out.Query != expected {
+			t.Error("2 - Want: ", expected, "Got: ", out.Query)
+		}
+
+		if out.RemoteLookup != false {
+			t.Error("3 - Want: ", false, "Got: ", out.RemoteLookup)
+		}
+
+	}, []string{"cmd", "query", "-n", "somenode", "-T", "SOME_TYPE"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryBuildOptions(ctx)
+		if out.Attribute != "gabe;test" {
+			t.Error("Unable to set attribute when building options")
+		}
+	}, []string{"cmd", "query", "-a", "gabe:test"})
+
+}
