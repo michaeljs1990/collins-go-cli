@@ -46,8 +46,5 @@ func main() {
 	cmds = append(cmds, datacenterSubcommand())
 	app.Commands = cmds
 
-	err := app.Run(os.Args)
-	if err != nil {
-		log.Fatal(err)
-	}
+	app.Run(os.Args)
 }
