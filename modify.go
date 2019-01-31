@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"io"
 	"os"
 	"strings"
@@ -10,6 +11,8 @@ import (
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
+
+var gotError = false
 
 // Allowed values (uppercase or lowercase is accepted):
 //   Status:State (-S,--set-status):
@@ -85,18 +88,60 @@ func attributeUpdateOpts(ctx *cli.Context) []collins.AssetUpdateOpts {
 	return opts
 }
 
+func statusUpdateOpts(ctx *cli.Context) collins.AssetUpdateStatusOpts {
+	opt := collins.AssetUpdateStatusOpts{}
+
+	if ctx.IsSet("set-state") {
+		if !ctx.IsSet("reason") || ctx.String("reason") == "" {
+			log.Fatal("You need to provide a --reason when changing asset states!")
+		}
+
+		status := strings.Split(ctx.String("set-state"), ":")
+		if len(status) == 2 {
+			opt.State = status[1]
+		}
+		opt.Status = status[0]
+
+		opt.Reason = ctx.String("reason")
+	}
+
+	return opt
+}
+
 func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
+	// Generate all the options before doing anything so we don't half start
+	// applying settings and then run into an issue with the proper flags not
+	// being passed in such as status without reason.
 	attrs := attributeUpdateOpts(ctx)
+	status := statusUpdateOpts(ctx)
+	// Apply the options that we have set and try to output it in some kind
+	// of sane format for users to see what applied and what did not.
 	for _, attr := range attrs {
 		_, err := col.Assets.Update(tag, &attr)
 		attrSplit := strings.SplitN(attr.Attribute, ";", 2)
-		attrMsg := strings.Join(attrSplit, "=")
+		msg := tag + " setting " + strings.Join(attrSplit, "=")
 		if err != nil {
-			log.Error(tag + " setting " + attrMsg)
+			gotError = true
+			log.Error(msg)
 		} else {
-			log.Print(tag + " setting " + attrMsg)
+			log.Print(msg)
 		}
 	}
+
+	if status != (collins.AssetUpdateStatusOpts{}) {
+		_, err := col.Assets.UpdateStatus(tag, &status)
+		msg := tag + " changing status to " + strings.ToUpper(status.Status)
+		if status.State != "" {
+			msg = msg + ":" + strings.ToUpper(status.State)
+		}
+		if err != nil {
+			gotError = true
+			log.Error(msg)
+		} else {
+			log.Print(msg)
+		}
+	}
+
 }
 
 func modifyRunCommand(c *cli.Context) error {
@@ -117,9 +162,12 @@ func modifyRunCommand(c *cli.Context) error {
 			} else if err != nil {
 				log.Fatal(err)
 			}
-
 			modifyAssetByTag(c, client, line)
 		}
+	}
+
+	if gotError {
+		return errors.New("Some commands failed to run to success")
 	}
 
 	return nil
