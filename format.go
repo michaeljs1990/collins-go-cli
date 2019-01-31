@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -9,10 +10,10 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
-func formatAssets(format string, columns []string, assets []collins.Asset) {
+func formatAssets(format string, showHeaders bool, columns []string, assets []collins.Asset) {
 	switch format {
 	case "table":
-		renderTable(columns, assets)
+		renderTable(columns, showHeaders, assets)
 	default:
 		log.Fatal(format, " is not a supported format")
 	}
@@ -32,7 +33,7 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 	}
 }
 
-func renderTable(columns []string, assets []collins.Asset) {
+func renderTable(columns []string, showHeaders bool, assets []collins.Asset) {
 	// Find the longest column in each field so the final output is pretty.
 	maxColumnWidth := make(map[string]int)
 	for _, column := range columns {
@@ -46,12 +47,24 @@ func renderTable(columns []string, assets []collins.Asset) {
 		maxColumnWidth[column] = max
 	}
 
+	// Make sure we build the formatter back in the correct order.
+	// Golang you need more datastructures for real.
 	var formatterSlice []string
-	for _, maxWidth := range maxColumnWidth {
-		formatterSlice = append(formatterSlice, "%-"+strconv.Itoa(maxWidth)+"s")
+	for _, col := range columns {
+		fmtr := "%-" + strconv.Itoa(maxColumnWidth[col]) + "s"
+		formatterSlice = append(formatterSlice, fmtr)
 	}
 
 	formatter := strings.Join(formatterSlice, "\t")
+
+	if showHeaders {
+		headers := make([]interface{}, len(columns))
+		for i, v := range columns {
+			headers[i] = v
+		}
+
+		fmt.Fprintf(os.Stderr, formatter+"\n", headers...)
+	}
 
 	for _, asset := range assets {
 		// We use an interface instead of a slice becasue Printf requires this.

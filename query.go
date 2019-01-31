@@ -251,7 +251,8 @@ func queryRunCommand(c *cli.Context) error {
 
 	columns := queryGetColumns(c)
 	format := getOutputFormat(c)
-	formatAssets(format, columns, allAssets)
+	showHeaders := c.Bool("show-header")
+	formatAssets(format, showHeaders, columns, allAssets)
 
 	return nil
 }
