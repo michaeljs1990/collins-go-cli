@@ -233,7 +233,7 @@ func queryRunCommand(c *cli.Context) error {
 	// Don't run if nothing is passed into the command
 	if len(os.Args) == 2 {
 		log.Error("See --help for collins query usage")
-    os.Exit(1)
+		os.Exit(1)
 	}
 
 	client := getCollinsClient(c)
