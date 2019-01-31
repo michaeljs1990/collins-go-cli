@@ -88,6 +88,14 @@ func attributeUpdateOpts(ctx *cli.Context) []collins.AssetUpdateOpts {
 	return opts
 }
 
+func attributeDeleteStrings(ctx *cli.Context) []string {
+	if ctx.IsSet("d") || ctx.IsSet("delete-attribute") {
+		return ctx.StringSlice("delete-attribute")
+	}
+
+	return []string{}
+}
+
 func statusUpdateOpts(ctx *cli.Context) collins.AssetUpdateStatusOpts {
 	opt := collins.AssetUpdateStatusOpts{}
 
@@ -114,12 +122,24 @@ func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 	// being passed in such as status without reason.
 	attrs := attributeUpdateOpts(ctx)
 	status := statusUpdateOpts(ctx)
+	delattrs := attributeDeleteStrings(ctx)
 	// Apply the options that we have set and try to output it in some kind
 	// of sane format for users to see what applied and what did not.
 	for _, attr := range attrs {
 		_, err := col.Assets.Update(tag, &attr)
 		attrSplit := strings.SplitN(attr.Attribute, ";", 2)
 		msg := tag + " setting " + strings.Join(attrSplit, "=")
+		if err != nil {
+			gotError = true
+			log.Error(msg)
+		} else {
+			log.Print(msg)
+		}
+	}
+
+	for _, attr := range delattrs {
+		_, err := col.Assets.DeleteAttribute(tag, attr)
+		msg := tag + " deleting " + attr
 		if err != nil {
 			gotError = true
 			log.Error(msg)
