@@ -231,6 +231,18 @@ func getOutputFormat(c *cli.Context) string {
 func queryRunCommand(c *cli.Context) error {
 	client := getCollinsClient(c)
 	opts := queryBuildOptions(c)
+	size := c.Int("size")
+
+	// Kinda hacky but if limit is set we just set
+	// that as the page size and break after the first
+	// call to get assets.
+	if c.IsSet("limit") {
+		size = c.Int("limit")
+	}
+
+	opts.PageOpts = collins.PageOpts{
+		Size: size,
+	}
 
 	var allAssets []collins.Asset
 	for {
@@ -241,6 +253,11 @@ func queryRunCommand(c *cli.Context) error {
 		}
 
 		allAssets = append(allAssets, assets...)
+
+		// Limit was set break out of the loop now
+		if c.IsSet("limit") {
+			break
+		}
 
 		if resp.NextPage == resp.CurrentPage { // No more pages
 			break
