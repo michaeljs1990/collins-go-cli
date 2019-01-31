@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -229,6 +230,12 @@ func getOutputFormat(c *cli.Context) string {
 }
 
 func queryRunCommand(c *cli.Context) error {
+	// Don't run if nothing is passed into the command
+	if len(os.Args) == 2 {
+		log.Error("See --help for collins query usage")
+    os.Exit(1)
+	}
+
 	client := getCollinsClient(c)
 	opts := queryBuildOptions(c)
 	size := c.Int("size")
