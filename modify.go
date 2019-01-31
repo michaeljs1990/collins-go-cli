@@ -116,6 +116,49 @@ func statusUpdateOpts(ctx *cli.Context) collins.AssetUpdateStatusOpts {
 	return opt
 }
 
+func logCreateOpts(ctx *cli.Context) collins.LogCreateOpts {
+	opts := collins.LogCreateOpts{}
+
+	if ctx.IsSet("log") && ctx.String("log") == "" {
+		log.Fatal("You need to provide a message with the --log flag")
+	} else if ctx.IsSet("log") {
+		opts.Message = ctx.String("log")
+		opts.Type = "NOTE"
+	}
+
+	validLevels := []string{
+		"ERROR",
+		"DEBUG",
+		"EMERGENCY",
+		"ALERT",
+		"CRITICAL",
+		"WARNING",
+		"NOTICE",
+		"INFORMATIONAL",
+		"NOTE"}
+
+	// Only set the level if log is also set otherwise we will
+	// just ignore this option from the user.
+	if ctx.IsSet("level") && ctx.IsSet("log") {
+		valid := false
+		level := strings.ToUpper(ctx.String("level"))
+		for _, vlevel := range validLevels {
+			if level == vlevel {
+				valid = true
+			}
+		}
+
+		if !valid {
+			log.Fatal("Your log level is not valid")
+		}
+
+		opts.Type = level
+	}
+
+	return opts
+}
+
+// Run everything that will mutate the assets state in this function
 func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 	// Generate all the options before doing anything so we don't half start
 	// applying settings and then run into an issue with the proper flags not
@@ -123,6 +166,8 @@ func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 	attrs := attributeUpdateOpts(ctx)
 	status := statusUpdateOpts(ctx)
 	delattrs := attributeDeleteStrings(ctx)
+	logMsg := logCreateOpts(ctx)
+
 	// Apply the options that we have set and try to output it in some kind
 	// of sane format for users to see what applied and what did not.
 	for _, attr := range attrs {
@@ -162,6 +207,15 @@ func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 		}
 	}
 
+	if logMsg != (collins.LogCreateOpts{}) {
+		_, _, err := col.Logs.Create(tag, &logMsg)
+		msg := tag + " logging " + strings.ToLower(logMsg.Type) + "\"" + logMsg.Message + "\""
+		if err != nil {
+			log.Error(msg)
+		} else {
+			log.Print(msg)
+		}
+	}
 }
 
 func modifyRunCommand(c *cli.Context) error {
