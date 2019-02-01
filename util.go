@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	color "github.com/logrusorgru/aurora"
 )
 
 // This is kinda dumb but go has pretty limited data structure types
@@ -30,7 +32,16 @@ func (u UniqueOrderedSet) Add(s string) UniqueOrderedSet {
 	return append(u, s)
 }
 
+// Helper functions for printing
 func logAndDie(msg string) {
 	fmt.Fprintln(os.Stderr, msg)
 	os.Exit(1)
+}
+
+func printSuccess() {
+	fmt.Println(color.Green("SUCCESS"))
+}
+
+func printError(e string) {
+	fmt.Println(color.Red("ERROR "), "("+e+")")
 }

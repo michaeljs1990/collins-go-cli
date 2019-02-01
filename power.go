@@ -48,7 +48,6 @@ func powerActionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 		var err error
 		switch ctx.String("power") {
 		case "reboot", "rebootSoft":
-
 			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
 			_, err = col.Management.SoftReboot(tag)
 		case "reboothard":
@@ -72,9 +71,9 @@ func powerActionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 
 		if err != nil {
 			gotError = true
-			fmt.Print("ERROR ", "("+err.Error()+")\n")
+			printError(err.Error())
 		} else {
-			fmt.Print("SUCCESS\n")
+			printSuccess()
 		}
 
 		return

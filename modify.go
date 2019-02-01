@@ -8,9 +8,9 @@ import (
 	"os"
 	"strings"
 
+	color "github.com/logrusorgru/aurora"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
-  color "github.com/logrusorgru/aurora"
 )
 
 // We want to allow errors to happen and still keep running. However if any
@@ -175,9 +175,9 @@ func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 		_, err := col.Assets.Update(tag, &attr)
 		if err != nil {
 			gotError = true
-			fmt.Println(color.Red("ERROR "), "("+err.Error()+")")
+			printError(err.Error())
 		} else {
-			fmt.Println(color.Green("SUCCESS"))
+			printSuccess()
 		}
 	}
 
@@ -188,9 +188,9 @@ func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 		_, err := col.Assets.DeleteAttribute(tag, attr)
 		if err != nil {
 			gotError = true
-			fmt.Println(color.Red("ERROR "), "("+err.Error()+")")
+			printError(err.Error())
 		} else {
-			fmt.Println(color.Green("SUCCESS"))
+			printSuccess()
 		}
 	}
 
@@ -204,9 +204,9 @@ func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 		}
 		if err != nil {
 			gotError = true
-			fmt.Println(color.Red("ERROR "), "("+err.Error()+")")
+			printError(err.Error())
 		} else {
-			fmt.Println(color.Green("SUCCESS"))
+			printSuccess()
 		}
 	}
 
@@ -216,9 +216,9 @@ func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 
 		_, _, err := col.Logs.Create(tag, &logMsg)
 		if err != nil {
-			fmt.Println(color.Red("ERROR "), "("+err.Error()+")")
+			printError(err.Error())
 		} else {
-			fmt.Println(color.Green("SUCCESS"))
+			printSuccess()
 		}
 	}
 }

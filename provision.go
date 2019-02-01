@@ -85,9 +85,9 @@ func provisionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 	_, err := col.Management.Provision(tag, profile, contact, opts)
 	if err != nil {
 		gotError = true
-		fmt.Print("ERROR (" + err.Error() + ")\n")
+		printError(err.Error())
 	} else {
-		fmt.Print("SUCCESS\n")
+		printSuccess()
 	}
 }
 
