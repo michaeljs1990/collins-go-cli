@@ -236,7 +236,13 @@ func modifyRunCommand(c *cli.Context) error {
 			} else if err != nil {
 				log.Fatal(err)
 			}
-			modifyAssetByTag(c, client, line)
+
+			// If a newline was all that was recieved from stdin
+			// ignore it and keep going.
+			tag := strings.Fields(line)
+			if len(tag) >= 1 {
+				modifyAssetByTag(c, client, tag[0])
+			}
 		}
 	}
 
