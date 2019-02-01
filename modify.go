@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 
-	color "github.com/logrusorgru/aurora"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
