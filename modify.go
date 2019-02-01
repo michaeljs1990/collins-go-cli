@@ -12,13 +12,9 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
+// We want to allow errors to happen and still keep running. However if any
+// error does happen we don't want to exit with a 0 status.
 var gotError = false
-
-// Allowed values (uppercase or lowercase is accepted):
-//   Status:State (-S,--set-status):
-//     See `collins state --list`
-//   Log levels (-L,--level):
-//     ERROR, DEBUG, EMERGENCY, ALERT, CRITICAL, WARNING, NOTICE, INFORMATIONAL, NOTE
 
 func modifySubcommand() cli.Command {
 	return cli.Command{
