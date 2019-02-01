@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
@@ -48,46 +48,53 @@ func powerActionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 		var err error
 		switch ctx.String("power") {
 		case "reboot", "rebootSoft":
+
+			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
 			_, err = col.Management.SoftReboot(tag)
 		case "reboothard":
+			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
 			_, err = col.Management.HardReboot(tag)
 		case "poweron", "on":
+			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
 			_, err = col.Management.PowerOn(tag)
 		case "poweroff", "off":
+			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
 			_, err = col.Management.SoftPowerOff(tag)
 		case "identify":
+			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
 			_, err = col.Management.Identify(tag)
 		case "verify":
+			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
 			_, err = col.Management.Verify(tag)
 		default:
-			log.Fatal("Unknown power action rebootx, expecting one of reboot,rebootsoft,reboothard,on,off,poweron,poweroff,identify,verify")
+			logAndDie("Unknown power action rebootx, expecting one of reboot,rebootsoft,reboothard,on,off,poweron,poweroff,identify,verify")
 		}
 
-		msg := tag + " performing " + ctx.String("power") + " ..."
 		if err != nil {
 			gotError = true
-			log.Error(msg)
+			fmt.Print("ERROR ", "("+err.Error()+")\n")
 		} else {
-			log.Print(msg)
+			fmt.Print("SUCCESS\n")
 		}
 
 		return
 	}
 
 	if ctx.IsSet("status") {
+		msg := tag + " checking power status ... "
+		fmt.Print(msg)
+
 		stat, _, err := col.Management.PowerStatus(tag)
 
 		if stat == "" {
 			stat = "Unknown"
 		}
 
-		msg := tag + " checking power status ... (" + stat + ")"
 		if err != nil {
 			gotError = true
-			log.Error(msg)
-		} else {
-			log.Print(msg)
 		}
+
+		fmt.Print("(" + stat + ")\n")
 
 		return
 	}
@@ -110,7 +117,7 @@ func powerRunCommand(c *cli.Context) error {
 			if err == io.EOF {
 				break
 			} else if err != nil {
-				log.Fatal(err)
+				logAndDie(err.Error())
 			}
 
 			// If a newline was all that was recieved from stdin

@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
-	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
@@ -11,8 +11,8 @@ import (
 func getCollinsClient(c *cli.Context) *collins.Client {
 	collins, err := collins.NewClientFromYaml()
 	if err != nil {
-		log.Info("You can use COLLINS_CLIENT_CONFIG env to set the location of your config")
-		log.Fatal(err)
+		fmt.Println("You can use COLLINS_CLIENT_CONFIG env to set the location of your config")
+		logAndDie(err.Error())
 	}
 	return collins
 }

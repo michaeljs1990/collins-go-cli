@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
@@ -73,19 +73,21 @@ func provisionMakeOpts(ctx *cli.Context, tag string) collins.ProvisionOpts {
 
 func provisionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 	if !ctx.IsSet("nodeclass") {
-		log.Fatal("You need to specify at least a nodeclass when provisioning")
+		logAndDie("You need to specify at least a nodeclass when provisioning")
 	}
 
 	opts := provisionMakeOpts(ctx, tag)
 	profile := ctx.String("nodeclass")
 	contact := ctx.String("build-contact")
-	_, err := col.Management.Provision(tag, profile, contact, opts)
 	msg := tag + " provisioning with nodeclass:" + profile + " by " + contact + "... "
+	fmt.Print(msg)
+
+	_, err := col.Management.Provision(tag, profile, contact, opts)
 	if err != nil {
 		gotError = true
-		log.Error(msg + "ERROR")
+		fmt.Print("ERROR (" + err.Error() + ")\n")
 	} else {
-		log.Print(msg + "SUCCESS")
+		fmt.Print("SUCCESS\n")
 	}
 }
 
@@ -105,7 +107,7 @@ func provisionRunCommand(c *cli.Context) error {
 			if err == io.EOF {
 				break
 			} else if err != nil {
-				log.Fatal(err)
+				logAndDie(err.Error())
 			}
 
 			// If a newline was all that was recieved from stdin

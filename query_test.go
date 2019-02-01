@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	monkey "github.com/bouk/monkey"
-	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
 )
 
@@ -303,7 +302,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 
 	queryContext(func(ctx *cli.Context) {
 		hitFatalError := false
-		monkey.Patch(log.Fatal, func(v ...interface{}) {
+		monkey.Patch(logAndDie, func(msg string) {
 			hitFatalError = true
 		})
 		buildOptionsQuery(ctx, "")

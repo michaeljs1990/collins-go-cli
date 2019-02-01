@@ -4,7 +4,6 @@ import (
 	"os"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
@@ -192,7 +191,7 @@ func buildOptionsQuery(c *cli.Context, hostname string) string {
 
 	operation := c.String("operation")
 	if operation != "AND" && operation != "OR" {
-		log.Fatal("Operation (or o) flag may only be set to AND or OR")
+		logAndDie("Operation (or o) flag may only be set to AND or OR")
 	}
 
 	return strings.Join(cql, " "+operation+" ")
@@ -241,8 +240,7 @@ func getOutputFormat(c *cli.Context) string {
 func queryRunCommand(c *cli.Context) error {
 	// Don't run if nothing is passed into the command
 	if len(os.Args) == 2 {
-		log.Error("See --help for collins query usage")
-		os.Exit(1)
+		logAndDie("See --help for collins query usage")
 	}
 
 	// If the user passes in an argument we treat it as a
@@ -273,7 +271,7 @@ func queryRunCommand(c *cli.Context) error {
 		assets, resp, err := client.Assets.Find(&opts)
 
 		if err != nil {
-			log.Fatal(err.Error())
+			logAndDie(err.Error())
 		}
 
 		allAssets = append(allAssets, assets...)

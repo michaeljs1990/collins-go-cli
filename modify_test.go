@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	monkey "github.com/bouk/monkey"
-	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
 )
 
@@ -82,7 +81,7 @@ func TestLogCreateOpts(t *testing.T) {
 
 	modifyContext(func(ctx *cli.Context) {
 		hitFatalError := false
-		monkey.Patch(log.Fatal, func(v ...interface{}) {
+		monkey.Patch(logAndDie, func(msg string) {
 			hitFatalError = true
 		})
 
@@ -112,7 +111,7 @@ func TestStatusUpdateOpts(t *testing.T) {
 
 	modifyContext(func(ctx *cli.Context) {
 		hitFatalError := false
-		monkey.Patch(log.Fatal, func(v ...interface{}) {
+		monkey.Patch(logAndDie, func(msg string) {
 			hitFatalError = true
 		})
 
@@ -174,7 +173,7 @@ func TestAttributeUpdateOpts(t *testing.T) {
 
 	modifyContext(func(ctx *cli.Context) {
 		hitFatalError := false
-		monkey.Patch(log.Fatal, func(v ...interface{}) {
+		monkey.Patch(logAndDie, func(msg string) {
 			hitFatalError = true
 		})
 

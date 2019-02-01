@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
@@ -15,7 +14,7 @@ func formatAssets(format string, showHeaders bool, columns []string, assets []co
 	case "table":
 		renderTable(columns, showHeaders, assets)
 	default:
-		log.Fatal(format, " is not a supported format")
+		logAndDie(format + " is not a supported format")
 	}
 }
 

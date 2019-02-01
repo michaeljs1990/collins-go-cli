@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"os"
+)
+
 // This is kinda dumb but go has pretty limited data structure types
 // this means no Sets. We only support adding values via the Add method
 // creating a UniqueOrderedSet with duplicate values will not cause it to
@@ -23,4 +28,9 @@ func (u UniqueOrderedSet) Add(s string) UniqueOrderedSet {
 	}
 
 	return append(u, s)
+}
+
+func logAndDie(msg string) {
+	fmt.Fprintln(os.Stderr, msg)
+	os.Exit(1)
 }

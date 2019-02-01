@@ -3,13 +3,14 @@ package main
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
+  color "github.com/logrusorgru/aurora"
 )
 
 // We want to allow errors to happen and still keep running. However if any
@@ -71,7 +72,7 @@ func attributeUpdateOpts(ctx *cli.Context) []collins.AssetUpdateOpts {
 		for _, attr := range attrs {
 			attrSplit := strings.SplitN(attr, ":", 2)
 			if len(attrSplit) != 2 {
-				log.Fatal("--set-attribute and -a requires attribute:value, missing :value")
+				logAndDie("--set-attribute and -a requires attribute:value, missing :value")
 			}
 
 			attrJoin := strings.Join(attrSplit, ";")
@@ -97,7 +98,7 @@ func statusUpdateOpts(ctx *cli.Context) collins.AssetUpdateStatusOpts {
 
 	if ctx.IsSet("set-state") {
 		if !ctx.IsSet("reason") || ctx.String("reason") == "" {
-			log.Fatal("You need to provide a --reason when changing asset states!")
+			logAndDie("You need to provide a --reason when changing asset states!")
 		}
 
 		status := strings.Split(ctx.String("set-state"), ":")
@@ -116,7 +117,7 @@ func logCreateOpts(ctx *cli.Context) collins.LogCreateOpts {
 	opts := collins.LogCreateOpts{}
 
 	if ctx.IsSet("log") && ctx.String("log") == "" {
-		log.Fatal("You need to provide a message with the --log flag")
+		logAndDie("You need to provide a message with the --log flag")
 	} else if ctx.IsSet("log") {
 		opts.Message = ctx.String("log")
 		opts.Type = "NOTE"
@@ -145,7 +146,7 @@ func logCreateOpts(ctx *cli.Context) collins.LogCreateOpts {
 		}
 
 		if !valid {
-			log.Fatal("Your log level is not valid")
+			logAndDie("Your log level is not valid")
 		}
 
 		opts.Type = level
@@ -167,49 +168,57 @@ func modifyAssetByTag(ctx *cli.Context, col *collins.Client, tag string) {
 	// Apply the options that we have set and try to output it in some kind
 	// of sane format for users to see what applied and what did not.
 	for _, attr := range attrs {
-		_, err := col.Assets.Update(tag, &attr)
 		attrSplit := strings.SplitN(attr.Attribute, ";", 2)
-		msg := tag + " setting " + strings.Join(attrSplit, "=")
+		msg := tag + " setting " + strings.Join(attrSplit, "=") + " ... "
+		fmt.Print(msg)
+
+		_, err := col.Assets.Update(tag, &attr)
 		if err != nil {
 			gotError = true
-			log.Error(msg)
+			fmt.Println(color.Red("ERROR "), "("+err.Error()+")")
 		} else {
-			log.Print(msg)
+			fmt.Println(color.Green("SUCCESS"))
 		}
 	}
 
 	for _, attr := range delattrs {
+		msg := tag + " deleting " + attr + " ... "
+		fmt.Print(msg)
+
 		_, err := col.Assets.DeleteAttribute(tag, attr)
-		msg := tag + " deleting " + attr
 		if err != nil {
 			gotError = true
-			log.Error(msg)
+			fmt.Println(color.Red("ERROR "), "("+err.Error()+")")
 		} else {
-			log.Print(msg)
+			fmt.Println(color.Green("SUCCESS"))
 		}
 	}
 
 	if status != (collins.AssetUpdateStatusOpts{}) {
+		msg := tag + " changing status to " + strings.ToUpper(status.Status) + " ... "
+		fmt.Print(msg)
+
 		_, err := col.Assets.UpdateStatus(tag, &status)
-		msg := tag + " changing status to " + strings.ToUpper(status.Status)
 		if status.State != "" {
 			msg = msg + ":" + strings.ToUpper(status.State)
 		}
 		if err != nil {
 			gotError = true
-			log.Error(msg)
+			fmt.Println(color.Red("ERROR "), "("+err.Error()+")")
 		} else {
-			log.Print(msg)
+			fmt.Println(color.Green("SUCCESS"))
 		}
 	}
 
 	if logMsg != (collins.LogCreateOpts{}) {
+		msg := tag + " logging " + strings.ToLower(logMsg.Type) + "\"" + logMsg.Message + "\" ... "
+		fmt.Print(msg)
+
 		_, _, err := col.Logs.Create(tag, &logMsg)
-		msg := tag + " logging " + strings.ToLower(logMsg.Type) + "\"" + logMsg.Message + "\""
 		if err != nil {
-			log.Error(msg)
+			fmt.Println(color.Red("ERROR "), "("+err.Error()+")")
 		} else {
-			log.Print(msg)
+			fmt.Println(color.Green("SUCCESS"))
 		}
 	}
 }
@@ -230,7 +239,7 @@ func modifyRunCommand(c *cli.Context) error {
 			if err == io.EOF {
 				break
 			} else if err != nil {
-				log.Fatal(err)
+				logAndDie(err.Error())
 			}
 
 			// If a newline was all that was recieved from stdin
