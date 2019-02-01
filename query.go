@@ -123,7 +123,7 @@ func querySubcommand() cli.Command {
 	}
 }
 
-func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
+func queryBuildOptions(c *cli.Context, hostname string) collins.AssetFindOpts {
 	opts := collins.AssetFindOpts{}
 
 	if c.IsSet("status") {
@@ -136,6 +136,12 @@ func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 
 	if c.IsSet("attribute") {
 		attribute := strings.Split(c.String("attribute"), ":")
+		// HACK: Check to make sure the user didn't slip in a hostname since the ruby
+		// client seems to have some nice magic around how it handles this that isn't
+		// possible in go without a bit of work.
+		if attribute[0] == "hostname" && hostname != "" {
+			attribute[1] = hostname
+		}
 		opts.Attribute = strings.Join(attribute, ";")
 	}
 
@@ -147,13 +153,13 @@ func queryBuildOptions(c *cli.Context) collins.AssetFindOpts {
 		opts.RemoteLookup = true
 	}
 
-	opts.Query = buildOptionsQuery(c)
+	opts.Query = buildOptionsQuery(c, hostname)
 
 	return opts
 }
 
 // This is broke out of build options just for the sake of making testing easier
-func buildOptionsQuery(c *cli.Context) string {
+func buildOptionsQuery(c *cli.Context, hostname string) string {
 	cql := []string{}
 	// The go client isn't as friendly as the ruby one which is fine we will just
 	// take everything else and convert it into CQL to talk to collins.
@@ -179,6 +185,10 @@ func buildOptionsQuery(c *cli.Context) string {
 
 	if c.IsSet("ip-address") {
 		cql = append(cql, "(IP_ADDRESS = "+c.String("ip-address")+")")
+	}
+
+	if hostname != "" {
+		cql = append(cql, "(HOSTNAME = "+hostname+")")
 	}
 
 	operation := c.String("operation")
@@ -236,8 +246,16 @@ func queryRunCommand(c *cli.Context) error {
 		os.Exit(1)
 	}
 
+	// If the user passes in an argument we treat it as a
+	// hostname and pass it along it overwrites hostname
+	// in the case you set it as an attribute
+	hostname := ""
+	if c.NArg() > 0 {
+		hostname = c.Args().Get(0)
+	}
+
 	client := getCollinsClient(c)
-	opts := queryBuildOptions(c)
+	opts := queryBuildOptions(c, hostname)
 	size := c.Int("size")
 
 	// Kinda hacky but if limit is set we just set
