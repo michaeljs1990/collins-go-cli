@@ -139,10 +139,9 @@ func queryBuildOptions(c *cli.Context, hostname string) collins.AssetFindOpts {
 		// HACK: Check to make sure the user didn't slip in a hostname since the ruby
 		// client seems to have some nice magic around how it handles this that isn't
 		// possible in go without a bit of work.
-		if attribute[0] == "hostname" && hostname != "" {
-			attribute[1] = hostname
+		if attribute[0] != "hostname" || hostname == "" {
+			opts.Attribute = strings.Join(attribute, ";")
 		}
-		opts.Attribute = strings.Join(attribute, ";")
 	}
 
 	if c.IsSet("type") {

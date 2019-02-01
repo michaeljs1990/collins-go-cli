@@ -249,7 +249,7 @@ func TestGetOutputFormat(t *testing.T) {
 
 func TestBuildOptionsQuery(t *testing.T) {
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx)
+		out := buildOptionsQuery(ctx, "")
 		expected := "(NODECLASS = somenode)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -257,7 +257,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx)
+		out := buildOptionsQuery(ctx, "")
 		expected := "(NODECLASS = snode) AND (PRIMARY_ROLE = arole) AND (SECONDARY_ROLE = srole)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -265,7 +265,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "snode", "-r", "arole", "-R", "srole"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx)
+		out := buildOptionsQuery(ctx, "")
 		expected := "(NODECLASS = snode) OR (PRIMARY_ROLE = arole2) OR (SECONDARY_ROLE = srole2)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -273,7 +273,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-o", "OR"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx)
+		out := buildOptionsQuery(ctx, "")
 		expected := "(TAG = U001) OR (NODECLASS = snode) OR (POOL = DEV) OR (PRIMARY_ROLE = arole2) OR (SECONDARY_ROLE = srole2) OR (IP_ADDRESS = 10.0.0.5)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -281,7 +281,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-o", "OR", "-t", "U001", "--pool", "DEV", "-i", "10.0.0.5"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx)
+		out := buildOptionsQuery(ctx, "")
 		expected := "(TAG = U001) AND (NODECLASS = snode) AND (POOL = DEV) AND (PRIMARY_ROLE = arole2) AND (SECONDARY_ROLE = srole2) AND (IP_ADDRESS = 10.0.0.5)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -289,20 +289,34 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-t", "U001", "--pool", "DEV", "-i", "10.0.0.5"})
 
 	queryContext(func(ctx *cli.Context) {
+		out := buildOptionsQuery(ctx, "dev")
+		expected := "(HOSTNAME = dev)"
+		if out != expected {
+			t.Error("Expected ", expected, " got ", out)
+		}
+
+		out2 := queryBuildOptions(ctx, "dev")
+		if out2.Attribute != "test;thing" {
+			t.Error("Attribute was net set properly from passed in flag")
+		}
+	}, []string{"cmd", "query", "-a", "test:thing", "dev"})
+
+	queryContext(func(ctx *cli.Context) {
 		hitFatalError := false
 		monkey.Patch(log.Fatal, func(v ...interface{}) {
 			hitFatalError = true
 		})
-		buildOptionsQuery(ctx)
+		buildOptionsQuery(ctx, "")
 		if hitFatalError == false {
 			t.Error("LOL should throw a fatal error")
 		}
 	}, []string{"cmd", "query", "-o", "LOL"})
+
 }
 
 func TestQueryBuildOptions(t *testing.T) {
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx)
+		out := queryBuildOptions(ctx, "")
 		expected := "(NODECLASS = somenode)"
 		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
 			t.Error("Building simple query options failed")
@@ -310,28 +324,44 @@ func TestQueryBuildOptions(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode", "-S", "allocated:running"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx)
+		out := queryBuildOptions(ctx, "")
 		expected := "(NODECLASS = somenode)"
 
 		if out.Type != "SOME_TYPE" {
-			t.Error("1 - Want: ", "SOME_TYPE", "Got: ", out.Type)
+			t.Error("1 - Want: ", "SOME_TYPE", " Got: ", out.Type)
 		}
 
 		if out.Query != expected {
-			t.Error("2 - Want: ", expected, "Got: ", out.Query)
+			t.Error("2 - Want: ", expected, " Got: ", out.Query)
 		}
 
 		if out.RemoteLookup != false {
-			t.Error("3 - Want: ", false, "Got: ", out.RemoteLookup)
+			t.Error("3 - Want: ", false, " Got: ", out.RemoteLookup)
 		}
 
 	}, []string{"cmd", "query", "-n", "somenode", "-T", "SOME_TYPE"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx)
+		out := queryBuildOptions(ctx, "")
 		if out.Attribute != "gabe;test" {
 			t.Error("Unable to set attribute when building options")
 		}
 	}, []string{"cmd", "query", "-a", "gabe:test"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryBuildOptions(ctx, "hi")
+		want := ""
+		if out.Attribute != "" {
+			t.Error("Want:", want, " Got:", out.Attribute)
+		}
+	}, []string{"cmd", "query", "-a", "hostname:test", "hi"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryBuildOptions(ctx, "hi")
+		want := "pool;test"
+		if out.Attribute != want {
+			t.Error("Want:", want, " Got:", out.Attribute)
+		}
+	}, []string{"cmd", "query", "-a", "pool:test", "hi"})
 
 }
