@@ -14,11 +14,12 @@ that disabled your system gems. Additionally I also just wanted to write somethi
 |--------------------------------------|:-------:|
 |Query subcommand feature parity       |90%      |
 |Power subcommand feature parity       |90%      |
-|Datacenter subcommand feature parity  |         |
+|Datacenter subcommand feature parity  |0%       |
 |Modify subcommand feature parity      |100%     |
-|Log subcommand feature parity         |         |
+|Log subcommand feature parity         |0%       |
 |Provision subcommand feature parity   |90%      |
-|IPAM subcommand feature parity        |         |
+|IPAM subcommand feature parity        |0%       |
+|State subcommand feature parity       |0%       |
 
 ## Notes
 
