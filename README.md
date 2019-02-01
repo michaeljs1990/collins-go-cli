@@ -12,10 +12,15 @@ that disabled your system gems. Additionally I also just wanted to write somethi
 
 |Feature                               |Completed|
 |--------------------------------------|:-------:|
-|Query subcommand feature parity       |         |
+|Query subcommand feature parity       |90%      |
 |Log subcommand feature parity         |         |
 |Datacenter subcommand feature parity  |         |
-|Modify subcommand feature parity      |         |
+|Modify subcommand feature parity      |100%     |
 |Log subcommand feature parity         |         |
 |Provision subcommand feature parity   |         |
 |IPAM subcommand feature parity        |         |
+
+## Notes
+
+* The query subcommand is missing some output formatting such as YAML, JSON, and Links however
+the ability to query assets is the same as the ruby version.
