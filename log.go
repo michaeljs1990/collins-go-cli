@@ -105,10 +105,8 @@ func handleLogs(c *cli.Context, col *collins.Client, tags []string) {
 	seenLogIDs := map[int]bool{}
 	for {
 		logsThisRun := []collins.Log{}
-		var resp *collins.Response
 		for _, tag := range tags {
-			logs, r, err := col.Logs.Get(tag, &opts)
-			resp = r
+			logs, _, err = col.Logs.Get(tag, &opts)
 			if err != nil {
 				fmt.Println("Unable to fetch logs for " + tag + ": " + err.Error())
 			}
@@ -122,6 +120,8 @@ func handleLogs(c *cli.Context, col *collins.Client, tags []string) {
 			return logsThisRun[i].ID < logsThisRun[j].ID
 		})
 
+		// Only print out messages that we have not seen before and
+		// pop the message onto the end of the string formatter
 		for _, log := range logsThisRun {
 			var fields []interface{}
 
@@ -131,18 +131,16 @@ func handleLogs(c *cli.Context, col *collins.Client, tags []string) {
 
 			fields = append(fields, log.Message)
 
-			fmt.Printf(format+"\n", fields...)
-			seenLogIDs[log.ID] = true
+			if _, ok := seenLogIDs[log.ID]; ok {
+				continue
+			} else {
+				fmt.Printf(format+"\n", fields...)
+				seenLogIDs[log.ID] = true
+			}
 		}
 
 		if !c.IsSet("follow") {
 			break
-		}
-
-		if resp.NextPage == resp.CurrentPage { // No more pages
-			break
-		} else { // Fetch next page
-			opts.PageOpts.Page++
 		}
 	}
 }
