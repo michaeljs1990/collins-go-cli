@@ -14,7 +14,7 @@ that disabled your system gems. Additionally I also just wanted to write somethi
 |--------------------------------------|:-------:|
 |Query subcommand feature parity       |90%      |
 |Power subcommand feature parity       |100%     |
-|Datacenter subcommand feature parity  |0%       |
+|Datacenter subcommand feature parity  |100%     |
 |Modify subcommand feature parity      |100%     |
 |Log subcommand feature parity         |100%     |
 |Provision subcommand feature parity   |100%     |
