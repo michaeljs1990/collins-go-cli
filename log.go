@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
+	color "github.com/logrusorgru/aurora"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
@@ -47,6 +50,28 @@ func logSubcommand() cli.Command {
 	}
 }
 
+// Given a string name give it the proper color scheme
+func colorType(sev string) string {
+	switch sev {
+	case "EMERGENCY":
+		return color.Magenta(sev).String()
+	case "ALERT", "ERROR":
+		return color.Red(sev).String()
+	case "INFORMATIONAL":
+		return color.Green(sev).String()
+	case "DEBUG":
+		return color.Blue(sev).String()
+	case "NOTE":
+		return color.Cyan(sev).String()
+	case "CRITICAL":
+		return color.Blue(sev).String()
+	case "WARNING":
+		return color.Brown(sev).String()
+	default:
+		return color.Gray(sev).String()
+	}
+}
+
 func fieldToLogStruct(field string, log collins.Log) string {
 	switch field {
 	case "time":
@@ -54,7 +79,7 @@ func fieldToLogStruct(field string, log collins.Log) string {
 	case "creator":
 		return log.CreatedBy
 	case "severity":
-		return log.Type
+		return colorType(log.Type)
 	case "tag":
 		return log.AssetTag
 	}
@@ -75,12 +100,11 @@ func logGetFormat(columns []string, logs []collins.Log) string {
 		maxColumnWidth[column] = max
 	}
 
-	// Make sure we build the formatter back in the correct order.
-	// Golang you need more datastructures for real.
-	var formatterSlice []string
-	for _, col := range columns {
-		fmtr := "%-" + strconv.Itoa(maxColumnWidth[col]) + "s"
-		formatterSlice = append(formatterSlice, fmtr)
+	formatterSlice := []string{
+		"%-" + strconv.Itoa(maxColumnWidth["time"]) + "s:",
+		"%-" + strconv.Itoa(maxColumnWidth["creator"]) + "s",
+		"%-" + strconv.Itoa(maxColumnWidth["severity"]) + "s",
+		"%-" + strconv.Itoa(maxColumnWidth["tag"]) + "s",
 	}
 
 	formatter := strings.Join(formatterSlice, " ")
@@ -98,7 +122,7 @@ func handleLogs(c *cli.Context, col *collins.Client, tags []string) {
 	uniqueSet := UniqueOrderedSet{
 		"time",
 		"creator",
-		"serverity",
+		"severity",
 		"tag",
 	}
 
@@ -106,23 +130,39 @@ func handleLogs(c *cli.Context, col *collins.Client, tags []string) {
 	for {
 		logsThisRun := []collins.Log{}
 		for _, tag := range tags {
-			logs, _, err = col.Logs.Get(tag, &opts)
+			var logs []collins.Log
+			var err error
+			if c.IsSet("all") {
+				logs, _, err = col.Logs.GetAll(&opts)
+			} else {
+				logs, _, err = col.Logs.Get(tag, &opts)
+			}
 			if err != nil {
-				fmt.Println("Unable to fetch logs for " + tag + ": " + err.Error())
+				fmt.Println(os.Stderr, "Unable to fetch logs for "+tag+": "+err.Error())
 			}
 
 			logsThisRun = append(logsThisRun, logs...)
 		}
 
+		// Filter logs based on severity passed in
+		filteredLogs := []collins.Log{}
+		if c.IsSet("severity") {
+			for _, log := range logsThisRun {
+				if log.Type == strings.ToUpper(c.String("severity")) {
+					filteredLogs = append(filteredLogs, log)
+				}
+			}
+		}
+
 		// Get the format for logs this run, sort them, and print
-		format := logGetFormat(uniqueSet, logsThisRun)
-		sort.Slice(logsThisRun, func(i, j int) bool {
-			return logsThisRun[i].ID < logsThisRun[j].ID
+		format := logGetFormat(uniqueSet, filteredLogs)
+		sort.Slice(filteredLogs, func(i, j int) bool {
+			return filteredLogs[i].ID < filteredLogs[j].ID
 		})
 
 		// Only print out messages that we have not seen before and
 		// pop the message onto the end of the string formatter
-		for _, log := range logsThisRun {
+		for _, log := range filteredLogs {
 			var fields []interface{}
 
 			for _, column := range uniqueSet {
@@ -142,13 +182,40 @@ func handleLogs(c *cli.Context, col *collins.Client, tags []string) {
 		if !c.IsSet("follow") {
 			break
 		}
+
+		time.Sleep(2 * time.Second)
 	}
 }
 
 func logRunCommand(c *cli.Context) error {
 	client := getCollinsClient(c)
 
-	if c.IsSet("tags") {
+	if c.IsSet("severity") {
+		check := []string{
+			"EMERGENCY",
+			"ALERT",
+			"ERROR",
+			"INFORMATIONAL",
+			"DEBUG",
+			"NOTE",
+			"CRITICAL",
+			"WARNING",
+			"NOTICE"}
+
+		valid := false
+		toCheck := strings.ToUpper(c.String("severity"))
+		for _, s := range check {
+			if s == toCheck {
+				valid = true
+			}
+		}
+
+		if !valid {
+			logAndDie("Log severities " + toCheck + " are invalid! Use one of EMERGENCY, ALERT, CRITICAL, ERROR, WARNING, NOTICE, INFORMATIONAL, DEBUG, NOTE")
+		}
+	}
+
+	if c.IsSet("tags") || c.IsSet("all") {
 		tags := strings.Split(c.String("tags"), ",")
 		handleLogs(c, client, tags)
 	}
