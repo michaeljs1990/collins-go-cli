@@ -33,7 +33,6 @@ func powerSubcommand() cli.Command {
 				Category: "Power options",
 			},
 		},
-
 		Action: powerRunCommand,
 	}
 }
