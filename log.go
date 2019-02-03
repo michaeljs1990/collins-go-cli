@@ -138,7 +138,7 @@ func handleLogs(c *cli.Context, col *collins.Client, tags []string) {
 				logs, _, err = col.Logs.Get(tag, &opts)
 			}
 			if err != nil {
-				fmt.Println(os.Stderr, "Unable to fetch logs for "+tag+": "+err.Error())
+				fmt.Fprintln(os.Stderr, "Unable to fetch logs for "+tag+": "+err.Error())
 			}
 
 			logsThisRun = append(logsThisRun, logs...)
