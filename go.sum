@@ -11,6 +11,8 @@ github.com/logrusorgru/aurora v0.0.0-20181002194514-a7b3b318ed4e h1:9MlwzLdW7QSD
 github.com/logrusorgru/aurora v0.0.0-20181002194514-a7b3b318ed4e/go.mod h1:7rIyQOR62GCctdiQpZ/zOJlFyk6y+94wXzv6RNZgaR4=
 github.com/michaeljs1990/cli v1.20.1-0.20190128030917-b0494d5188b4 h1:b/8DnC9Cnc75U3UgvT08Y2em24C11Nv5WzM7f8eqWxQ=
 github.com/michaeljs1990/cli v1.20.1-0.20190128030917-b0494d5188b4/go.mod h1:YJXLzzMu1s99OObeSHv4l6vfcCHA15r5XTg8xoEAoaM=
+github.com/michaeljs1990/go-collins v0.0.0-20190202194148-b130eadcdda3 h1:VzEsVFLHs0pLB0N9uFTFRIrkUqzU7v/S7V7lesrcy18=
+github.com/michaeljs1990/go-collins v0.0.0-20190202194148-b130eadcdda3/go.mod h1:s0yNFXnyKNDT89SqvyhYsdqaa7f0FCiK74c9qLf+NU4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/schallert/iso8601 v0.0.0-20151102174922-d51701471974 h1:MlG1dDfLMkUe5bVS4ImeF9dDLqdi+Zs30kHeBLvehO0=
