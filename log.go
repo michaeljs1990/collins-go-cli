@@ -145,8 +145,9 @@ func handleLogs(c *cli.Context, col *collins.Client, tags []string) {
 		}
 
 		// Filter logs based on severity passed in
-		filteredLogs := []collins.Log{}
+		filteredLogs := logsThisRun
 		if c.IsSet("severity") {
+			filteredLogs = []collins.Log{}
 			for _, log := range logsThisRun {
 				if log.Type == strings.ToUpper(c.String("severity")) {
 					filteredLogs = append(filteredLogs, log)
