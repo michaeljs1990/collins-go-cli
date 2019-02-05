@@ -43,6 +43,13 @@ func renderTable(columns []string, showHeaders bool, assets []collins.Asset) {
 				max = length
 			}
 		}
+
+		// If headers are going to be output make sure we take them into
+		// account when formatting the table.
+		if showHeaders && len(column) > max {
+			max = len(column)
+		}
+
 		maxColumnWidth[column] = max
 	}
 
