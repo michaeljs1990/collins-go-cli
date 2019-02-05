@@ -18,14 +18,48 @@ func formatAssets(format string, showHeaders bool, columns []string, assets []co
 	}
 }
 
-// Can't thing of a very nice and idiomatic way to handle converting the fields
-// a user passes into a printable struct without mapping it like this.
+func emptyOrValue(sliceSize int, fn func() string) string {
+	if sliceSize > 0 {
+		return fn()
+	} else {
+		return ""
+	}
+}
+
 func fieldToAssetStruct(field string, asset collins.Asset) string {
 	switch field {
 	case "tag":
 		return asset.Metadata.Tag
 	case "status":
 		return asset.Metadata.Status
+	case "state":
+		return asset.Metadata.State.Name
+	case "classification":
+		return asset.Classification.Tag
+	case "cpu_cores":
+		return emptyOrValue(len(asset.CPUs), func() string {
+			return strconv.Itoa(asset.CPUs[0].Cores)
+		})
+	case "cpu_threads":
+		return emptyOrValue(len(asset.CPUs), func() string {
+			return strconv.Itoa(asset.CPUs[0].Threads)
+		})
+	case "cpu_speed_ghz":
+		return emptyOrValue(len(asset.CPUs), func() string {
+			return strconv.FormatFloat(float64(asset.CPUs[0].SpeedGhz), 'f', 4, 32)
+		})
+	case "cpu_description":
+		return emptyOrValue(len(asset.CPUs), func() string {
+			return asset.CPUs[0].Description
+		})
+	case "cpu_product":
+		return emptyOrValue(len(asset.CPUs), func() string {
+			return asset.CPUs[0].Product
+		})
+	case "cpu_vendor":
+		return emptyOrValue(len(asset.CPUs), func() string {
+			return asset.CPUs[0].Vendor
+		})
 	default:
 		// If it's not special fish it out of atts
 		return asset.Attributes["0"][strings.ToUpper(field)]
