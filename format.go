@@ -38,11 +38,11 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return asset.Classification.Tag
 	case "cpu_cores":
 		return emptyOrValue(len(asset.CPUs), func() string {
-			return strconv.Itoa(asset.CPUs[0].Cores)
+			return strconv.Itoa(asset.CPUs[0].Cores * len(asset.CPUs))
 		})
 	case "cpu_threads":
 		return emptyOrValue(len(asset.CPUs), func() string {
-			return strconv.Itoa(asset.CPUs[0].Threads)
+			return strconv.Itoa(asset.CPUs[0].Threads * len(asset.CPUs))
 		})
 	case "cpu_speed_ghz":
 		return emptyOrValue(len(asset.CPUs), func() string {
