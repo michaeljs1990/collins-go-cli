@@ -86,7 +86,7 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		})
 	case "memory_banks_total":
 		return emptyOrValue(len(asset.Memory), func() string {
-			return strconv.Itoa((asset.Memory[len(asset.Memory)-1].Bank + 1))
+			return strconv.Itoa(len(asset.Memory))
 		})
 	default:
 		// If it's not special fish it out of atts
