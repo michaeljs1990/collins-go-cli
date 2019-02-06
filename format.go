@@ -60,6 +60,34 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return emptyOrValue(len(asset.CPUs), func() string {
 			return asset.CPUs[0].Vendor
 		})
+	case "memory_size_bytes":
+		return emptyOrValue(len(asset.Memory), func() string {
+			bytes := 0
+			for _, v := range asset.Memory {
+				bytes = bytes + v.Size
+			}
+			return strconv.Itoa(bytes)
+		})
+	case "memory_size_total":
+		return emptyOrValue(len(asset.Memory), func() string {
+			var size float64
+			format := ""
+			for _, v := range asset.Memory {
+				split := strings.Split(v.SizeHuman, " ")
+				format = split[1]
+				pop, _ := strconv.ParseFloat(split[0], 64)
+				size = size + pop
+			}
+			return strconv.FormatFloat(size, 'f', 2, 64) + " " + format
+		})
+	case "memory_description":
+		return emptyOrValue(len(asset.Memory), func() string {
+			return asset.Memory[0].Description
+		})
+	case "memory_banks_total":
+		return emptyOrValue(len(asset.Memory), func() string {
+			return strconv.Itoa((asset.Memory[len(asset.Memory)-1].Bank + 1))
+		})
 	default:
 		// If it's not special fish it out of atts
 		return asset.Attributes["0"][strings.ToUpper(field)]
