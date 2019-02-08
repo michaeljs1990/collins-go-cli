@@ -70,7 +70,7 @@ func querySubcommand() cli.Command {
 				Usage:    "Asset status (and optional state after :)",
 				Category: "Query options",
 			},
-			cli.StringFlag{
+			cli.StringSliceFlag{
 				Name:     "a, attribute",
 				Usage:    "Arbitrary attributes and values to match in query. : between key and value",
 				Category: "Query options",
@@ -133,16 +133,6 @@ func queryBuildOptions(c *cli.Context, hostname string) collins.AssetFindOpts {
 		opts.Status = status[0]
 	}
 
-	if c.IsSet("attribute") {
-		attribute := strings.Split(c.String("attribute"), ":")
-		// HACK: Check to make sure the user didn't slip in a hostname since the ruby
-		// client seems to have some nice magic around how it handles this that isn't
-		// possible in go without a bit of work.
-		if attribute[0] != "hostname" || hostname == "" {
-			opts.Attribute = strings.Join(attribute, ";")
-		}
-	}
-
 	if c.IsSet("type") {
 		opts.Type = c.String("type")
 	}
@@ -189,6 +179,19 @@ func buildOptionsQuery(c *cli.Context, hostname string) string {
 		cql = append(cql, "(HOSTNAME = "+hostname+")")
 	}
 
+	if c.IsSet("attribute") || c.IsSet("a") {
+		for _, attr := range c.StringSlice("attribute") {
+			attrSplit := strings.SplitN(attr, ":", 2)
+			if len(attrSplit) != 2 {
+				logAndDie("--attribute and -a requires attribute:value, missing :value")
+			}
+			attrKey := strings.ToUpper(attrSplit[0])
+			attrValue := strings.ToUpper(attrSplit[1])
+
+			cql = append(cql, "("+attrKey+" = "+attrValue+")")
+		}
+	}
+
 	operation := c.String("operation")
 	if operation != "AND" && operation != "OR" {
 		logAndDie("Operation (or o) flag may only be set to AND or OR")
@@ -208,6 +211,16 @@ func queryGetColumns(c *cli.Context) []string {
 		"pool",
 		"primary_role",
 		"secondary_role",
+	}
+
+	if c.IsSet("attribute") || c.IsSet("a") {
+		for _, attr := range c.StringSlice("attribute") {
+			attrSplit := strings.SplitN(attr, ":", 2)
+			if len(attrSplit) != 2 {
+				logAndDie("--attribute and -a requires attribute:value, missing :value")
+			}
+			uniqueSet = uniqueSet.Add(attrSplit[0])
+		}
 	}
 
 	if c.IsSet("columns") {

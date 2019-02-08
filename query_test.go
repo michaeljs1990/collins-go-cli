@@ -73,7 +73,7 @@ func queryContext(fn func(*cli.Context), cmd []string) {
 						Usage:    "Asset status (and optional state after :)",
 						Category: "Query options",
 					},
-					cli.StringFlag{
+					cli.StringSliceFlag{
 						Name:     "a, attribute",
 						Usage:    "Arbitrary attributes and values to match in query. : between key and value",
 						Category: "Query options",
@@ -291,14 +291,9 @@ func TestBuildOptionsQuery(t *testing.T) {
 
 	queryContext(func(ctx *cli.Context) {
 		out := buildOptionsQuery(ctx, "dev")
-		expected := "(HOSTNAME = dev)"
+		expected := "(HOSTNAME = dev) AND (TEST = THING)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
-		}
-
-		out2 := queryBuildOptions(ctx, "dev")
-		if out2.Attribute != "test;thing" {
-			t.Error("Attribute was net set properly from passed in flag")
 		}
 	}, []string{"cmd", "query", "-a", "test:thing", "dev"})
 
@@ -343,28 +338,12 @@ func TestQueryBuildOptions(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode", "-T", "SOME_TYPE"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx, "")
-		if out.Attribute != "gabe;test" {
-			t.Error("Unable to set attribute when building options")
-		}
-	}, []string{"cmd", "query", "-a", "gabe:test"})
-
-	queryContext(func(ctx *cli.Context) {
 		out := queryBuildOptions(ctx, "hi")
 		want := ""
 		if out.Attribute != "" {
 			t.Error("Want:", want, " Got:", out.Attribute)
 		}
 	}, []string{"cmd", "query", "-a", "hostname:test", "hi"})
-
-	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx, "hi")
-		want := "pool;test"
-		if out.Attribute != want {
-			t.Error("Want:", want, " Got:", out.Attribute)
-		}
-	}, []string{"cmd", "query", "-a", "pool:test", "hi"})
-
 }
 
 func TestQuery(t *testing.T) {
