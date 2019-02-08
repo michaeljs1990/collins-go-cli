@@ -90,7 +90,11 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		})
 	default:
 		// If it's not special fish it out of atts
-		return asset.Attributes["0"][strings.ToUpper(field)]
+		if val, ok := asset.Attributes["0"]; ok {
+			return val[strings.ToUpper(field)]
+		}
+
+		return ""
 	}
 }
 
