@@ -1,10 +1,12 @@
 package main
 
 import (
+	"strings"
 	"testing"
 
 	monkey "github.com/bouk/monkey"
 	cli "github.com/urfave/cli"
+	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
 // This is largely copied from the main file to create a wrapper in which we
@@ -363,4 +365,36 @@ func TestQueryBuildOptions(t *testing.T) {
 		}
 	}, []string{"cmd", "query", "-a", "pool:test", "hi"})
 
+}
+
+func TestQuery(t *testing.T) {
+	client := setup()
+	monkey.Patch(getCollinsClient, func(c *cli.Context) *collins.Client {
+		return client
+	})
+	defer teardown()
+
+	SetupGET(201, "/api/assets", "./assets/find_success.json", t)
+
+	queryContext(func(ctx *cli.Context) {
+		c, o, w := captureStdout()
+		err := queryRunCommand(ctx)
+		result := returnStdout(c, o, w)
+		if err != nil {
+			t.Error(err.Error())
+		}
+
+		tags := []string{"tag30", "tag31"}
+		status := []string{"New", "New"}
+		for i, line := range strings.Split(result, "\n") {
+			parts := strings.Split(line, "\t")
+			if parts[0] != tags[i] {
+				t.Error("Expected ", tags[i], " got ", parts[0])
+			}
+
+			if parts[3] != status[i] {
+				t.Error("Expected ", status[i], " got ", parts[3])
+			}
+		}
+	}, []string{"cmd", "query", "-t", "tag30,tag31"})
 }
