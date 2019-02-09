@@ -1,0 +1,643 @@
+{
+  "status": "success:ok",
+  "data": {
+    "Pagination": {
+      "PreviousPage": 0,
+      "CurrentPage": 0,
+      "NextPage": 0,
+      "TotalResults": 2
+    },
+    "Data": [
+      {
+        "ASSET": {
+          "ID": 3,
+          "TAG": "M0000002",
+          "STATE": {
+            "ID": 3,
+            "STATUS": null,
+            "NAME": "RUNNING",
+            "LABEL": "Running",
+            "DESCRIPTION": "A service in this state is operational."
+          },
+          "STATUS": "Provisioned",
+          "TYPE": "SERVER_NODE",
+          "CREATED": "2018-04-15T00:51:11",
+          "UPDATED": "2019-02-02T18:44:06",
+          "DELETED": null
+        },
+        "HARDWARE": {
+          "CPU": [
+            {
+              "CORES": 4,
+              "THREADS": 8,
+              "SPEED_GHZ": 2.528,
+              "DESCRIPTION": "Intel(R) Xeon(R) CPU           E5540  @ 2.53GHz Intel Corp.",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "CORES": 4,
+              "THREADS": 8,
+              "SPEED_GHZ": 2.528,
+              "DESCRIPTION": "Intel(R) Xeon(R) CPU           E5540  @ 2.53GHz Intel Corp.",
+              "PRODUCT": "",
+              "VENDOR": ""
+            }
+          ],
+          "GPU": [],
+          "MEMORY": [
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 0,
+              "DESCRIPTION": "DIMM DDR3 Synchronous Registered (Buffered) 1333 MHz (0.8 ns) - 00CE04B380CE M393B5273DH0-YH9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 1,
+              "DESCRIPTION": "DIMM DDR3 Synchronous Registered (Buffered) 1333 MHz (0.8 ns) - 00CE04B380CE M393B5273DH0-YH9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "BANK": 2,
+              "DESCRIPTION": "Empty Memory Bank",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 3,
+              "DESCRIPTION": "DIMM DDR3 Synchronous Registered (Buffered) 1333 MHz (0.8 ns) - 00CE04B380CE M393B5273DH0-YH9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 4,
+              "DESCRIPTION": "DIMM DDR3 Synchronous Registered (Buffered) 1333 MHz (0.8 ns) - 00CE04B380CE M393B5273DH0-YH9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "BANK": 5,
+              "DESCRIPTION": "Empty Memory Bank",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 6,
+              "DESCRIPTION": "DIMM DDR3 Synchronous Registered (Buffered) 1333 MHz (0.8 ns) - 00CE04B380CE M393B5273CH0-YH9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 7,
+              "DESCRIPTION": "DIMM DDR3 Synchronous Registered (Buffered) 1333 MHz (0.8 ns) - 00CE04B380CE M393B5273CH0-YH9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "BANK": 8,
+              "DESCRIPTION": "Empty Memory Bank",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 9,
+              "DESCRIPTION": "DIMM DDR3 Synchronous Registered (Buffered) 1333 MHz (0.8 ns) - 00CE04B380CE M393B5273CH0-YH9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 10,
+              "DESCRIPTION": "DIMM DDR3 Synchronous Registered (Buffered) 1333 MHz (0.8 ns) - 00CE04B380CE M393B5273CH0-YH9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "BANK": 11,
+              "DESCRIPTION": "Empty Memory Bank",
+              "PRODUCT": "",
+              "VENDOR": ""
+            }
+          ],
+          "NIC": [
+            {
+              "SPEED": 1000000000,
+              "SPEED_S": "1000000000",
+              "SPEED_HUMAN": "1.00 Gb",
+              "MAC_ADDRESS": "00:22:19:5d:02:4f",
+              "DESCRIPTION": "NetXtreme II BCM5709 Gigabit Ethernet - Broadcom Limited",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SPEED": 1000000000,
+              "SPEED_S": "1000000000",
+              "SPEED_HUMAN": "1.00 Gb",
+              "MAC_ADDRESS": "00:22:19:5d:02:51",
+              "DESCRIPTION": "NetXtreme II BCM5709 Gigabit Ethernet - Broadcom Limited",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SPEED": 1000000000,
+              "SPEED_S": "1000000000",
+              "SPEED_HUMAN": "1.00 Gb",
+              "MAC_ADDRESS": "00:22:19:5d:02:53",
+              "DESCRIPTION": "NetXtreme II BCM5709 Gigabit Ethernet - Broadcom Limited",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SPEED": 1000000000,
+              "SPEED_S": "1000000000",
+              "SPEED_HUMAN": "1.00 Gb",
+              "MAC_ADDRESS": "00:22:19:5d:02:55",
+              "DESCRIPTION": "NetXtreme II BCM5709 Gigabit Ethernet - Broadcom Limited",
+              "PRODUCT": "",
+              "VENDOR": ""
+            }
+          ],
+          "DISK": [
+            {
+              "SIZE": 146163105792,
+              "SIZE_S": "146163105792",
+              "SIZE_HUMAN": "136.13 GB",
+              "TYPE": "SCSI",
+              "DESCRIPTION": "DELL PERC 6/i",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "TYPE": "SCSI",
+              "DESCRIPTION": "TSSTcorp DVD-ROM TS-L333A",
+              "PRODUCT": "",
+              "VENDOR": ""
+            }
+          ],
+          "BASE": {
+            "MOTHERBOARD": "0K399H",
+            "FIRMWARE": "6.4.0",
+            "FIRMWAREDATE": "07/23/2013",
+            "DESCRIPTION": "Rack Mount Chassis",
+            "PRODUCT": "PowerEdge R610",
+            "VENDOR": "Dell Inc.",
+            "SERIAL": null
+          }
+        },
+        "CLASSIFICATION": {
+          "ID": 4,
+          "TAG": "test_node",
+          "STATE": null,
+          "STATUS": "Incomplete",
+          "TYPE": "CONFIGURATION",
+          "CREATED": "2019-02-05T06:58:47",
+          "UPDATED": "2019-02-05T06:59:08",
+          "DELETED": null
+        },
+        "LLDP": {
+          "INTERFACES": [
+            {
+              "NAME": "eno1",
+              "CHASSIS": {
+                "NAME": "c3560g.tor-a1.pod-1.pit-shd-1.terame.com",
+                "ID": {
+                  "TYPE": "mac",
+                  "VALUE": "00:17:0e:09:d8:80"
+                },
+                "DESCRIPTION": "Cisco IOS Software, C3560 Software (C3560-IPSERVICESK9-M), Version 15.0(2)SE6, RELEASE SOFTWARE (fc2)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2014 by Cisco Systems, Inc.\nCompiled Wed 09-Apr-14 03:30 by prod_rel_team"
+              },
+              "PORT": {
+                "ID": {
+                  "TYPE": "ifname",
+                  "VALUE": "Gi0/41"
+                },
+                "DESCRIPTION": "GigabitEthernet0/41"
+              },
+              "VLANS": [
+                {
+                  "ID": 2,
+                  "NAME": ""
+                }
+              ]
+            }
+          ]
+        },
+        "IPMI": {
+          "ASSET_ID": 3,
+          "ASSET_TAG": "M0000002",
+          "IPMI_USERNAME": "root",
+          "IPMI_PASSWORD": "dU7FmTbs1rpVmH2b",
+          "IPMI_GATEWAY": "10.0.0.1",
+          "IPMI_ADDRESS": "10.0.0.179",
+          "IPMI_NETMASK": "255.255.255.0",
+          "ID": 3
+        },
+        "ADDRESSES": [
+          {
+            "ASSET_ID": 3,
+            "ASSET_TAG": "M0000002",
+            "GATEWAY": "10.0.0.1",
+            "ADDRESS": "10.0.0.102",
+            "NETMASK": "255.255.255.0",
+            "POOL": "RACK-SHD1",
+            "ID": 28
+          }
+        ],
+        "POWER": [
+          {
+            "UNIT_ID": 0,
+            "UNITS": [
+              {
+                "KEY": "POWER_PORT_A",
+                "VALUE": "A",
+                "TYPE": "POWER_PORT",
+                "LABEL": "Plug Strip A",
+                "POSITION": 0,
+                "IS_REQUIRED": true,
+                "UNIQUE": true
+              },
+              {
+                "KEY": "POWER_OUTLET_A",
+                "VALUE": "A",
+                "TYPE": "POWER_OUTLET",
+                "LABEL": "Outlet A",
+                "POSITION": 1,
+                "IS_REQUIRED": true,
+                "UNIQUE": false
+              }
+            ]
+          }
+        ],
+        "ATTRIBS": {
+          "0": {
+            "CHASSIS_TAG": "M0000002",
+            "RACK_POSITION": "PIT-SHD1-1U",
+            "DISK_STORAGE_TOTAL": "146163105792",
+            "HOSTNAME": "dev-a7e8c3277b.pit1.terame.com",
+            "NODECLASS": "devnode",
+            "POOL": "DEVELOPMENT",
+            "PRIMARY_ROLE": "DEVELOPMENT",
+            "BUILD_CONTACT": "eatingthenight",
+            "PASSWORD": "Ifp3rkx4r1I0UTIv",
+            "TEST": "this",
+            "HI": "bye"
+          }
+        }
+      },
+      {
+        "ASSET": {
+          "ID": 2,
+          "TAG": "M0000001",
+          "STATE": {
+            "ID": 3,
+            "STATUS": null,
+            "NAME": "RUNNING",
+            "LABEL": "Running",
+            "DESCRIPTION": "A service in this state is operational."
+          },
+          "STATUS": "Allocated",
+          "TYPE": "SERVER_NODE",
+          "CREATED": "2017-12-14T02:26:15",
+          "UPDATED": "2019-02-02T18:44:06",
+          "DELETED": null
+        },
+        "HARDWARE": {
+          "CPU": [
+            {
+              "CORES": 4,
+              "THREADS": 8,
+              "SPEED_GHZ": 2.528,
+              "DESCRIPTION": "Xeon Intel Corp.",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "CORES": 4,
+              "THREADS": 8,
+              "SPEED_GHZ": 2.528,
+              "DESCRIPTION": "Xeon Intel Corp.",
+              "PRODUCT": "",
+              "VENDOR": ""
+            }
+          ],
+          "GPU": [],
+          "MEMORY": [
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 0,
+              "DESCRIPTION": "DIMM DDR3 Synchronous 1333 MHz (0.8 ns) - 00AD04B380AD HMT351R7BFR8C-H9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 1,
+              "DESCRIPTION": "DIMM DDR3 Synchronous 1333 MHz (0.8 ns) - 00AD04B380AD HMT351R7BFR8C-H9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "BANK": 2,
+              "DESCRIPTION": "Empty Memory Bank",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 3,
+              "DESCRIPTION": "DIMM DDR3 Synchronous 1333 MHz (0.8 ns) - 00AD04B380AD HMT351R7BFR8C-H9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 4,
+              "DESCRIPTION": "DIMM DDR3 Synchronous 1333 MHz (0.8 ns) - 00AD04B380AD HMT351R7BFR8C-H9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "BANK": 5,
+              "DESCRIPTION": "Empty Memory Bank",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 6,
+              "DESCRIPTION": "DIMM DDR3 Synchronous 1333 MHz (0.8 ns) - 00AD00B380AD HMT351R7BFR8C-H9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 7,
+              "DESCRIPTION": "DIMM DDR3 Synchronous 1333 MHz (0.8 ns) - 00AD00B380AD HMT351R7BFR8C-H9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "BANK": 8,
+              "DESCRIPTION": "Empty Memory Bank",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 9,
+              "DESCRIPTION": "DIMM DDR3 Synchronous 1333 MHz (0.8 ns) - 00AD00B380AD HMT351R7BFR8C-H9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 4294967296,
+              "SIZE_S": "4294967296",
+              "SIZE_HUMAN": "4.00 GB",
+              "BANK": 10,
+              "DESCRIPTION": "DIMM DDR3 Synchronous 1333 MHz (0.8 ns) - 00AD00B380AD HMT351R7BFR8C-H9",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "BANK": 11,
+              "DESCRIPTION": "Empty Memory Bank",
+              "PRODUCT": "",
+              "VENDOR": ""
+            }
+          ],
+          "NIC": [
+            {
+              "SPEED": 1000000000,
+              "SPEED_S": "1000000000",
+              "SPEED_HUMAN": "1.00 Gb",
+              "MAC_ADDRESS": "00:22:19:5d:03:98",
+              "DESCRIPTION": "NetXtreme II BCM5709 Gigabit Ethernet - Broadcom Corporation",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SPEED": 1000000000,
+              "SPEED_S": "1000000000",
+              "SPEED_HUMAN": "1.00 Gb",
+              "MAC_ADDRESS": "00:22:19:5d:03:9a",
+              "DESCRIPTION": "NetXtreme II BCM5709 Gigabit Ethernet - Broadcom Corporation",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SPEED": 1000000000,
+              "SPEED_S": "1000000000",
+              "SPEED_HUMAN": "1.00 Gb",
+              "MAC_ADDRESS": "00:22:19:5d:03:9c",
+              "DESCRIPTION": "NetXtreme II BCM5709 Gigabit Ethernet - Broadcom Corporation",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SPEED": 1000000000,
+              "SPEED_S": "1000000000",
+              "SPEED_HUMAN": "1.00 Gb",
+              "MAC_ADDRESS": "00:22:19:5d:03:9e",
+              "DESCRIPTION": "NetXtreme II BCM5709 Gigabit Ethernet - Broadcom Corporation",
+              "PRODUCT": "",
+              "VENDOR": ""
+            }
+          ],
+          "DISK": [
+            {
+              "SIZE": 146163105792,
+              "SIZE_S": "146163105792",
+              "SIZE_HUMAN": "136.13 GB",
+              "TYPE": "SCSI",
+              "DESCRIPTION": "DELL PERC 6/i",
+              "PRODUCT": "",
+              "VENDOR": ""
+            },
+            {
+              "SIZE": 0,
+              "SIZE_S": "0",
+              "SIZE_HUMAN": "0 Bytes",
+              "TYPE": "SCSI",
+              "DESCRIPTION": "TSSTcorp DVD-ROM TS-L333A",
+              "PRODUCT": "",
+              "VENDOR": ""
+            }
+          ],
+          "BASE": {
+            "MOTHERBOARD": "0K399H",
+            "FIRMWARE": "6.4.0",
+            "FIRMWAREDATE": "07/23/2013",
+            "DESCRIPTION": "Rack Mount Chassis",
+            "PRODUCT": "PowerEdge R610",
+            "VENDOR": "Dell Inc.",
+            "SERIAL": null
+          }
+        },
+        "CLASSIFICATION": {
+          "ID": 4,
+          "TAG": "test_node",
+          "STATE": null,
+          "STATUS": "Incomplete",
+          "TYPE": "CONFIGURATION",
+          "CREATED": "2019-02-05T06:58:47",
+          "UPDATED": "2019-02-05T06:59:08",
+          "DELETED": null
+        },
+        "LLDP": {
+          "INTERFACES": [
+            {
+              "NAME": "eth0",
+              "CHASSIS": {
+                "NAME": "c3560g.tor-a1.pod-1.pit-shd-1.terame.com",
+                "ID": {
+                  "TYPE": "mac",
+                  "VALUE": "00:17:0e:09:d8:80"
+                },
+                "DESCRIPTION": "Cisco IOS Software, C3560 Software (C3560-IPSERVICESK9-M), Version 15.0(2)SE6, RELEASE SOFTWARE (fc2)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2014 by Cisco Systems, Inc.\nCompiled Wed 09-Apr-14 03:30 by prod_rel_team"
+              },
+              "PORT": {
+                "ID": {
+                  "TYPE": "ifname",
+                  "VALUE": "Gi0/33"
+                },
+                "DESCRIPTION": "GigabitEthernet0/33"
+              },
+              "VLANS": [
+                {
+                  "ID": 2,
+                  "NAME": ""
+                }
+              ]
+            }
+          ]
+        },
+        "IPMI": {
+          "ASSET_ID": 2,
+          "ASSET_TAG": "M0000001",
+          "IPMI_USERNAME": "root",
+          "IPMI_PASSWORD": "CPMrWU1qlmwuMQwk",
+          "IPMI_GATEWAY": "10.0.0.1",
+          "IPMI_ADDRESS": "10.0.0.178",
+          "IPMI_NETMASK": "255.255.255.0",
+          "ID": 2
+        },
+        "ADDRESSES": [
+          {
+            "ASSET_ID": 2,
+            "ASSET_TAG": "M0000001",
+            "GATEWAY": "10.0.0.1",
+            "ADDRESS": "10.0.0.101",
+            "NETMASK": "255.255.255.0",
+            "POOL": "RACK-SHD1",
+            "ID": 17
+          }
+        ],
+        "POWER": [
+          {
+            "UNIT_ID": 0,
+            "UNITS": [
+              {
+                "KEY": "POWER_PORT_A",
+                "VALUE": "A",
+                "TYPE": "POWER_PORT",
+                "LABEL": "Plug Strip A",
+                "POSITION": 0,
+                "IS_REQUIRED": true,
+                "UNIQUE": true
+              },
+              {
+                "KEY": "POWER_OUTLET_A",
+                "VALUE": "A",
+                "TYPE": "POWER_OUTLET",
+                "LABEL": "Outlet A",
+                "POSITION": 1,
+                "IS_REQUIRED": true,
+                "UNIQUE": false
+              }
+            ]
+          }
+        ],
+        "ATTRIBS": {
+          "0": {
+            "CHASSIS_TAG": "M0000001",
+            "RACK_POSITION": "PIT-SHD1-3U",
+            "DISK_STORAGE_TOTAL": "146163105792",
+            "HOSTNAME": "plex-8316f3de71.pit1.terame.com",
+            "NODECLASS": "plexnode",
+            "POOL": "PRODUCTION",
+            "PRIMARY_ROLE": "PLEX",
+            "BUILD_CONTACT": "michael",
+            "PASSWORD": "NHsdwQuLi1uxtXxA",
+            "HI": "bye",
+            "BYE": "bab:ba"
+          }
+        }
+      }
+    ]
+  }
+}

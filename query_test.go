@@ -346,14 +346,16 @@ func TestQueryBuildOptions(t *testing.T) {
 	}, []string{"cmd", "query", "-a", "hostname:test", "hi"})
 }
 
-func TestQuery(t *testing.T) {
+// Note that the commands we use don't matter it just shows what command was used when
+// generating the json for this.
+func TestQueryCLIBasicWorkflow(t *testing.T) {
 	client := setup()
 	monkey.Patch(getCollinsClient, func(c *cli.Context) *collins.Client {
 		return client
 	})
 	defer teardown()
 
-	SetupGET(201, "/api/assets", "./assets/find_success.json", t)
+	SetupGET(201, "/api/assets", "./assets/TestQueryCLIBasicWorkflow.json", t)
 
 	queryContext(func(ctx *cli.Context) {
 		c, o, w := captureStdout()
@@ -376,4 +378,37 @@ func TestQuery(t *testing.T) {
 			}
 		}
 	}, []string{"cmd", "query", "-t", "tag30,tag31"})
+}
+
+func TestQueryCLIGetByAttribute(t *testing.T) {
+	client := setup()
+	monkey.Patch(getCollinsClient, func(c *cli.Context) *collins.Client {
+		return client
+	})
+	defer teardown()
+
+	SetupGET(201, "/api/assets", "./assets/TestQueryCLIGetByAttribute.json", t)
+
+	queryContext(func(ctx *cli.Context) {
+		c, o, w := captureStdout()
+		err := queryRunCommand(ctx)
+		result := returnStdout(c, o, w)
+		if err != nil {
+			t.Error(err.Error())
+		}
+
+		rows := map[int][]string{
+      0: []string{"M0000002", "dev-a7e8c3277b.pit1.terame.com", "devnode", "Provisioned", "DEVELOPMENT", "DEVELOPMENT", "", "bye"},
+      1: []string{"M0000001", "plex-8316f3de71.pit1.terame.com", "plexnode", "Allocated", "PRODUCTION", "PLEX", "", "bye"},
+    }
+
+		for i, line := range strings.Split(result, "\n") {
+			parts := strings.Split(line, "\t")
+      for idx, value := range parts {
+        if strings.TrimSpace(value) != rows[i][idx] {
+				  t.Error("Expected ", value, " got ", rows[i][idx])
+        }
+      }
+		}
+	}, []string{"cmd", "query", "-a", "hi:bye"})
 }
