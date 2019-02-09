@@ -398,17 +398,17 @@ func TestQueryCLIGetByAttribute(t *testing.T) {
 		}
 
 		rows := map[int][]string{
-      0: []string{"M0000002", "dev-a7e8c3277b.pit1.terame.com", "devnode", "Provisioned", "DEVELOPMENT", "DEVELOPMENT", "", "bye"},
-      1: []string{"M0000001", "plex-8316f3de71.pit1.terame.com", "plexnode", "Allocated", "PRODUCTION", "PLEX", "", "bye"},
-    }
+			0: []string{"M0000002", "dev-a7e8c3277b.pit1.terame.com", "devnode", "Provisioned", "DEVELOPMENT", "DEVELOPMENT", "", "bye"},
+			1: []string{"M0000001", "plex-8316f3de71.pit1.terame.com", "plexnode", "Allocated", "PRODUCTION", "PLEX", "", "bye"},
+		}
 
 		for i, line := range strings.Split(result, "\n") {
 			parts := strings.Split(line, "\t")
-      for idx, value := range parts {
-        if strings.TrimSpace(value) != rows[i][idx] {
-				  t.Error("Expected ", value, " got ", rows[i][idx])
-        }
-      }
+			for idx, value := range parts {
+				if strings.TrimSpace(value) != rows[i][idx] {
+					t.Error("Expected ", value, " got ", rows[i][idx])
+				}
+			}
 		}
 	}, []string{"cmd", "query", "-a", "hi:bye"})
 }
@@ -431,16 +431,16 @@ func TestQueryCLIGetGPU(t *testing.T) {
 		}
 
 		rows := map[int][]string{
-      0: []string{"tumblrtag304", "", "", "New", "", "", "", "NVIDIA Corporation", "GM200GL [Quadro M6000]"},
-    }
+			0: []string{"tumblrtag304", "", "", "New", "", "", "", "NVIDIA Corporation", "GM200GL [Quadro M6000]"},
+		}
 
 		for i, line := range strings.Split(result, "\n") {
 			parts := strings.Split(line, "\t")
-      for idx, value := range parts {
-        if strings.TrimSpace(value) != rows[i][idx] {
-				  t.Error("Expected ", value, " got ", rows[i][idx])
-        }
-      }
+			for idx, value := range parts {
+				if strings.TrimSpace(value) != rows[i][idx] {
+					t.Error("Expected ", value, " got ", rows[i][idx])
+				}
+			}
 		}
 	}, []string{"cmd", "query", "-a", "gpu_vendor:nvidia", "-x", "gpu_product"})
 }
