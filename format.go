@@ -52,13 +52,25 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return emptyOrValue(len(asset.CPUs), func() string {
 			return asset.CPUs[0].Description
 		})
+	case "gpu_description":
+		return emptyOrValue(len(asset.GPUs), func() string {
+			return asset.GPUs[0].Description
+		})
 	case "cpu_product":
 		return emptyOrValue(len(asset.CPUs), func() string {
 			return asset.CPUs[0].Product
 		})
+	case "gpu_product":
+		return emptyOrValue(len(asset.GPUs), func() string {
+			return asset.GPUs[0].Product
+		})
 	case "cpu_vendor":
 		return emptyOrValue(len(asset.CPUs), func() string {
 			return asset.CPUs[0].Vendor
+		})
+	case "gpu_vendor":
+		return emptyOrValue(len(asset.GPUs), func() string {
+			return asset.GPUs[0].Vendor
 		})
 	case "memory_size_bytes":
 		return emptyOrValue(len(asset.Memory), func() string {

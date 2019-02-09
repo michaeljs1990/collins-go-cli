@@ -8,11 +8,13 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
+	github.com/kr/pty v1.1.3 // indirect
 	github.com/logrusorgru/aurora v0.0.0-20181002194514-a7b3b318ed4e
 	github.com/schallert/iso8601 v0.0.0-20151102174922-d51701471974 // indirect
+	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.3.0 // indirect
 	github.com/urfave/cli v1.20.0
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/tumblr/go-collins.v0 v0.0.0-20190204201458-61cb23616633
+	gopkg.in/tumblr/go-collins.v0 v0.0.0-20190208222215-7e5500a55e4d
 	gopkg.in/yaml.v2 v2.2.2
 )

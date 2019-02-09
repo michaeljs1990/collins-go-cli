@@ -412,3 +412,35 @@ func TestQueryCLIGetByAttribute(t *testing.T) {
 		}
 	}, []string{"cmd", "query", "-a", "hi:bye"})
 }
+
+func TestQueryCLIGetGPU(t *testing.T) {
+	client := setup()
+	monkey.Patch(getCollinsClient, func(c *cli.Context) *collins.Client {
+		return client
+	})
+	defer teardown()
+
+	SetupGET(201, "/api/assets", "./assets/TestQueryCLIGetGPU.json", t)
+
+	queryContext(func(ctx *cli.Context) {
+		c, o, w := captureStdout()
+		err := queryRunCommand(ctx)
+		result := returnStdout(c, o, w)
+		if err != nil {
+			t.Error(err.Error())
+		}
+
+		rows := map[int][]string{
+      0: []string{"tumblrtag304", "", "", "New", "", "", "", "NVIDIA Corporation", "GM200GL [Quadro M6000]"},
+    }
+
+		for i, line := range strings.Split(result, "\n") {
+			parts := strings.Split(line, "\t")
+      for idx, value := range parts {
+        if strings.TrimSpace(value) != rows[i][idx] {
+				  t.Error("Expected ", value, " got ", rows[i][idx])
+        }
+      }
+		}
+	}, []string{"cmd", "query", "-a", "gpu_vendor:nvidia", "-x", "gpu_product"})
+}
