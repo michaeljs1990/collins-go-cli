@@ -103,6 +103,7 @@ func queryContext(fn func(*cli.Context), cmd []string) {
 					cli.StringFlag{
 						Name:     "f, field-separator",
 						Usage:    "Separator between columns in output",
+						Value:    "\t",
 						Category: "Table formatting",
 					},
 					cli.BoolFlag{
@@ -378,6 +379,38 @@ func TestQueryCLIBasicWorkflow(t *testing.T) {
 			}
 		}
 	}, []string{"cmd", "query", "-t", "tag30,tag31"})
+}
+
+func TestQueryCLIBasicWorkflowSeparator(t *testing.T) {
+	client := setup()
+	monkey.Patch(getCollinsClient, func(c *cli.Context) *collins.Client {
+		return client
+	})
+	defer teardown()
+
+	SetupGET(201, "/api/assets", "./assets/TestQueryCLIBasicWorkflow.json", t)
+
+	queryContext(func(ctx *cli.Context) {
+		c, o, w := captureStdout()
+		err := queryRunCommand(ctx)
+		result := returnStdout(c, o, w)
+		if err != nil {
+			t.Error(err.Error())
+		}
+
+		tags := []string{"tag30", "tag31"}
+		status := []string{"New", "New"}
+		for i, line := range strings.Split(result, "\n") {
+			parts := strings.Split(line, "lol")
+			if parts[0] != tags[i] {
+				t.Error("Expected ", tags[i], " got ", parts[0])
+			}
+
+			if parts[3] != status[i] {
+				t.Error("Expected ", status[i], " got ", parts[3])
+			}
+		}
+	}, []string{"cmd", "query", "-t", "tag30,tag31", "-f", "lol"})
 }
 
 func TestQueryCLIGetByAttribute(t *testing.T) {

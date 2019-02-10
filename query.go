@@ -100,6 +100,7 @@ func querySubcommand() cli.Command {
 			cli.StringFlag{
 				Name:     "f, field-separator",
 				Usage:    "Separator between columns in output",
+				Value:    "\t",
 				Category: "Table formatting",
 			},
 			cli.BoolFlag{
@@ -304,7 +305,7 @@ func queryRunCommand(c *cli.Context) error {
 	columns := queryGetColumns(c)
 	format := getOutputFormat(c)
 	showHeaders := c.Bool("show-header")
-	formatAssets(format, showHeaders, columns, allAssets)
+	formatAssets(format, c.String("field-separator"), showHeaders, columns, allAssets)
 
 	return nil
 }

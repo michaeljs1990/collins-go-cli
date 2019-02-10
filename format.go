@@ -9,10 +9,10 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
-func formatAssets(format string, showHeaders bool, columns []string, assets []collins.Asset) {
+func formatAssets(format string, separator string, showHeaders bool, columns []string, assets []collins.Asset) {
 	switch format {
 	case "table":
-		renderTable(columns, showHeaders, assets)
+		renderTable(separator, showHeaders, columns, assets)
 	default:
 		logAndDie(format + " is not a supported format")
 	}
@@ -110,7 +110,7 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 	}
 }
 
-func renderTable(columns []string, showHeaders bool, assets []collins.Asset) {
+func renderTable(separator string, showHeaders bool, columns []string, assets []collins.Asset) {
 	// Find the longest column in each field so the final output is pretty.
 	maxColumnWidth := make(map[string]int)
 	for _, column := range columns {
@@ -139,7 +139,7 @@ func renderTable(columns []string, showHeaders bool, assets []collins.Asset) {
 		formatterSlice = append(formatterSlice, fmtr)
 	}
 
-	formatter := strings.Join(formatterSlice, "\t")
+	formatter := strings.Join(formatterSlice, separator)
 
 	if showHeaders {
 		headers := make([]interface{}, len(columns))
