@@ -36,6 +36,14 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return asset.Metadata.State.Name
 	case "classification":
 		return asset.Classification.Tag
+	case "ip_address":
+		return emptyOrValue(len(asset.Addresses), func() string {
+			ips := []string{}
+			for _, address := range asset.Addresses {
+				ips = append(ips, address.Address)
+			}
+			return strings.Join(ips, ",")
+		})
 	case "cpu_cores":
 		return emptyOrValue(len(asset.CPUs), func() string {
 			return strconv.Itoa(asset.CPUs[0].Cores * len(asset.CPUs))
