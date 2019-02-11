@@ -52,17 +52,17 @@ func querySubcommand() cli.Command {
 			},
 			cli.StringFlag{
 				Name:     "r, role",
-				Usage:    "Assets in primary role",
+				Usage:    "Assets in primary role[s] value[,...]",
 				Category: "Query options",
 			},
 			cli.StringFlag{
 				Name:     "R, secondary-role",
-				Usage:    "Assets in secondary role",
+				Usage:    "Assets in secondary role[s] value[,...]",
 				Category: "Query options",
 			},
 			cli.StringFlag{
 				Name:     "i, ip-address",
-				Usage:    "Assets with IP address[es]",
+				Usage:    "Assets with IP address[es] value[,...]",
 				Category: "Query options",
 			},
 			cli.StringFlag{
@@ -147,33 +147,48 @@ func queryBuildOptions(c *cli.Context, hostname string) collins.AssetFindOpts {
 	return opts
 }
 
+// Build a CQL query from the passed in flag taking into account comma seperated values.
+func cqlQuery(c *cli.Context, flag string, field string) string {
+	query := []string{}
+	for _, val := range strings.Split(c.String(flag), ",") {
+		query = append(query, "("+field+" = "+val+")")
+	}
+
+	// This isn't needed but keeps the resulting CQL from not looking so crazy
+	if len(query) == 1 {
+		return query[0]
+	} else {
+		return "(" + strings.Join(query, " OR ") + ")"
+	}
+}
+
 // This is broke out of build options just for the sake of making testing easier
 func buildOptionsQuery(c *cli.Context, hostname string) string {
 	cql := []string{}
 	// The go client isn't as friendly as the ruby one which is fine we will just
 	// take everything else and convert it into CQL to talk to collins.
 	if c.IsSet("tag") {
-		cql = append(cql, "(TAG = "+c.String("tag")+")")
+		cql = append(cql, cqlQuery(c, "tag", "TAG"))
 	}
 
 	if c.IsSet("nodeclass") {
-		cql = append(cql, "(NODECLASS = "+c.String("nodeclass")+")")
+		cql = append(cql, cqlQuery(c, "nodeclass", "NODECLASS"))
 	}
 
 	if c.IsSet("pool") {
-		cql = append(cql, "(POOL = "+c.String("pool")+")")
+		cql = append(cql, cqlQuery(c, "pool", "POOL"))
 	}
 
 	if c.IsSet("role") {
-		cql = append(cql, "(PRIMARY_ROLE = "+c.String("role")+")")
+		cql = append(cql, cqlQuery(c, "role", "PRIMARY_ROLE"))
 	}
 
 	if c.IsSet("secondary-role") {
-		cql = append(cql, "(SECONDARY_ROLE = "+c.String("secondary-role")+")")
+		cql = append(cql, cqlQuery(c, "secondary-role", "SECONDARY_ROLE"))
 	}
 
 	if c.IsSet("ip-address") {
-		cql = append(cql, "(IP_ADDRESS = "+c.String("ip-address")+")")
+		cql = append(cql, cqlQuery(c, "ip-address", "IP_ADDRESS"))
 	}
 
 	if hostname != "" {
