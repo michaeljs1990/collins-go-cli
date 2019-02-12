@@ -320,7 +320,7 @@ func queryRunCommand(c *cli.Context) error {
 	columns := queryGetColumns(c)
 	format := getOutputFormat(c)
 	showHeaders := c.Bool("show-header")
-	formatAssets(format, c.String("field-separator"), showHeaders, columns, allAssets)
+	formatAssets(format, c.String("field-separator"), showHeaders, client.BaseURL.String(), c.Bool("remote-lookup"), columns, allAssets)
 
 	return nil
 }

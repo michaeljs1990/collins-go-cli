@@ -11,7 +11,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func formatAssets(format string, separator string, showHeaders bool, columns []string, assets []collins.Asset) {
+func formatAssets(format string, separator string, showHeaders bool, url string, remoteLookup bool, columns []string, assets []collins.Asset) {
 	switch format {
 	case "table":
 		renderTable(separator, showHeaders, columns, assets)
@@ -19,6 +19,8 @@ func formatAssets(format string, separator string, showHeaders bool, columns []s
 		renderYAML(assets)
 	case "json":
 		renderJSON(assets)
+	case "link":
+		renderLinks(url, remoteLookup, assets)
 	default:
 		logAndDie(format + " is not a supported format")
 	}
@@ -192,4 +194,14 @@ func renderJSON(assets []collins.Asset) {
 	}
 
 	fmt.Println(string(out))
+}
+
+func renderLinks(url string, remoteLookup bool, assets []collins.Asset) {
+	for _, asset := range assets {
+		if remoteLookup {
+			fmt.Printf("%s/resources?tag=%s&remoteLookup=true\n", url, asset.Metadata.Tag)
+		} else {
+			fmt.Println(url + "/asset/" + asset.Metadata.Tag)
+		}
+	}
 }
