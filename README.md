@@ -8,7 +8,6 @@ Command line interface for interacting with https://tumblr.github.io/collins/
 ## Coming Features
 
 * Collins IPAM subcommand
-* Collins query yaml, link, and json output formats
 
 ## Documentation
 
