@@ -23,7 +23,7 @@ Query Examples
 A basic example to query a specific tag and additionally tell us the ip of the
 asset would be:
 
-    collins query -t M000001 -x ip\_address
+    collins query -t M000001 -x ip_address
 
 Options
 =======
@@ -48,8 +48,8 @@ Query options {.options}
     might be for selecting all power switches or server nodes. When multiple
     values are specified they must be separated by commas.
 
-        -T SERVER\_NODE
-        --type POWER\_SWITCH,SERVER\_NODE
+        -T SERVER_NODE
+        --type POWER_SWITCH,SERVER_NODE
 
 `-n` *VALUES*, `--nodeclass` *VALUES*
 
@@ -134,28 +134,28 @@ Format options {.options}
     special column we check if it's in attributes when outputting it. The
     following special values are available.
 
-    By default tag, hostname, nodeclass, status, pool, primary\_role, and
-    seconadary\_role are returned.
+    By default tag, hostname, nodeclass, status, pool, primary_role, and
+    seconadary_role are returned.
 
     ::: {#column-values}
     - tag
     - status
     - state
     - classification
-    - ip\_address
-    - cpu\_cores
-    - cpu\_threads
-    - cpu\_speed\_ghz
-    - cpu\_description
-    - gpu\_description
-    - cpu\_product
-    - gpu\_product
-    - cpu\_vendor
-    - gpu\_vendor
-    - memory\_size\_bytes
-    - memory\_size\_total
-    - memory\_description
-    - memory\_banks\_total
+    - ip_address
+    - cpu_cores
+    - cpu_threads
+    - cpu_speed_ghz
+    - cpu_description
+    - gpu_description
+    - cpu_product
+    - gpu_product
+    - cpu_vendor
+    - gpu_vendor
+    - memory_size_bytes
+    - memory_size_total
+    - memory_description
+    - memory_banks_total
     :::
 
 `-x`, *VALUES*, `--extra-columns` *VALUES*
