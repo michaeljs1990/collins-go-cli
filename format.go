@@ -1,18 +1,24 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
 
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
+	yaml "gopkg.in/yaml.v2"
 )
 
 func formatAssets(format string, separator string, showHeaders bool, columns []string, assets []collins.Asset) {
 	switch format {
 	case "table":
 		renderTable(separator, showHeaders, columns, assets)
+	case "yaml":
+		renderYAML(assets)
+	case "json":
+		renderJSON(assets)
 	default:
 		logAndDie(format + " is not a supported format")
 	}
@@ -168,4 +174,22 @@ func renderTable(separator string, showHeaders bool, columns []string, assets []
 
 		fmt.Printf(formatter+"\n", fields...)
 	}
+}
+
+func renderYAML(assets []collins.Asset) {
+	out, err := yaml.Marshal(&assets)
+	if err != nil {
+		logAndDie(err.Error())
+	}
+
+	fmt.Println(string(out))
+}
+
+func renderJSON(assets []collins.Asset) {
+	out, err := json.Marshal(&assets)
+	if err != nil {
+		logAndDie(err.Error())
+	}
+
+	fmt.Println(string(out))
 }
