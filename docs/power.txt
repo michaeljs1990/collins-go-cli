@@ -1,0 +1,56 @@
+% Collins Golang CLI
+% Michael Schuett
+% February 12, 2019
+
+Synopsis
+========
+
+`collins power` [options]...
+
+Description
+===========
+
+Collins power lets you change or list the current status of an asset if
+it has been configured properly with IPMI.
+
+Power Examples
+------------
+
+Show the current status.
+
+    collins power --status -t M001
+
+Power down an asset.
+
+    collins power -t M00001 -p off
+
+Options
+=======
+
+Power options {.options}
+---------------
+
+`-s`, `--status`
+
+:   List the current status of an asset.
+
+`-p` *VALUE*, `--power` *VALUE*
+
+:   Set the status of an asset. The following are valid power states.
+
+    ::: {#power-states}
+    - `reboot`
+    - `rebootSoft`
+    - `reboothard`
+    - `poweron`
+    - `on`
+    - `poweroff`
+    - `off`
+    - `identif`
+    - `verify`
+    :::
+
+`-t` *VALUES*, `--tags` *VALUES*
+
+:   The tags on which to operate. You can specify multiple with a comma in the
+    format of tag1,tag2.

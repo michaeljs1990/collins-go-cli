@@ -1,0 +1,68 @@
+% Collins Golang CLI
+% Michael Schuett
+% February 12, 2019
+
+Synopsis
+========
+
+`collins log` [options]...
+
+Description
+===========
+
+Collins log will output logs from a single, multiple, or all tags that you
+specify.
+
+Log Examples
+------------
+
+List all logs for everything in collins. This might take a while.
+
+    collins log --all
+
+Follow a log for multiple assets.
+
+    collins log -t M00001,M00002 --follow
+
+Options
+=======
+
+Log options {.options}
+---------------
+
+`-a`, `--all`
+
+:   List all logs for every asset that you have in collins.
+
+`-n` *VALUE*, `--number` *VALUE*
+
+:   Set a limit on the number of logs that are output. By default only 20 logs
+    are ouput for a given asset. This means getting the output for two assets
+    would print out 40 logs by default.
+
+`-f`, `--follow`
+
+:   Tail the assets logs. This isn't instant but will query collins for new
+    logs that may have shown up every 2 seconds.
+
+`-s` *VALUE*, `--severity` *VALUE*
+
+:   Limit the log severity that is shown. By default all logs will be shown.
+    The following severity levels are valid.
+
+    ::: {#severity-levels}
+    - `EMERGENCY`
+    - `ALERT`
+    - `ERROR`
+    - `INFORMATIONAL`
+    - `DEBUG`
+    - `NOTE`
+    - `CRITICAL`
+    - `WARNING`
+    - `NOTICE`
+    :::
+
+`-t` *VALUES*, `--tags` *VALUES*
+
+:   Specify the tags to get logs from. You can specify multiple logs with a
+    comma (ex. tag1,tag2,tag3).

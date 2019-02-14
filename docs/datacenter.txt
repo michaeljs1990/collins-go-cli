@@ -1,0 +1,55 @@
+% Collins Golang CLI
+% Michael Schuett
+% February 12, 2019
+
+Synopsis
+========
+
+`collins datacenter` [site]...
+
+Description
+===========
+
+Collins datacenter manages multiple collins config files in your $HOME
+directory. It manages them via a symlink at ~/.collins.yml that points to
+files that are in the form of ~/.collins.yml.datacenter-name.
+
+Datacenter Examples
+------------
+
+List all currently configured collins config files.
+
+    collins datacenter --list
+
+Switch your ~/.collins.yml to point to a different site
+
+    collins datacenter irn3
+
+Options
+=======
+
+Datacenter options {.options}
+---------------
+
+`-n` *VALUES*, `--new` *VALUES*
+
+:   Create a new configuration file in the form of ~/.collins.yml.VALUE. You
+    can set --host, --username, and --password from the cli. If you do not it
+    will interactively ask you to fill them out.
+
+`-H` *VALUE*, `--host` *VALUE*
+
+:   Set the hostname at which collins lives.
+
+`-u` *VALUE*, `--username` *VALUE*
+
+:   Set the username via the cli. If not set the default name will be $USER.
+
+`-p` *VALUE*, `--password` *VALUE*
+
+:   Set the password to use for collins.
+
+`-l`, `--list`
+
+:   List all sites that collins is managing. The listed values can be made the
+    main config file with `collins datacenter $sitename`

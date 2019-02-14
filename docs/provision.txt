@@ -1,0 +1,59 @@
+% Collins Golang CLI
+% Michael Schuett
+% February 12, 2019
+
+Synopsis
+========
+
+`collins provision` [options]...
+
+Description
+===========
+
+Provision a new asset in collins.
+
+Provision Examples
+------------
+
+Provision a devnode
+
+    collins provision -n devnode -p DEVELOPMENT -t M0001
+
+Options
+=======
+
+Provision options {.options}
+---------------
+
+`-n` *VALUE*, `--nodeclass` *VALUE*
+
+:   Set the nodeclass to be used when provisioning the asset. Most of the time
+    this and pool should be all you need since a collins profile will set the
+    other values based on the nodeclass.
+
+`-p` *VALUE*, `--pool` *VALUE*
+
+:   Specify the pool for the asset to be provisioned into.
+
+`-r`, `--role`
+
+:   Specify the primary role of the asset.
+
+`-R` *VALUE*, `--secondary-role` *VALUE*
+
+:   Specify the secondary role of the asset
+
+`-s` *VALUE*, `--suffix` *VALUE*
+
+:   Specify a suffix to use when creating the hostname provided the nodeclass
+    allows for it.
+
+`-b` *VALUE*, `--build-contact` *VALUE*
+
+:   Set the build contact that will be shown as the contact in collins. My
+    default we use the $USER environment variable.
+
+`-t` *VALUES*, `--tags` *VALUES*
+
+:   Specify the tags that are to be provisioned. Multiple can be set in the
+    form of tag1,tag2.

@@ -1,0 +1,39 @@
+% Collins Golang CLI
+% Michael Schuett
+% February 12, 2019
+
+Synopsis
+========
+
+`collins state` [options]...
+
+Description
+===========
+
+Output all states that are available in to be set on an asset in collins.
+
+State Examples
+------------
+
+List all states in collins.
+
+    collins state --list
+
+Options
+=======
+
+State options {.options}
+---------------
+
+`-l`, `--list`
+
+:   List all states for your collins instance.
+
+`-H`, `--show-header`
+
+:   Show headers when listing all states.
+
+`-f`, `--field--separator`
+
+:   Choose how columns are seperated in the output from list. By default `/t`
+    is used.
