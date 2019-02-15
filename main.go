@@ -20,7 +20,7 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 func main() {
 	app := cli.NewApp()
 	app.Name = "collins"
-	app.Version = "0.0.1"
+	app.Version = "0.9.0"
 	app.Usage = "Interface with http://tumblr.github.io/collins/"
 	app.Flags = []cli.Flag{
 		cli.IntFlag{
