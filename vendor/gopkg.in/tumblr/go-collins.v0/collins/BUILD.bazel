@@ -1,0 +1,30 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "asset.go",
+        "asset_attributes.go",
+        "asset_find.go",
+        "asset_type.go",
+        "collins.go",
+        "doc.go",
+        "firehose.go",
+        "ipam.go",
+        "ipmi.go",
+        "log.go",
+        "management.go",
+        "state.go",
+        "tag.go",
+        "util.go",
+    ],
+    importmap = "vendor/gopkg.in/tumblr/go-collins.v0/collins",
+    importpath = "gopkg.in/tumblr/go-collins.v0/collins",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_google_go_querystring//query:go_default_library",
+        "@com_github_schallert_iso8601//:go_default_library",
+        "@in_gopkg_tumblr_go_collins_v0//collins/sseclient:go_default_library",
+        "@in_gopkg_yaml_v2//:go_default_library",
+    ],
+)

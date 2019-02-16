@@ -17,6 +17,19 @@ $ curl -o collins -L https://github.com/michaeljs1990/collins-go-cli/releases/do
 $ chmod +x collins
 ```
 
+## Building
+
+This repos supports building with bazel as well as the default `go build` command. If you would like to build with bazel
+you can ...
+
+```
+# Install Bazel build file generator
+$ go get -u github.com/bazelbuild/bazel-gazelle/cmd/gazelle
+
+# Build binary
+$ bazel build //...
+```
+
 ## Coming Features
 
 * Collins IPAM subcommand

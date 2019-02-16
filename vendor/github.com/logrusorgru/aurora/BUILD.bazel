@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "aurora.go",
+        "color.go",
+        "sprintf.go",
+        "value.go",
+        "wrap.go",
+    ],
+    importmap = "vendor/github.com/logrusorgru/aurora",
+    importpath = "github.com/logrusorgru/aurora",
+    visibility = ["//visibility:public"],
+)
