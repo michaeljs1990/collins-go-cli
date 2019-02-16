@@ -43,6 +43,11 @@ go_test(
         "query_test.go",
         "util_test.go",
     ],
+    data = [
+        "assets/TestQueryCLIBasicWorkflow.json",
+        "assets/TestQueryCLIGetByAttribute.json",
+        "assets/TestQueryCLIGetGPU.json",
+    ],
     embed = [":go_default_library"],
     deps = [
         "@com_github_bouk_monkey//:go_default_library",
