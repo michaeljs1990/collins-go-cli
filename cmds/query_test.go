@@ -383,7 +383,7 @@ func TestQueryCLIBasicWorkflow(t *testing.T) {
 	})
 	defer teardown()
 
-	SetupGET(201, "/api/assets", "../assets/TestQueryCLIBasicWorkflow.json", t)
+	SetupGET(201, "/api/assets", "assets/TestQueryCLIBasicWorkflow.json", t)
 
 	queryContext(func(ctx *cli.Context) {
 		c, o, w := captureStdout()
@@ -415,7 +415,7 @@ func TestQueryCLIBasicWorkflowSeparator(t *testing.T) {
 	})
 	defer teardown()
 
-	SetupGET(201, "/api/assets", "../assets/TestQueryCLIBasicWorkflow.json", t)
+	SetupGET(201, "/api/assets", "assets/TestQueryCLIBasicWorkflow.json", t)
 
 	queryContext(func(ctx *cli.Context) {
 		c, o, w := captureStdout()
@@ -447,7 +447,7 @@ func TestQueryCLIGetByAttribute(t *testing.T) {
 	})
 	defer teardown()
 
-	SetupGET(201, "/api/assets", "../assets/TestQueryCLIGetByAttribute.json", t)
+	SetupGET(201, "/api/assets", "assets/TestQueryCLIGetByAttribute.json", t)
 
 	queryContext(func(ctx *cli.Context) {
 		c, o, w := captureStdout()
@@ -480,7 +480,7 @@ func TestQueryCLIGetGPU(t *testing.T) {
 	})
 	defer teardown()
 
-	SetupGET(201, "/api/assets", "../assets/TestQueryCLIGetGPU.json", t)
+	SetupGET(201, "/api/assets", "assets/TestQueryCLIGetGPU.json", t)
 
 	queryContext(func(ctx *cli.Context) {
 		c, o, w := captureStdout()
