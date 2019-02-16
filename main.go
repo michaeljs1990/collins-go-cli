@@ -6,7 +6,7 @@ import (
 
 	cli "github.com/urfave/cli"
 
-  cmds "cgit.xrt0x.com/xrt0x/collins-go-cli/cmds"
+	cmds "cgit.xrt0x.com/xrt0x/collins-go-cli/cmds"
 )
 
 var (

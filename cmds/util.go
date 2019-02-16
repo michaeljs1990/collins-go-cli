@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	color "github.com/logrusorgru/aurora"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
-	color "github.com/logrusorgru/aurora"
 )
 
 // This is kinda dumb but go has pretty limited data structure types
