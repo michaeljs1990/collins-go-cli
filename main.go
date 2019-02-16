@@ -8,6 +8,11 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
+var (
+  version = "master"
+  commit = "4b825dc642cb6eb9a060e54bf8d69288fbee4904" // Empty tree hash
+)
+
 func getCollinsClient(c *cli.Context) *collins.Client {
 	collins, err := collins.NewClientFromYaml()
 	if err != nil {
@@ -20,7 +25,7 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 func main() {
 	app := cli.NewApp()
 	app.Name = "collins"
-	app.Version = "0.9.0"
+	app.Version = fmt.Sprintf("%s (%s)", version, commit)
 	app.Usage = "Interface with http://tumblr.github.io/collins/"
 	app.Flags = []cli.Flag{
 		cli.IntFlag{

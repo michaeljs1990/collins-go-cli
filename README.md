@@ -20,13 +20,12 @@ $ chmod +x collins
 ## Building
 
 This repos supports building with bazel as well as the default `go build` command. If you would like to build with bazel
-you can ...
+which I use for releases now you can look at github.com/bazelbuild/bazel-gazelle/cmd/gazelle which is used to generate the
+build files. However it's not 100% feature complete and running it in this repo without knowing a little about bazel will
+likely cause some breakage. If you would like to build the world you can run the following which will pull in some git
+keys that are created with the `setup.sh` script and then build the binary.
 
 ```
-# Install Bazel build file generator
-$ go get -u github.com/bazelbuild/bazel-gazelle/cmd/gazelle
-
-# Build binary
 $ bazel build //...
 ```
 
