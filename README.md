@@ -25,6 +25,10 @@ build files. However it's not 100% feature complete and running it in this repo 
 likely cause some breakage. If you would like to build the world you can run the following which will pull in some git
 keys that are created with the `setup.sh` script and then build the binary.
 
+To get a similar feature set as I have used gox in the past for you can pass the --platforms flag to bazel build. That
+flag can take anything that is output by `bazel query 'kind(platform, @io_bazel_rules_go//go/toolchain:all)'` See the
+following page for more info https://github.com/bazelbuild/rules_go/blob/master/go/core.rst#cross-compilation.
+
 ```
 $ bazel build //...
 ```

@@ -29,6 +29,7 @@ go_binary(
     name = "collins-go-cli",
     embed = [":go_default_library"],
     visibility = ["//visibility:public"],
+    pure = "on",
     x_defs = {
       "main.version": "{STABLE_GIT_TAG}",
       "main.commit": "{STABLE_GIT_COMMIT}",
