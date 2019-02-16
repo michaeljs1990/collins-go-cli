@@ -1,4 +1,4 @@
-package main
+package cmds
 
 import (
 	"bufio"
@@ -12,7 +12,7 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
-func provisionSubcommand() cli.Command {
+func ProvisionSubcommand() cli.Command {
 	return cli.Command{
 		Name:  "provision",
 		Usage: "Provision assets",

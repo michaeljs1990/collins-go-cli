@@ -1,4 +1,4 @@
-package main
+package cmds
 
 import (
 	"bufio"
@@ -13,7 +13,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func datacenterSubcommand() cli.Command {
+func DatacenterSubcommand() cli.Command {
 	return cli.Command{
 		Name:    "datacenter",
 		Aliases: []string{"dc"},

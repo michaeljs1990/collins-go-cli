@@ -1,10 +1,10 @@
-package main
+package cmds
 
 import (
 	cli "github.com/urfave/cli"
 )
 
-func ipamSubcommand() cli.Command {
+func IpamSubcommand() cli.Command {
 	return cli.Command{
 		Name:    "ipam",
 		Aliases: []string{"address", "ipaddress"},

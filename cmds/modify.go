@@ -1,4 +1,4 @@
-package main
+package cmds
 
 import (
 	"bufio"
@@ -16,7 +16,7 @@ import (
 // error does happen we don't want to exit with a 0 status.
 var gotError = false
 
-func modifySubcommand() cli.Command {
+func ModifySubcommand() cli.Command {
 	return cli.Command{
 		Name:    "modify",
 		Aliases: []string{"set"},

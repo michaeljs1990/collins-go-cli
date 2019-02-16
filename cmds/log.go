@@ -1,4 +1,4 @@
-package main
+package cmds
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
-func logSubcommand() cli.Command {
+func LogSubcommand() cli.Command {
 	return cli.Command{
 		Name:  "log",
 		Usage: "Display log messages on assets",

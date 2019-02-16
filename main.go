@@ -5,22 +5,14 @@ import (
 	"os"
 
 	cli "github.com/urfave/cli"
-	collins "gopkg.in/tumblr/go-collins.v0/collins"
+
+  cmds "cgit.xrt0x.com/xrt0x/collins-go-cli/cmds"
 )
 
 var (
 	version = "master"
 	commit  = "4b825dc642cb6eb9a060e54bf8d69288fbee4904" // Empty tree hash
 )
-
-func getCollinsClient(c *cli.Context) *collins.Client {
-	collins, err := collins.NewClientFromYaml()
-	if err != nil {
-		fmt.Println("You can use COLLINS_CLIENT_CONFIG env to set the location of your config")
-		logAndDie(err.Error())
-	}
-	return collins
-}
 
 func main() {
 	app := cli.NewApp()
@@ -40,16 +32,16 @@ func main() {
 		},
 	}
 
-	cmds := []cli.Command{}
-	cmds = append(cmds, querySubcommand())
-	cmds = append(cmds, modifySubcommand())
-	cmds = append(cmds, logSubcommand())
-	cmds = append(cmds, provisionSubcommand())
-	cmds = append(cmds, powerSubcommand())
-	cmds = append(cmds, ipamSubcommand())
-	cmds = append(cmds, stateSubcommand())
-	cmds = append(cmds, datacenterSubcommand())
-	app.Commands = cmds
+	subCmds := []cli.Command{}
+	subCmds = append(subCmds, cmds.QuerySubcommand())
+	subCmds = append(subCmds, cmds.ModifySubcommand())
+	subCmds = append(subCmds, cmds.LogSubcommand())
+	subCmds = append(subCmds, cmds.ProvisionSubcommand())
+	subCmds = append(subCmds, cmds.PowerSubcommand())
+	subCmds = append(subCmds, cmds.IpamSubcommand())
+	subCmds = append(subCmds, cmds.StateSubcommand())
+	subCmds = append(subCmds, cmds.DatacenterSubcommand())
+	app.Commands = subCmds
 
 	err := app.Run(os.Args)
 	if err != nil {

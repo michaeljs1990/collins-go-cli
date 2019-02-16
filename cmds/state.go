@@ -1,4 +1,4 @@
-package main
+package cmds
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
-func stateSubcommand() cli.Command {
+func StateSubcommand() cli.Command {
 	return cli.Command{
 		Name:    "state",
 		Aliases: []string{"status"},

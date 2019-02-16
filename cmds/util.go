@@ -1,9 +1,11 @@
-package main
+package cmds
 
 import (
 	"fmt"
 	"os"
 
+	cli "github.com/urfave/cli"
+	collins "gopkg.in/tumblr/go-collins.v0/collins"
 	color "github.com/logrusorgru/aurora"
 )
 
@@ -30,6 +32,15 @@ func (u UniqueOrderedSet) Add(s string) UniqueOrderedSet {
 	}
 
 	return append(u, s)
+}
+
+func getCollinsClient(c *cli.Context) *collins.Client {
+	collins, err := collins.NewClientFromYaml()
+	if err != nil {
+		fmt.Println("You can use COLLINS_CLIENT_CONFIG env to set the location of your config")
+		logAndDie(err.Error())
+	}
+	return collins
 }
 
 // Helper functions for printing

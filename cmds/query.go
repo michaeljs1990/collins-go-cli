@@ -1,4 +1,4 @@
-package main
+package cmds
 
 import (
 	"os"
@@ -8,7 +8,7 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
-func querySubcommand() cli.Command {
+func QuerySubcommand() cli.Command {
 	return cli.Command{
 		Name:    "query",
 		Aliases: []string{"find"},
