@@ -44,7 +44,7 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return asset.Metadata.State.Name
 	case "classification":
 		return asset.Classification.Tag
-  case "ipmi_address":
+	case "ipmi_address":
 		return asset.IPMI.Address
 	case "ip_address":
 		return emptyOrValue(len(asset.Addresses), func() string {

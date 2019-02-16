@@ -9,8 +9,8 @@ import (
 )
 
 var (
-  version = "master"
-  commit = "4b825dc642cb6eb9a060e54bf8d69288fbee4904" // Empty tree hash
+	version = "master"
+	commit  = "4b825dc642cb6eb9a060e54bf8d69288fbee4904" // Empty tree hash
 )
 
 func getCollinsClient(c *cli.Context) *collins.Client {
