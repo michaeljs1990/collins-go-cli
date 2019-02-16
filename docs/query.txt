@@ -143,6 +143,7 @@ Format options {.options}
     - state
     - classification
     - ip_address
+    - ipmi_address
     - cpu_cores
     - cpu_threads
     - cpu_speed_ghz
