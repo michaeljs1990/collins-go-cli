@@ -32,7 +32,7 @@ flag can take anything that is output by `bazel query 'kind(platform, @io_bazel_
 following page for more info https://github.com/bazelbuild/rules_go/blob/master/go/core.rst#cross-compilation.
 
 ```
-$ bazel build //...
+$ bazel build //:collins-go-cli
 ```
 
 ## Coming Features
