@@ -1,9 +1,0 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
-
-go_library(
-    name = "go_default_library",
-    srcs = ["client.go"],
-    importmap = "vendor/gopkg.in/tumblr/go-collins.v0/collins/sseclient",
-    importpath = "gopkg.in/tumblr/go-collins.v0/collins/sseclient",
-    visibility = ["//visibility:public"],
-)
