@@ -15,13 +15,11 @@ username: blake
 password: test
 ```
 
-## Installing
+## Building
 
 You can easily build this by cloning the repo and running `go build -mod=vendor`. Additionally
 the most recent tags will have binaries uploaded for most common and some uncommon platforms
 that you can pull down via curl/wget.
-
-## Building
 
 This repos supports building with bazel as well as the default `go build` command. If you would like to build with bazel
 which I use for releases now you can look at github.com/bazelbuild/bazel-gazelle/cmd/gazelle which is used to generate the
