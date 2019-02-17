@@ -53,6 +53,10 @@ func printSuccess() {
 	fmt.Println(color.Green("SUCCESS"))
 }
 
+func printSuccessWithMsg(msg string) {
+	fmt.Println(color.Green("SUCCESS "), "("+msg+")")
+}
+
 func printError(e string) {
 	fmt.Println(color.Red("ERROR "), "("+e+")")
 }

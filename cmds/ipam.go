@@ -38,6 +38,22 @@ func IpamSubcommand() cli.Command {
 				Usage:    "Show header fields",
 				Category: "IPAM options",
 			},
+			cli.StringFlag{
+				Name:     "a, allocate",
+				Usage:    "Allocate addresses in pool",
+				Category: "IPAM options",
+			},
+			cli.IntFlag{
+				Name:     "n, number",
+				Usage:    "Allocate NUM addresses",
+				Value:    1,
+				Category: "IPAM options",
+			},
+			cli.StringFlag{
+				Name:     "t, tags",
+				Usage:    "Tags to work on, comma separated",
+				Category: "IPAM options",
+			},
 		},
 		Action: ipamRunCommand,
 	}
@@ -63,6 +79,31 @@ func fieldToPoolStruct(field string, pool collins.Pool) string {
 	}
 
 	return ""
+}
+
+func allocateAddress(c *cli.Context, col *collins.Client) {
+  num := c.Int("number")
+  pool := c.String("allocate")
+
+	opts := collins.AddressAllocateOpts{
+		Count: num,
+		Pool:  pool,
+	}
+
+	for _, tag := range strings.Split(c.String("tags"), ",") {
+		addrs, _, err := col.IPAM.Allocate(tag, opts)
+		fmt.Printf("%s allocating %d IP in %s... ", tag, num, pool)
+		if err != nil {
+      printError(err.Error())
+		} else {
+      msg := []string{"Allocated"}
+      for _, addr := range addrs {
+        msg = append(msg, addr.Address)
+      }
+      printSuccessWithMsg(strings.Join(msg, " "))
+    }
+	}
+
 }
 
 func renderPools(c *cli.Context, col *collins.Client, pools []collins.Pool) {
@@ -143,6 +184,8 @@ func ipamRunCommand(c *cli.Context) error {
 			logAndDie(err.Error())
 		}
 		renderPools(c, client, pools)
+	case c.IsSet("allocate"):
+		allocateAddress(c, client)
 	}
 
 	return nil
