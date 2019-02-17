@@ -8,5 +8,5 @@ To generate a man pages you can run the following command. Man pages should
 never be directly edited.
 
 ```
-pandoc query.md -f markdown -t man -s -o query.1
+pandoc query.md -f markdown -t man -s -o gen/query.1
 ```
