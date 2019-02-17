@@ -10,13 +10,6 @@ import (
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
-// -s, --show-pools                 Show IP pools
-// -H, --show-header                Show header fields in --show-pools output
-// -a, --allocate POOL              Allocate addresses in POOL
-// -n, --number [NUM]               Allocate NUM addresses (Defaults to 1 if omitted)
-// -d, --delete [POOL]              Delete addresses in POOL. Deletes ALL addresses if POOL is omitted
-// -t, --tags TAG[,...]             Tags to work on, comma separated
-
 func IpamSubcommand() cli.Command {
 	return cli.Command{
 		Name:    "ipam",
@@ -47,6 +40,11 @@ func IpamSubcommand() cli.Command {
 				Name:     "n, number",
 				Usage:    "Allocate NUM addresses",
 				Value:    1,
+				Category: "IPAM options",
+			},
+			cli.StringFlag{
+				Name:     "d, delete",
+				Usage:    "Delete addresses in POOL. An empty string deletes all pools",
 				Category: "IPAM options",
 			},
 			cli.StringFlag{
@@ -81,9 +79,32 @@ func fieldToPoolStruct(field string, pool collins.Pool) string {
 	return ""
 }
 
+func deleteAddress(c *cli.Context, col *collins.Client) {
+	pool := c.String("delete")
+
+	opts := collins.AddressDeleteOpts{
+		Pool: pool,
+	}
+
+	for _, tag := range strings.Split(c.String("tags"), ",") {
+		num, _, err := col.IPAM.Delete(tag, opts)
+		if pool == "" {
+			fmt.Printf("%s deleting all IPs in %s... ", tag, pool)
+		} else {
+			fmt.Printf("%s deleting all IPs... ", tag)
+		}
+
+		if err != nil {
+			printError(err.Error())
+		} else {
+			printSuccessWithMsg(fmt.Sprintf("Deleted %d IPs", num))
+		}
+	}
+}
+
 func allocateAddress(c *cli.Context, col *collins.Client) {
-  num := c.Int("number")
-  pool := c.String("allocate")
+	num := c.Int("number")
+	pool := c.String("allocate")
 
 	opts := collins.AddressAllocateOpts{
 		Count: num,
@@ -94,16 +115,15 @@ func allocateAddress(c *cli.Context, col *collins.Client) {
 		addrs, _, err := col.IPAM.Allocate(tag, opts)
 		fmt.Printf("%s allocating %d IP in %s... ", tag, num, pool)
 		if err != nil {
-      printError(err.Error())
+			printError(err.Error())
 		} else {
-      msg := []string{"Allocated"}
-      for _, addr := range addrs {
-        msg = append(msg, addr.Address)
-      }
-      printSuccessWithMsg(strings.Join(msg, " "))
-    }
+			msg := []string{"Allocated"}
+			for _, addr := range addrs {
+				msg = append(msg, addr.Address)
+			}
+			printSuccessWithMsg(strings.Join(msg, " "))
+		}
 	}
-
 }
 
 func renderPools(c *cli.Context, col *collins.Client, pools []collins.Pool) {
@@ -186,6 +206,8 @@ func ipamRunCommand(c *cli.Context) error {
 		renderPools(c, client, pools)
 	case c.IsSet("allocate"):
 		allocateAddress(c, client)
+	case c.IsSet("delete"):
+		deleteAddress(c, client)
 	}
 
 	return nil
