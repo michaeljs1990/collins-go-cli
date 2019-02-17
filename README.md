@@ -15,7 +15,7 @@ username: blake
 password: test
 ```
 
-## Building
+## Development
 
 You can easily build this by cloning the repo and running `go build -mod=vendor`. Additionally
 the most recent tags will have binaries uploaded for most common and some uncommon platforms
@@ -34,10 +34,6 @@ following page for more info https://github.com/bazelbuild/rules_go/blob/master/
 ```
 $ bazel build //:collins-go-cli
 ```
-
-## Coming Features
-
-* Collins IPAM subcommand
 
 ## Documentation
 
