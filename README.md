@@ -3,8 +3,6 @@ Collins Golang CLI
 
 Command line interface for interacting with https://tumblr.github.io/collins/
 
-[![asciicast](https://asciinema.org/a/HfytRKrk8jpgVFmFxOiZyusFS.svg)](https://asciinema.org/a/HfytRKrk8jpgVFmFxOiZyusFS)
-
 ## Config file
 
 In order to talk to collins you will need to create a `~/.collins.yml` file with the following fields.
