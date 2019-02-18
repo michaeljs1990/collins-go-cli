@@ -48,6 +48,11 @@ func IpamSubcommand() cli.Command {
 				Category: "IPAM options",
 			},
 			cli.StringFlag{
+				Name:     "dip, delete-ip",
+				Usage:    "Delete the IP that has has been provided on a given asset",
+				Category: "IPAM options",
+			},
+			cli.StringFlag{
 				Name:     "t, tags",
 				Usage:    "Tags to work on, comma separated",
 				Category: "IPAM options",
@@ -77,6 +82,32 @@ func fieldToPoolStruct(field string, pool collins.Pool) string {
 	}
 
 	return ""
+}
+
+func deleteIP(c *cli.Context, col *collins.Client) {
+	ip := c.String("delete-ip")
+
+	opts := collins.AddressDeleteOpts{
+		Address: ip,
+	}
+
+	// This only ever makes sense to do for one tag but we will
+	// leave this here since all other commands support multiple tags
+	// it will just throw some errors.
+	for _, tag := range strings.Split(c.String("tags"), ",") {
+		num, _, err := col.IPAM.Delete(tag, opts)
+		if ip == "" {
+			fmt.Printf("%s deleting all IPs... ", tag)
+		} else {
+			fmt.Printf("%s deleting IP %s... ", tag, ip)
+		}
+
+		if err != nil {
+			printError(err.Error())
+		} else {
+			printSuccessWithMsg(fmt.Sprintf("Deleted %d IPs", num))
+		}
+	}
 }
 
 func deleteAddress(c *cli.Context, col *collins.Client) {
@@ -208,6 +239,8 @@ func ipamRunCommand(c *cli.Context) error {
 		allocateAddress(c, client)
 	case c.IsSet("delete"):
 		deleteAddress(c, client)
+	case c.IsSet("delete-ip"):
+		deleteIP(c, client)
 	}
 
 	return nil

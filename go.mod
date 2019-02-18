@@ -2,6 +2,8 @@ module cgit.xrt0x.com/xrt0x/collins-go-cli
 
 replace github.com/urfave/cli => github.com/michaeljs1990/cli v1.20.1-0.20190128030917-b0494d5188b4
 
+replace gopkg.in/tumblr/go-collins.v0 => /home/eatingthenight/code/go-collins
+
 require (
 	bou.ke/monkey v1.0.1 // indirect
 	github.com/bouk/monkey v1.0.1
