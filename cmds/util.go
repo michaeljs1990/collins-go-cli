@@ -35,11 +35,18 @@ func (u UniqueOrderedSet) Add(s string) UniqueOrderedSet {
 }
 
 func getCollinsClient(c *cli.Context) *collins.Client {
+	// We just set the COLLINS_CLIENT_CONFIG so we can use the NewClientFromYaml
+	// helper function still which will still run through all the default config paths.
+	if c.GlobalIsSet("config") {
+		os.Setenv("COLLINS_CLIENT_CONFIG", c.GlobalString("config"))
+	}
+
 	collins, err := collins.NewClientFromYaml()
 	if err != nil {
-		fmt.Println("You can use COLLINS_CLIENT_CONFIG env to set the location of your config")
+		fmt.Println("You can use COLLINS_CLIENT_CONFIG env or --config to set the location of your config")
 		logAndDie(err.Error())
 	}
+
 	return collins
 }
 
