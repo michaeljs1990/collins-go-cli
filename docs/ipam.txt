@@ -1,0 +1,63 @@
+% Collins Golang CLI
+% Michael Schuett
+% February 12, 2019
+
+Synopsis
+========
+
+`collins ipam` [options]...
+
+Description
+===========
+
+Collins ipam will allow you to allocate, delete, or list addresses that
+belong to your IP pools configured in collins.
+
+IPAM Examples
+------------
+
+List all pools available in collins.
+
+    collins ipam --show-pools
+
+Delete an IPs that belong to a single pool.
+
+    collins ipam -t M00001,M00002 --delete DEV-POOL
+
+Options
+=======
+
+IPAM options {.options}
+---------------
+
+`-s`, `--show-pools`
+
+:   List all address pools that you have configured in collins.
+
+`-i`, `--show-ipmi-pools`
+
+:   List all ipmi address pools that you have configured in collins.
+
+`-H`, `--show-header`
+
+:   When using the `--show-pools` or `--show-ipmi-pools` this will
+    additionally output the header above each rendered field.
+
+`-a` *VALUE*, `--allocate` *VALUE*
+
+:   Allocate an address on a given asset from the pool of *VALUE*.
+
+`-n` *VALUE*, `--n` *VALUE*
+
+:   When using the `--allocate` flag you can additionally set the number of
+    addresses that will created on that asset.
+
+`-d` *VALUE*, `--delete` *VALUE*
+
+:   Pass in the pool name that you would like to delete all addresses from
+    that are on a given asset.
+
+`-t` *VALUE*, `--tags` *VALUE*
+
+:   Specify the tags to delete or allocate ips to. You can specify multiple 
+    logs with a comma (ex. tag1,tag2,tag3).
