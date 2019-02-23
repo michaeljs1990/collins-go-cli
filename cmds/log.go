@@ -1,7 +1,9 @@
 package cmds
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"sort"
 	"strconv"
@@ -218,6 +220,27 @@ func logRunCommand(c *cli.Context) error {
 
 	if c.IsSet("tags") || c.IsSet("all") {
 		tags := strings.Split(c.String("tags"), ",")
+		handleLogs(c, client, tags)
+	} else {
+		// No tag was passed in try to read from stdin
+		reader := bufio.NewReader(os.Stdin)
+		tags := []string{}
+		for {
+			line, err := reader.ReadString('\n')
+			if err == io.EOF {
+				break
+			} else if err != nil {
+				logAndDie(err.Error())
+			}
+
+			// If a newline was all that was recieved from stdin
+			// ignore it and keep going.
+			tag := strings.Fields(line)
+			if len(tag) >= 1 {
+				tags = append(tags, tag[0])
+			}
+		}
+
 		handleLogs(c, client, tags)
 	}
 
