@@ -81,6 +81,11 @@ func QuerySubcommand() cli.Command {
 				Value:    "AND",
 				Category: "Query options",
 			},
+			cli.StringFlag{
+				Name:     "q, query",
+				Usage:    "Specify a CQL query. This will overwrite most other flags see docs for more info.",
+				Category: "Query options",
+			},
 			cli.BoolFlag{
 				Name:     "H, show-header",
 				Usage:    "Show header fields in output",
@@ -142,7 +147,11 @@ func queryBuildOptions(c *cli.Context, hostname string) collins.AssetFindOpts {
 		opts.RemoteLookup = true
 	}
 
-	opts.Query = buildOptionsQuery(c, hostname)
+	if c.IsSet("query") {
+		opts.Query = c.String("query")
+	} else {
+		opts.Query = buildOptionsQuery(c, hostname)
+	}
 
 	return opts
 }

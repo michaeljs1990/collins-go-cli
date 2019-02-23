@@ -118,6 +118,18 @@ Query options {.options}
 :   Limit the total number of assets that will be returned for the query. By
     default everything will be returned.
 
+`-q` *VALUE*, `--query` *VALUE*
+
+:   Specify your own CQL query. Read the tumblr/collins docs for more info on
+    CQL or see the source code for examples of how we turn flags into CQL. The
+    following flags can be used with `--query`.
+
+    ::: {#flags}
+    - `--type`
+    - `--status`
+    - `--remote-lookup`
+    :::
+
 Format options {.options}
 ---------------
 

@@ -112,6 +112,20 @@ issue this may be useful to increase.
 .B \f[C]--limit\f[R] \f[I]VALUE\f[R]
 Limit the total number of assets that will be returned for the query.
 By default everything will be returned.
+.TP
+.B \f[C]-q\f[R] \f[I]VALUE\f[R], \f[C]--query\f[R] \f[I]VALUE\f[R]
+Specify your own CQL query.
+Read the tumblr/collins docs for more info on CQL or see the source code
+for examples of how we turn flags into CQL.
+The following flags can be used with \f[C]--query\f[R].
+.RS
+.IP \[bu] 2
+\f[C]--type\f[R]
+.IP \[bu] 2
+\f[C]--status\f[R]
+.IP \[bu] 2
+\f[C]--remote-lookup\f[R]
+.RE
 .SS Format options
 .TP
 .B \f[C]-H\f[R], \f[C]--show-header\f[R]
