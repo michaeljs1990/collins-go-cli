@@ -47,22 +47,22 @@ func powerActionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 		var err error
 		switch ctx.String("power") {
 		case "reboot", "rebootSoft":
-			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
+			fmt.Print(tag + " performing " + ctx.String("power") + " ... ")
 			_, err = col.Management.SoftReboot(tag)
 		case "reboothard":
-			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
+			fmt.Print(tag + " performing " + ctx.String("power") + " ... ")
 			_, err = col.Management.HardReboot(tag)
 		case "poweron", "on":
-			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
+			fmt.Print(tag + " performing " + ctx.String("power") + " ... ")
 			_, err = col.Management.PowerOn(tag)
 		case "poweroff", "off":
-			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
+			fmt.Print(tag + " performing " + ctx.String("power") + " ... ")
 			_, err = col.Management.SoftPowerOff(tag)
 		case "identify":
-			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
+			fmt.Print(tag + " performing " + ctx.String("power") + " ... ")
 			_, err = col.Management.Identify(tag)
 		case "verify":
-			fmt.Print(tag + " performing " + ctx.String("power") + " ...")
+			fmt.Print(tag + " performing " + ctx.String("power") + " ... ")
 			_, err = col.Management.Verify(tag)
 		default:
 			logAndDie("Unknown power action rebootx, expecting one of reboot,rebootsoft,reboothard,on,off,poweron,poweroff,identify,verify")
