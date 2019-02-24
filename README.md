@@ -13,6 +13,9 @@ username: blake
 password: test
 ```
 
+Note that unlike the ruby collins-cli gem you may not use symbols and strings interchangeably. If collins-go-cli
+blows up on the first run make sure you don't have `:host`, `:username`,or `:password` in your config file.
+
 ## Development
 
 You can easily build this by cloning the repo and running `go build -mod=vendor`. Additionally
