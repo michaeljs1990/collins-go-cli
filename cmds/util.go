@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	color "github.com/logrusorgru/aurora"
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
@@ -48,34 +47,4 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 	}
 
 	return collins
-}
-
-var debugMode bool
-
-func setDebugMode(c *cli.Context) {
-	debugMode = c.GlobalIsSet("debug")
-}
-
-func debugLog(msg string) {
-	if debugMode {
-		fmt.Fprintln(os.Stderr, "DEBUG: "+msg)
-	}
-}
-
-// Helper functions for printing
-func logAndDie(msg string) {
-	fmt.Fprintln(os.Stderr, msg)
-	os.Exit(1)
-}
-
-func printSuccess() {
-	fmt.Println(color.Green("SUCCESS"))
-}
-
-func printSuccessWithMsg(msg string) {
-	fmt.Println(color.Green("SUCCESS "), "("+msg+")")
-}
-
-func printError(e string) {
-	fmt.Println(color.Red("ERROR "), "("+e+")")
 }

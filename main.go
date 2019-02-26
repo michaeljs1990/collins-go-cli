@@ -37,6 +37,9 @@ func main() {
 		},
 	}
 
+	// Setup any needed middleware
+	app.Before = cmds.BeforeMiddleware
+
 	subCmds := []cli.Command{}
 	subCmds = append(subCmds, cmds.QuerySubcommand())
 	subCmds = append(subCmds, cmds.ModifySubcommand())
