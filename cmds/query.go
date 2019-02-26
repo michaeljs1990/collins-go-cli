@@ -153,6 +153,8 @@ func queryBuildOptions(c *cli.Context, hostname string) collins.AssetFindOpts {
 		opts.Query = buildOptionsQuery(c, hostname)
 	}
 
+	debugLog("CQL executed - " + opts.Query)
+
 	return opts
 }
 
@@ -276,6 +278,7 @@ func getOutputFormat(c *cli.Context) string {
 }
 
 func queryRunCommand(c *cli.Context) error {
+	setDebugMode(c)
 	// Don't run if nothing is passed into the command
 	if len(os.Args) == 2 {
 		logAndDie("See --help for collins query usage")

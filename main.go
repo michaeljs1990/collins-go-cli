@@ -25,6 +25,11 @@ func main() {
 			Usage:    "Timeout in seconds (0 == forever)",
 			Category: "Global setting",
 		},
+		cli.BoolFlag{
+			Name:     "debug",
+			Usage:    "Print some extra info to stderr when running commands",
+			Category: "Global setting",
+		},
 		cli.StringFlag{
 			Name:     "C, config",
 			Usage:    "Use specific Collins config yaml for client",

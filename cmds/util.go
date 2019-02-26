@@ -50,6 +50,18 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 	return collins
 }
 
+var debugMode bool
+
+func setDebugMode(c *cli.Context) {
+	debugMode = c.GlobalIsSet("debug")
+}
+
+func debugLog(msg string) {
+	if debugMode {
+		fmt.Fprintln(os.Stderr, "DEBUG: "+msg)
+	}
+}
+
 // Helper functions for printing
 func logAndDie(msg string) {
 	fmt.Fprintln(os.Stderr, msg)
