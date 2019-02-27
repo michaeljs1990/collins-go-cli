@@ -50,10 +50,12 @@ func PowerSubcommand() cli.Command {
 // specified power command. Maybe remove this and allow you to specify
 // both in a later release.
 func powerActionByTag(wg *sync.WaitGroup, ctx *cli.Context, col *collins.Client, tag string) {
-	wg.Add(1)
 	defer wg.Done()
 
 	if ctx.IsSet("power") {
+
+		debugLog("Trying to perform power action '" + ctx.String("power") + "' on " + tag)
+
 		var err error
 		msg := tag + " performing " + ctx.String("power") + " ... "
 		switch ctx.String("power") {
@@ -64,7 +66,7 @@ func powerActionByTag(wg *sync.WaitGroup, ctx *cli.Context, col *collins.Client,
 		case "poweron", "on":
 			_, err = col.Management.PowerOn(tag)
 		case "poweroff", "off":
-			_, err = col.Management.SoftPowerOff(tag)
+			_, err = col.Management.PowerOff(tag)
 		case "identify":
 			_, err = col.Management.Identify(tag)
 		case "verify":
@@ -78,9 +80,9 @@ func powerActionByTag(wg *sync.WaitGroup, ctx *cli.Context, col *collins.Client,
 		// not all printed to screen in one fmt.Print function.
 		if err != nil {
 			gotError = true
-			fmt.Print(msg, color.Red("ERROR"))
+			fmt.Print(msg, color.Red("ERROR"), "\n")
 		} else {
-			fmt.Print(msg, color.Green("SUCCESS"))
+			fmt.Print(msg, color.Green("SUCCESS"), "\n")
 		}
 
 		return
@@ -119,8 +121,10 @@ func powerRunCommand(c *cli.Context) error {
 		tags := strings.Split(c.String("tags"), ",")
 		for _, tag := range tags {
 			powerActionsRun++
+			wg.Add(1)
 			go powerActionByTag(&wg, c, client, tag)
 			if 0 == powerActionsRun%c.Int("number") {
+				debugLog("hit max number of outstanding power actions waiting for some to finish before continuing")
 				wg.Wait()
 			}
 		}
@@ -140,6 +144,7 @@ func powerRunCommand(c *cli.Context) error {
 			tag := strings.Fields(line)
 			if len(tag) >= 1 {
 				powerActionsRun++
+				wg.Add(1)
 				go powerActionByTag(&wg, c, client, tag[0])
 			}
 
@@ -147,12 +152,14 @@ func powerRunCommand(c *cli.Context) error {
 			// we take a break and wait for them to finish up before
 			// issuing more commands.
 			if 0 == powerActionsRun%c.Int("number") {
+				debugLog("hit max number of outstanding power actions waiting for some to finish before continuing")
 				wg.Wait()
 			}
 		}
 	}
 
 	// Ensure nothing is outstanding
+	debugLog("Will now wait to ensure that everything finishes before returning")
 	wg.Wait()
 
 	if gotError {
