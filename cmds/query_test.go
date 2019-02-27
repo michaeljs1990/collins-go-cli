@@ -299,6 +299,14 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-a", "test:thing", "dev"})
 
 	queryContext(func(ctx *cli.Context) {
+		out := buildOptionsQuery(ctx, "dev")
+		expected := "(HOSTNAME = dev) AND (TEST != THING)"
+		if out != expected {
+			t.Error("Expected ", expected, " got ", out)
+		}
+	}, []string{"cmd", "query", "-a", "test-:thing", "dev"})
+
+	queryContext(func(ctx *cli.Context) {
 		hitFatalError := false
 		monkey.Patch(logAndDie, func(msg string) {
 			hitFatalError = true

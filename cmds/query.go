@@ -72,12 +72,7 @@ func QuerySubcommand() cli.Command {
 			},
 			cli.StringSliceFlag{
 				Name:     "a, attribute",
-				Usage:    "Arbitrary attributes and values to match in query. : between key and value",
-				Category: "Query options",
-			},
-			cli.StringSliceFlag{
-				Name:     "na, not-attribute",
-				Usage:    "Arbitrary attributes and values to not match in query. -: between key and value",
+				Usage:    "Arbitrary attributes. ':'  or '-:' between key and value. : is a positive match and -: is a negative match",
 				Category: "Query options",
 			},
 			cli.StringFlag{
@@ -213,27 +208,24 @@ func buildOptionsQuery(c *cli.Context, hostname string) string {
 
 	if c.IsSet("attribute") || c.IsSet("a") {
 		for _, attr := range c.StringSlice("attribute") {
-			attrSplit := strings.SplitN(attr, ":", 2)
+			var attrSplit []string
+			equal := false
+			attrSplit = strings.SplitN(attr, "-:", 2)
+			if len(attrSplit) != 2 {
+				attrSplit = strings.SplitN(attr, ":", 2)
+				equal = true
+			}
 			if len(attrSplit) != 2 {
 				logAndDie("--attribute and -a requires attribute:value, missing :value")
 			}
 			attrKey := strings.ToUpper(attrSplit[0])
 			attrValue := strings.ToUpper(attrSplit[1])
 
-			cql = append(cql, "("+attrKey+" = "+attrValue+")")
-		}
-	}
-
-	if c.IsSet("not-attribute") || c.IsSet("na") {
-		for _, attr := range c.StringSlice("not-attribute") {
-			attrSplit := strings.SplitN(attr, "-:", 2)
-			if len(attrSplit) != 2 {
-				logAndDie("--not-attribute and -na requires attribute-:value, missing -:value")
+			if equal {
+				cql = append(cql, "("+attrKey+" = "+attrValue+")")
+			} else {
+				cql = append(cql, "("+attrKey+" != "+attrValue+")")
 			}
-			attrKey := strings.ToUpper(attrSplit[0])
-			attrValue := strings.ToUpper(attrSplit[1])
-
-			cql = append(cql, "("+attrKey+" != "+attrValue+")")
 		}
 	}
 
@@ -260,19 +252,13 @@ func queryGetColumns(c *cli.Context) []string {
 
 	if c.IsSet("attribute") || c.IsSet("a") {
 		for _, attr := range c.StringSlice("attribute") {
-			attrSplit := strings.SplitN(attr, ":", 2)
+			var attrSplit []string
+			attrSplit = strings.SplitN(attr, "-:", 2)
+			if len(attrSplit) != 2 {
+				attrSplit = strings.SplitN(attr, ":", 2)
+			}
 			if len(attrSplit) != 2 {
 				logAndDie("--attribute and -a requires attribute:value, missing :value")
-			}
-			uniqueSet = uniqueSet.Add(attrSplit[0])
-		}
-	}
-
-	if c.IsSet("not-attribute") || c.IsSet("na") {
-		for _, attr := range c.StringSlice("not-attribute") {
-			attrSplit := strings.SplitN(attr, "-:", 2)
-			if len(attrSplit) != 2 {
-				logAndDie("--not-attribute and -na requires attribute-:value, missing -:value")
 			}
 			uniqueSet = uniqueSet.Add(attrSplit[0])
 		}
