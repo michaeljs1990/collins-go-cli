@@ -86,6 +86,21 @@ func QuerySubcommand() cli.Command {
 				Usage:    "Specify a CQL query. This will overwrite most other flags see docs for more info.",
 				Category: "Query options",
 			},
+			cli.StringFlag{
+				Name:     "F, sort-field",
+				Usage:    "The field that should be used for sorting",
+				Category: "Query options",
+			},
+			cli.BoolFlag{
+				Name:     "A, sort-ascending",
+				Usage:    "Sort assets in ascending order",
+				Category: "Query options",
+			},
+			cli.BoolFlag{
+				Name:     "D, sort-descending",
+				Usage:    "Sort assets in descending order",
+				Category: "Query options",
+			},
 			cli.BoolFlag{
 				Name:     "H, show-header",
 				Usage:    "Show header fields in output",
@@ -318,6 +333,16 @@ func queryRunCommand(c *cli.Context) error {
 
 	opts.PageOpts = collins.PageOpts{
 		Size: size,
+	}
+
+	if c.IsSet("sort-ascending") {
+		opts.PageOpts.Sort = "ASC"
+	} else if c.IsSet("sort-descending") {
+		opts.PageOpts.Sort = "DESC"
+	}
+
+	if c.IsSet("sort-field") {
+		opts.PageOpts.SortField = c.String("sort-field")
 	}
 
 	var allAssets []collins.Asset
