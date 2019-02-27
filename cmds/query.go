@@ -75,6 +75,11 @@ func QuerySubcommand() cli.Command {
 				Usage:    "Arbitrary attributes and values to match in query. : between key and value",
 				Category: "Query options",
 			},
+			cli.StringSliceFlag{
+				Name:     "na, not-attribute",
+				Usage:    "Arbitrary attributes and values to not match in query. -: between key and value",
+				Category: "Query options",
+			},
 			cli.StringFlag{
 				Name:     "o, operation",
 				Usage:    "Sets if your query will be joined with AND or OR",
@@ -219,6 +224,19 @@ func buildOptionsQuery(c *cli.Context, hostname string) string {
 		}
 	}
 
+	if c.IsSet("not-attribute") || c.IsSet("na") {
+		for _, attr := range c.StringSlice("not-attribute") {
+			attrSplit := strings.SplitN(attr, "-:", 2)
+			if len(attrSplit) != 2 {
+				logAndDie("--not-attribute and -na requires attribute-:value, missing -:value")
+			}
+			attrKey := strings.ToUpper(attrSplit[0])
+			attrValue := strings.ToUpper(attrSplit[1])
+
+			cql = append(cql, "("+attrKey+" != "+attrValue+")")
+		}
+	}
+
 	operation := c.String("operation")
 	if operation != "AND" && operation != "OR" {
 		logAndDie("Operation (or o) flag may only be set to AND or OR")
@@ -245,6 +263,16 @@ func queryGetColumns(c *cli.Context) []string {
 			attrSplit := strings.SplitN(attr, ":", 2)
 			if len(attrSplit) != 2 {
 				logAndDie("--attribute and -a requires attribute:value, missing :value")
+			}
+			uniqueSet = uniqueSet.Add(attrSplit[0])
+		}
+	}
+
+	if c.IsSet("not-attribute") || c.IsSet("na") {
+		for _, attr := range c.StringSlice("not-attribute") {
+			attrSplit := strings.SplitN(attr, "-:", 2)
+			if len(attrSplit) != 2 {
+				logAndDie("--not-attribute and -na requires attribute-:value, missing -:value")
 			}
 			uniqueSet = uniqueSet.Add(attrSplit[0])
 		}
