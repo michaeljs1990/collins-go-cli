@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
@@ -46,6 +47,11 @@ func ProvisionSubcommand() cli.Command {
 				Name:     "b, build-contact",
 				Usage:    "Build contact",
 				Value:    os.Getenv("USER"),
+				Category: "Provision options",
+			},
+			cli.IntFlag{
+				Name:     "w, wait",
+				Usage:    "Time to wait in between each provision request",
 				Category: "Provision options",
 			},
 			cli.StringFlag{
@@ -94,10 +100,21 @@ func provisionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 func provisionRunCommand(c *cli.Context) error {
 	client := getCollinsClient(c)
 
+	waitTime := 0 * time.Second
+	numProvisioned := 0
+	if c.IsSet("wait") {
+		waitTime = time.Duration(c.Int("wait")) * time.Second
+	}
+
 	if c.IsSet("tags") {
 		tags := strings.Split(c.String("tags"), ",")
+
 		for _, tag := range tags {
+			if numProvisioned != 0 {
+				time.Sleep(waitTime)
+			}
 			provisionByTag(c, client, tag)
+			numProvisioned++
 		}
 	} else {
 		// No tag was passed in try to read from stdin
@@ -114,7 +131,11 @@ func provisionRunCommand(c *cli.Context) error {
 			// ignore it and keep going.
 			tag := strings.Fields(line)
 			if len(tag) >= 1 {
+				if numProvisioned != 0 {
+					time.Sleep(waitTime)
+				}
 				provisionByTag(c, client, tag[0])
+				numProvisioned++
 			}
 		}
 	}
