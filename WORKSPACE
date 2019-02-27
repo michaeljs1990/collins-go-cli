@@ -98,7 +98,7 @@ go_repository(
     name = "com_github_urfave_cli",
     importpath = "github.com/urfave/cli",
     remote = "https://github.com/michaeljs1990/cli",
-    commit = "50b52ca9d52b",
+    commit = "b0494d5188b484c900914767a3c791c2e93c0858",
     vcs = "git",
 )
 
@@ -117,7 +117,9 @@ go_repository(
 go_repository(
     name = "in_gopkg_urfave_cli_v1",
     importpath = "gopkg.in/urfave/cli.v1",
-    tag = "v1.20.0",
+    remote = "https://github.com/michaeljs1990/cli",
+    commit = "b0494d5188b484c900914767a3c791c2e93c0858",
+    vcs = "git",
 )
 
 go_repository(
