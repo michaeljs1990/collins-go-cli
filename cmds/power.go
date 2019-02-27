@@ -89,6 +89,8 @@ func powerActionByTag(wg *sync.WaitGroup, ctx *cli.Context, col *collins.Client,
 	}
 
 	if ctx.IsSet("status") {
+		debugLog("Trying to get current power status from " + tag)
+
 		msg := tag + " checking power status ... "
 
 		stat, _, err := col.Management.PowerStatus(tag)
