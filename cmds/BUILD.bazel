@@ -5,9 +5,12 @@ go_library(
     srcs = [
         "datacenter.go",
         "format.go",
+        "global.go",
         "ipam.go",
         "log.go",
+        "middleware.go",
         "modify.go",
+        "output.go",
         "power.go",
         "provision.go",
         "query.go",
