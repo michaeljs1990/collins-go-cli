@@ -16,6 +16,15 @@ password: test
 Note that unlike the ruby collins-cli gem you may not use symbols and strings interchangeably. If collins-go-cli
 blows up on the first run make sure you don't have `:host`, `:username`,or `:password` in your config file.
 
+## Install
+
+You can always install from the releases I have produced if you want however you can also stay up to date
+using the `go get` method. My server can be a little slow sometimes but it works just fine if you wait.
+
+```
+go get -u cgit.xrt0x.com/xrt0x/collins-go-cli/cmd/collins
+```
+
 ## Development
 
 You can easily build this by cloning the repo and running `go build -mod=vendor ./cmd/collins`. Additionally
