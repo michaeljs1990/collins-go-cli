@@ -20,5 +20,5 @@ done
 mkdir -p releases
 
 for arch in "${builds[@]}"; do
-  cp -f $(pwd)/bazel-bin/${arch}_pure_stripped/collins-go-cli $(pwd)/releases/collins_$arch
+  cp -f $(pwd)/bazel-bin/cmd/collins/${arch}_pure_stripped/collins $(pwd)/releases/collins_$arch
 done
