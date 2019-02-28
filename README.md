@@ -18,7 +18,7 @@ blows up on the first run make sure you don't have `:host`, `:username`,or `:pas
 
 ## Development
 
-You can easily build this by cloning the repo and running `go build -mod=vendor`. Additionally
+You can easily build this by cloning the repo and running `go build -mod=vendor ./cmd/collins`. Additionally
 the most recent tags will have binaries uploaded for most common and some uncommon platforms
 that you can pull down via curl/wget.
 
@@ -33,7 +33,7 @@ flag can take anything that is output by `bazel query 'kind(platform, @io_bazel_
 following page for more info https://github.com/bazelbuild/rules_go/blob/master/go/core.rst#cross-compilation.
 
 ```
-$ bazel build //:collins-go-cli
+$ bazel build //cmd/collins:collins
 ```
 
 ## Documentation

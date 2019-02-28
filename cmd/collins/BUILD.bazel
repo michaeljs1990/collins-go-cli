@@ -1,12 +1,12 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary")
 
 go_binary(
-    name = "collins-go-cli",
+    name = "collins",
     visibility = ["//visibility:public"],
     pure = "on",
     srcs = ["main.go"],
     deps = [
-      "//cmds:library",
+      "//src:library",
       "@com_github_urfave_cli//:go_default_library",
     ],
     x_defs = {

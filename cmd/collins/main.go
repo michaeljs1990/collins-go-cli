@@ -6,7 +6,7 @@ import (
 
 	cli "github.com/urfave/cli"
 
-	cmds "cgit.xrt0x.com/xrt0x/collins-go-cli/cmds"
+	src "cgit.xrt0x.com/xrt0x/collins-go-cli/src"
 )
 
 var (
@@ -38,17 +38,17 @@ func main() {
 	}
 
 	// Setup any needed middleware
-	app.Before = cmds.BeforeMiddleware
+	app.Before = src.BeforeMiddleware
 
 	subCmds := []cli.Command{}
-	subCmds = append(subCmds, cmds.QuerySubcommand())
-	subCmds = append(subCmds, cmds.ModifySubcommand())
-	subCmds = append(subCmds, cmds.LogSubcommand())
-	subCmds = append(subCmds, cmds.ProvisionSubcommand())
-	subCmds = append(subCmds, cmds.PowerSubcommand())
-	subCmds = append(subCmds, cmds.IpamSubcommand())
-	subCmds = append(subCmds, cmds.StateSubcommand())
-	subCmds = append(subCmds, cmds.DatacenterSubcommand())
+	subCmds = append(subCmds, src.QuerySubcommand())
+	subCmds = append(subCmds, src.ModifySubcommand())
+	subCmds = append(subCmds, src.LogSubcommand())
+	subCmds = append(subCmds, src.ProvisionSubcommand())
+	subCmds = append(subCmds, src.PowerSubcommand())
+	subCmds = append(subCmds, src.IpamSubcommand())
+	subCmds = append(subCmds, src.StateSubcommand())
+	subCmds = append(subCmds, src.DatacenterSubcommand())
 	app.Commands = subCmds
 
 	err := app.Run(os.Args)

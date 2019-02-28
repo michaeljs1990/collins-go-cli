@@ -14,11 +14,11 @@ builds=(
 for arch in "${builds[@]}"; do
   echo build for $arch
   echo ===========================================================================
-  bazel build --platforms=@io_bazel_rules_go//go/toolchain:$arch //:collins-go-cli
+  bazel build --platforms=@io_bazel_rules_go//go/toolchain:$arch //cmd/collins:collins
 done
 
 mkdir -p releases
 
 for arch in "${builds[@]}"; do
-  cp -f $(pwd)/bazel-bin/${arch}_pure_stripped/collins-go-cli $(pwd)/releases/collins-go-cli_$arch
+  cp -f $(pwd)/bazel-bin/${arch}_pure_stripped/collins-go-cli $(pwd)/releases/collins_$arch
 done
