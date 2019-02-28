@@ -23,5 +23,5 @@ before_install:
     rm -f install.sh
 
 script:
-  - bazel build //:collins-go-cli
-  - bazel test //cmds:test
+  - bazel build //cmd/collins:collins
+  - bazel test //src:test
