@@ -1,6 +1,8 @@
 package cmds
 
 import (
+	"bufio"
+	"io"
 	"os"
 	"strings"
 
@@ -128,7 +130,7 @@ func QuerySubcommand() cli.Command {
 	}
 }
 
-func queryBuildOptions(c *cli.Context, hostname string) collins.AssetFindOpts {
+func queryBuildOptions(c *cli.Context, hostname string, tagsFromStdin []string) collins.AssetFindOpts {
 	opts := collins.AssetFindOpts{}
 
 	if c.IsSet("status") {
@@ -150,7 +152,7 @@ func queryBuildOptions(c *cli.Context, hostname string) collins.AssetFindOpts {
 	if c.IsSet("query") {
 		opts.Query = c.String("query")
 	} else {
-		opts.Query = buildOptionsQuery(c, hostname)
+		opts.Query = buildOptionsQuery(c, hostname, tagsFromStdin)
 	}
 
 	debugLog("CQL executed - " + opts.Query)
@@ -174,10 +176,24 @@ func cqlQuery(c *cli.Context, flag string, field string) string {
 }
 
 // This is broke out of build options just for the sake of making testing easier
-func buildOptionsQuery(c *cli.Context, hostname string) string {
+func buildOptionsQuery(c *cli.Context, hostname string, tagsFromStdin []string) string {
 	cql := []string{}
+
 	// The go client isn't as friendly as the ruby one which is fine we will just
 	// take everything else and convert it into CQL to talk to collins.
+	if len(tagsFromStdin) > 0 {
+		query := []string{}
+		for _, val := range tagsFromStdin {
+			query = append(query, "(TAG = "+val+")")
+		}
+
+		if len(query) == 1 {
+			cql = append(cql, query[0])
+		} else {
+			cql = append(cql, "("+strings.Join(query, " OR ")+")")
+		}
+	}
+
 	if c.IsSet("tag") {
 		cql = append(cql, cqlQuery(c, "tag", "TAG"))
 	}
@@ -305,8 +321,39 @@ func queryRunCommand(c *cli.Context) error {
 		hostname = c.Args().Get(0)
 	}
 
+	// The use case for this seems odd but it's actual very helpful to be
+	// able to take a list of tags and query to get more info about them.
+	// We check here if the command is being piped to or not so that you can
+	// specify --tags and pipe to the file.
+	tagsFromStdin := []string{}
+	if !c.IsSet("tag") {
+		fi, err := os.Stdin.Stat()
+		if err != nil {
+			logAndDie(err.Error())
+		}
+
+		if (fi.Mode() & os.ModeCharDevice) == 0 {
+			reader := bufio.NewReader(os.Stdin)
+			for {
+				line, err := reader.ReadString('\n')
+				if err == io.EOF {
+					break
+				} else if err != nil {
+					logAndDie(err.Error())
+				}
+
+				// If a newline was all that was recieved from stdin
+				// ignore it and keep going.
+				tag := strings.Fields(line)
+				if len(tag) >= 1 {
+					tagsFromStdin = append(tagsFromStdin, tag[0])
+				}
+			}
+		}
+	}
+
 	client := getCollinsClient(c)
-	opts := queryBuildOptions(c, hostname)
+	opts := queryBuildOptions(c, hostname, tagsFromStdin)
 	size := c.Int("size")
 
 	// Kinda hacky but if limit is set we just set

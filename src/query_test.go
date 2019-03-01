@@ -251,7 +251,7 @@ func TestGetOutputFormat(t *testing.T) {
 
 func TestBuildOptionsQuery(t *testing.T) {
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx, "")
+		out := buildOptionsQuery(ctx, "", []string{})
 		expected := "(NODECLASS = somenode)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -259,7 +259,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx, "")
+		out := buildOptionsQuery(ctx, "", []string{})
 		expected := "(NODECLASS = snode) AND (PRIMARY_ROLE = arole) AND (SECONDARY_ROLE = srole)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -267,7 +267,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "snode", "-r", "arole", "-R", "srole"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx, "")
+		out := buildOptionsQuery(ctx, "", []string{})
 		expected := "(NODECLASS = snode) OR (PRIMARY_ROLE = arole2) OR (SECONDARY_ROLE = srole2)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -275,7 +275,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-o", "OR"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx, "")
+		out := buildOptionsQuery(ctx, "", []string{})
 		expected := "(TAG = U001) OR (NODECLASS = snode) OR (POOL = DEV) OR (PRIMARY_ROLE = arole2) OR (SECONDARY_ROLE = srole2) OR (IP_ADDRESS = 10.0.0.5)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -283,7 +283,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-o", "OR", "-t", "U001", "--pool", "DEV", "-i", "10.0.0.5"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx, "")
+		out := buildOptionsQuery(ctx, "", []string{})
 		expected := "(TAG = U001) AND (NODECLASS = snode) AND (POOL = DEV) AND (PRIMARY_ROLE = arole2) AND (SECONDARY_ROLE = srole2) AND (IP_ADDRESS = 10.0.0.5)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -291,7 +291,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "snode", "--role", "arole2", "-R", "srole2", "-t", "U001", "--pool", "DEV", "-i", "10.0.0.5"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx, "dev")
+		out := buildOptionsQuery(ctx, "dev", []string{})
 		expected := "(HOSTNAME = dev) AND (TEST = THING)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -299,7 +299,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 	}, []string{"cmd", "query", "-a", "test:thing", "dev"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := buildOptionsQuery(ctx, "dev")
+		out := buildOptionsQuery(ctx, "dev", []string{})
 		expected := "(HOSTNAME = dev) AND (TEST != THING)"
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
@@ -311,7 +311,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 		monkey.Patch(logAndDie, func(msg string) {
 			hitFatalError = true
 		})
-		buildOptionsQuery(ctx, "")
+		buildOptionsQuery(ctx, "", []string{})
 		if hitFatalError == false {
 			t.Error("LOL should throw a fatal error")
 		}
@@ -321,7 +321,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 
 func TestQueryBuildOptions(t *testing.T) {
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx, "")
+		out := queryBuildOptions(ctx, "", []string{})
 		expected := "(NODECLASS = somenode)"
 		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
 			t.Error("Building simple query options failed")
@@ -329,7 +329,7 @@ func TestQueryBuildOptions(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode", "-S", "allocated:running"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx, "")
+		out := queryBuildOptions(ctx, "", []string{})
 		expected := "(NODECLASS = somenode)"
 
 		if out.Type != "SOME_TYPE" {
@@ -347,7 +347,7 @@ func TestQueryBuildOptions(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode", "-T", "SOME_TYPE"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx, "")
+		out := queryBuildOptions(ctx, "", []string{})
 		expected := "((NODECLASS = somenode) OR (NODECLASS = someother))"
 
 		if out.Query != expected {
@@ -356,7 +356,7 @@ func TestQueryBuildOptions(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode,someother"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx, "")
+		out := queryBuildOptions(ctx, "", []string{})
 		expected := "((TAG = M1) OR (TAG = M2) OR (TAG = M3)) AND ((NODECLASS = somenode) OR (NODECLASS = someother)) AND ((PRIMARY_ROLE = test) OR (PRIMARY_ROLE = test2)) AND (IP_ADDRESS = 10.0.0.1)"
 
 		if out.Query != expected {
@@ -365,7 +365,7 @@ func TestQueryBuildOptions(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode,someother", "-t", "M1,M2,M3", "--role", "test,test2", "-i", "10.0.0.1"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx, "")
+		out := queryBuildOptions(ctx, "", []string{})
 		expected := "(TAG = M1) AND (NODECLASS = somenode) AND ((SECONDARY_ROLE = test) OR (SECONDARY_ROLE = test2))"
 
 		if out.Query != expected {
@@ -374,7 +374,7 @@ func TestQueryBuildOptions(t *testing.T) {
 	}, []string{"cmd", "query", "-n", "somenode", "-t", "M1", "--secondary-role", "test,test2"})
 
 	queryContext(func(ctx *cli.Context) {
-		out := queryBuildOptions(ctx, "hi")
+		out := queryBuildOptions(ctx, "hi", []string{})
 		want := ""
 		if out.Attribute != "" {
 			t.Error("Want:", want, " Got:", out.Attribute)
