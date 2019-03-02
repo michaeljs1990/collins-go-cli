@@ -129,11 +129,10 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		})
 	case "disk_types":
 		return emptyOrValue(len(asset.Disks), func() string {
-			disks := []string{}
+			disks := UniqueOrderedSet{}
 			for _, v := range asset.Disks {
-				disks = append(disks, v.Description)
+				disks = disks.Add(v.Description)
 			}
-
 			return strings.Join(disks, ",")
 		})
 	default:
