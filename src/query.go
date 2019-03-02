@@ -88,6 +88,11 @@ func QuerySubcommand() cli.Command {
 				Usage:    "Specify a CQL query. This will overwrite most other flags see docs for more info.",
 				Category: "Query options",
 			},
+			cli.StringFlag{
+				Name:     "u, pipe",
+				Usage:    "This sets the attribute to match against when piping to stdin. When not set it defaults to tags.",
+				Category: "Query options",
+			},
 			cli.BoolFlag{
 				Name:     "H, show-header",
 				Usage:    "Show header fields in output",
@@ -130,7 +135,7 @@ func QuerySubcommand() cli.Command {
 	}
 }
 
-func queryBuildOptions(c *cli.Context, hostname string, tagsFromStdin []string) collins.AssetFindOpts {
+func queryBuildOptions(c *cli.Context, hostname string, fromStdin []string) collins.AssetFindOpts {
 	opts := collins.AssetFindOpts{}
 
 	if c.IsSet("status") {
@@ -152,7 +157,7 @@ func queryBuildOptions(c *cli.Context, hostname string, tagsFromStdin []string) 
 	if c.IsSet("query") {
 		opts.Query = c.String("query")
 	} else {
-		opts.Query = buildOptionsQuery(c, hostname, tagsFromStdin)
+		opts.Query = buildOptionsQuery(c, hostname, fromStdin)
 	}
 
 	debugLog("CQL executed - " + opts.Query)
@@ -176,15 +181,22 @@ func cqlQuery(c *cli.Context, flag string, field string) string {
 }
 
 // This is broke out of build options just for the sake of making testing easier
-func buildOptionsQuery(c *cli.Context, hostname string, tagsFromStdin []string) string {
+func buildOptionsQuery(c *cli.Context, hostname string, fromStdin []string) string {
 	cql := []string{}
 
 	// The go client isn't as friendly as the ruby one which is fine we will just
 	// take everything else and convert it into CQL to talk to collins.
-	if len(tagsFromStdin) > 0 {
+	if len(fromStdin) > 0 {
+		// By default we match stdin against a tag unless pipe is set
+		// in which the user can set any field to match on.
+		key := "TAG"
+		if c.IsSet("pipe") {
+			key = c.String("pipe")
+		}
+
 		query := []string{}
-		for _, val := range tagsFromStdin {
-			query = append(query, "(TAG = "+val+")")
+		for _, val := range fromStdin {
+			query = append(query, "("+key+" = "+val+")")
 		}
 
 		if len(query) == 1 {
@@ -321,39 +333,37 @@ func queryRunCommand(c *cli.Context) error {
 	// able to take a list of tags and query to get more info about them.
 	// We check here if the command is being piped to or not so that you can
 	// specify --tags and pipe to the file.
-	tagsFromStdin := []string{}
-	if !c.IsSet("tag") {
-		fi, err := os.Stdin.Stat()
-		if err != nil {
-			logAndDie(err.Error())
-		}
+	fromStdin := []string{}
+	fi, err := os.Stdin.Stat()
+	if err != nil {
+		logAndDie(err.Error())
+	}
 
-		if (fi.Mode() & os.ModeCharDevice) == 0 {
-			reader := bufio.NewReader(os.Stdin)
-			for {
-				line, err := reader.ReadString('\n')
-				if err == io.EOF {
-					break
-				} else if err != nil {
-					logAndDie(err.Error())
-				}
+	if (fi.Mode() & os.ModeCharDevice) == 0 {
+		reader := bufio.NewReader(os.Stdin)
+		for {
+			line, err := reader.ReadString('\n')
+			if err == io.EOF {
+				break
+			} else if err != nil {
+				logAndDie(err.Error())
+			}
 
-				// If a newline was all that was recieved from stdin
-				// ignore it and keep going.
-				tag := strings.Fields(line)
-				if len(tag) >= 1 {
-					tagsFromStdin = append(tagsFromStdin, tag[0])
-				}
+			// If a newline was all that was recieved from stdin
+			// ignore it and keep going.
+			tag := strings.Fields(line)
+			if len(tag) >= 1 {
+				fromStdin = append(fromStdin, tag[0])
 			}
 		}
 	}
 
-	if len(os.Args) == 2 && len(tagsFromStdin) == 0 {
+	if len(os.Args) == 2 && len(fromStdin) == 0 {
 		logAndDie("See --help for collins query usage")
 	}
 
 	client := getCollinsClient(c)
-	opts := queryBuildOptions(c, hostname, tagsFromStdin)
+	opts := queryBuildOptions(c, hostname, fromStdin)
 	size := c.Int("size")
 
 	// Kinda hacky but if limit is set we just set
