@@ -2,7 +2,9 @@ package cmds
 
 import (
 	"fmt"
+	"math"
 	"os"
+	"strconv"
 
 	cli "github.com/urfave/cli"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
@@ -31,6 +33,33 @@ func (u UniqueOrderedSet) Add(s string) UniqueOrderedSet {
 	}
 
 	return append(u, s)
+}
+
+func Round(val float64, roundOn float64, places int) (newVal float64) {
+	var round float64
+	pow := math.Pow(10, float64(places))
+	digit := pow * val
+	_, div := math.Modf(digit)
+	if div >= roundOn {
+		round = math.Ceil(digit)
+	} else {
+		round = math.Floor(digit)
+	}
+	newVal = round / pow
+	return
+}
+
+// BytesToHumanSize takes an int and treats it as if it was bytes
+// converting it to the largest human readable size.
+func BytesToHumanSize(b int) string {
+	size := float64(b)
+	suffix := []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"}
+
+	base := math.Log(size) / math.Log(1024)
+	getSize := Round(math.Pow(1024, base-math.Floor(base)), .5, 2)
+	getSuffix := suffix[int(math.Floor(base))]
+	return strconv.FormatFloat(getSize, 'f', -1, 64) + " " + string(getSuffix)
+
 }
 
 func getCollinsClient(c *cli.Context) *collins.Client {
