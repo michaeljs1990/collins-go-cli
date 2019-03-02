@@ -118,6 +118,15 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return emptyOrValue(len(asset.Memory), func() string {
 			return strconv.Itoa(len(asset.Memory))
 		})
+	case "disk_storage_human":
+		return emptyOrValue(len(asset.Disks), func() string {
+			var size float64
+			for _, v := range asset.Disks {
+				size = size + float64(v.Size)
+			}
+
+			return BytesToHumanSize(size)
+		})
 	default:
 		// If it's not special fish it out of atts
 		if val, ok := asset.Attributes["0"]; ok {

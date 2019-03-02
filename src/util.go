@@ -51,8 +51,7 @@ func Round(val float64, roundOn float64, places int) (newVal float64) {
 
 // BytesToHumanSize takes an int and treats it as if it was bytes
 // converting it to the largest human readable size.
-func BytesToHumanSize(b int) string {
-	size := float64(b)
+func BytesToHumanSize(size float64) string {
 	suffix := []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"}
 
 	base := math.Log(size) / math.Log(1024)
