@@ -50,6 +50,11 @@ Power options {.options}
     - `verify`
     :::
 
+`-n` *VALUE*, `--number` *VALUE*
+
+:   number take the number of commands that will be executed at one time via
+    goroutines. By default ten commands will be executed at once.
+
 `-t` *VALUES*, `--tags` *VALUES*
 
 :   The tags on which to operate. You can specify multiple with a comma in the

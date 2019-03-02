@@ -170,6 +170,8 @@ Format options {.options}
     - memory_size_total
     - memory_description
     - memory_banks_total
+    - disk_storage_human
+    - disk_types
     :::
 
 `-x`, *VALUES*, `--extra-columns` *VALUES*
@@ -181,6 +183,12 @@ Format options {.options}
 
 :   This sets the delimiter that all columns are seperated by. By default all
     columns are seperated with a tab.
+
+`-u` *VALUE*, `--pipe` *VALUE*
+
+:   This lets you specify the key to match against when you pipe to this
+    command. When not set and you pipe to the command it will match against
+    tag.
 
 Robot options {.options}
 ---------------

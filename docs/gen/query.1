@@ -184,6 +184,10 @@ memory_size_total
 memory_description
 .IP \[bu] 2
 memory_banks_total
+.IP \[bu] 2
+disk_storage_human
+.IP \[bu] 2
+disk_types
 .RE
 .TP
 .B \f[C]-x\f[R], \f[I]VALUES\f[R], \f[C]--extra-columns\f[R] \f[I]VALUES\f[R]
@@ -194,6 +198,11 @@ The same documentaion applies to this.
 .B \f[C]-f\f[R] \f[I]VALUE\f[R], \f[C]--field-separator\f[R] \f[I]VALUE\f[R]
 This sets the delimiter that all columns are seperated by.
 By default all columns are seperated with a tab.
+.TP
+.B \f[C]-u\f[R] \f[I]VALUE\f[R], \f[C]--pipe\f[R] \f[I]VALUE\f[R]
+This lets you specify the key to match against when you pipe to this
+command.
+When not set and you pipe to the command it will match against tag.
 .SS Robot options
 .TP
 .B \f[C]-l\f[R], \f[C]--link\f[R]

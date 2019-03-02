@@ -56,6 +56,11 @@ The following are valid power states.
 \f[C]verify\f[R]
 .RE
 .TP
+.B \f[C]-n\f[R] \f[I]VALUE\f[R], \f[C]--number\f[R] \f[I]VALUE\f[R]
+number take the number of commands that will be executed at one time via
+goroutines.
+By default ten commands will be executed at once.
+.TP
 .B \f[C]-t\f[R] \f[I]VALUES\f[R], \f[C]--tags\f[R] \f[I]VALUES\f[R]
 The tags on which to operate.
 You can specify multiple with a comma in the format of tag1,tag2.
