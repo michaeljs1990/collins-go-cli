@@ -309,10 +309,6 @@ func getOutputFormat(c *cli.Context) string {
 
 func queryRunCommand(c *cli.Context) error {
 	// Don't run if nothing is passed into the command
-	if len(os.Args) == 2 {
-		logAndDie("See --help for collins query usage")
-	}
-
 	// If the user passes in an argument we treat it as a
 	// hostname and pass it along it overwrites hostname
 	// in the case you set it as an attribute
@@ -350,6 +346,10 @@ func queryRunCommand(c *cli.Context) error {
 				}
 			}
 		}
+	}
+
+	if len(os.Args) == 2 && len(tagsFromStdin) == 0 {
+		logAndDie("See --help for collins query usage")
 	}
 
 	client := getCollinsClient(c)
