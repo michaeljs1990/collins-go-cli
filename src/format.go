@@ -127,6 +127,15 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 
 			return BytesToHumanSize(size)
 		})
+	case "disk_types":
+		return emptyOrValue(len(asset.Disks), func() string {
+			disks := []string{}
+			for _, v := range asset.Disks {
+				disks = append(disks, v.Description)
+			}
+
+			return strings.Join(disks, ",")
+		})
 	default:
 		// If it's not special fish it out of atts
 		if val, ok := asset.Attributes["0"]; ok {
