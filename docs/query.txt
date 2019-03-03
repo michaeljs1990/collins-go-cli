@@ -25,6 +25,42 @@ asset would be:
 
     collins query -t M000001 -x ip_address
 
+Query for all nodeclasses named somenode that are allocated but only output
+the hostname for them.
+
+    collins query -n somenode -S Allocated:running -c hostname
+
+Return all nodes that are not in the DEV pool and have a hostname starting
+with ms.
+
+    collins query -p "~DEV" ms-
+
+This is an example of something you can do but it's silly. This will return
+everything that is not in the DEV pool or is in the PROD pool. Since this is
+asked of every asset it's only true of PROD.
+
+    collins query -p "~DEV,PROD"
+
+If you do only negative matches for something we try to help you out. By
+default we join multiple values with or since this is generally the correct
+thing to do. However in the case that you want to get everything that is not a
+devnode and is not an aaanode you can do this.
+
+    collins query -n "~devnode,~aaanode"
+
+If given a list of IPs you can do this to turn it into something useful. This
+will return the collins information for all IPs it knows. the -u flag
+specifies what keys to match on for the data it deads from the file. It splits
+on the first whitespace so having junk after the ips is fine.
+
+    cat list_of_ips | collins query -u ip_address
+
+If you have a list of tags you want to follow as they change state you can
+simply run the following since the default of collins query is to match on
+tags.
+
+    cat list_of_tags | collins query
+
 Options
 =======
    

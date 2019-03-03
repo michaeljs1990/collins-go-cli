@@ -174,6 +174,7 @@ func queryBuildOptions(c *cli.Context, hostname string, fromStdin []string) coll
 // Build a CQL query from the passed in flag taking into account comma seperated values.
 func cqlQuery(c *cli.Context, flag string, field string) string {
 	query := []string{}
+	nmatchNum := 0
 	for _, val := range strings.Split(c.String(flag), ",") {
 		// If the first value is a ~ in the field we are doing
 		// a negative match.
@@ -181,15 +182,21 @@ func cqlQuery(c *cli.Context, flag string, field string) string {
 		if nmatch && len(val) == 1 {
 			logAndDie("You tried to do a negative match but didn't pass in any value to do it on")
 		} else if nmatch {
+			nmatchNum++
 			query = append(query, "("+field+" != "+val[1:]+")")
 		} else {
 			query = append(query, "("+field+" = "+val+")")
 		}
 	}
 
-	// This isn't needed but keeps the resulting CQL from not looking so crazy
+	// This isn't needed but keeps the resulting CQL from not looking so crazy.
+	// Additionally if all that we are doing is negative matches it makes no sense
+	// to join with OR. In the case that a flag like -n "~devnode,~aaanode" is passed
+	// in we return everything that is not a devnode and not an aaanode.
 	if len(query) == 1 {
 		return query[0]
+	} else if nmatchNum == len(query) {
+		return "(" + strings.Join(query, " AND ") + ")"
 	} else {
 		return "(" + strings.Join(query, " OR ") + ")"
 	}
