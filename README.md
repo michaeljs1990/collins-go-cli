@@ -3,6 +3,20 @@ Collins Golang CLI
 
 Command line interface for interacting with https://tumblr.github.io/collins/
 
+## Whats good about this?
+
+The golang collins cli has a few features not availabe in the ruby client. In no particular order.
+
+1. JSON output format is a valid JSON dump
+2. YAML output format is valid YAML in all languages and not limited to ruby
+3. You can pipe ip's, tags, hostnames, or anything else to `collins query` to more info about them
+4. Additional fields that are computed client side. See `func fieldToAssetStruct` or the docs for the full list
+5. `collins provision` has a wait flag for that pesky rate limiter
+6. `collins power` issues commands inside goroutines so bad BMCs don't slow you down
+7. If you have been using the collins ruby cli it should function 100% the same for basic workflows
+8. `collins query` has netagive matching `key-:valueidontwant`
+8. `collins query` takes a comma delimited list for all values `-n devnode,aaanode` will return both
+
 ## Config file
 
 In order to talk to collins you will need to create a `~/.collins.yml` file with the following fields.
