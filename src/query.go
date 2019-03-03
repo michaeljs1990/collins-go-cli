@@ -93,6 +93,12 @@ func QuerySubcommand() cli.Command {
 				Usage:    "This sets the attribute to match against when piping to stdin. When not set it defaults to tags.",
 				Category: "Query options",
 			},
+			cli.IntFlag{
+				Name:     "U, pipe-size",
+				Usage:    "This sets the number of keys sent to collins at once when piping.",
+				Value:    30,
+				Category: "Query options",
+			},
 			cli.BoolFlag{
 				Name:     "H, show-header",
 				Usage:    "Show header fields in output",
@@ -363,23 +369,47 @@ func queryRunCommand(c *cli.Context) error {
 	}
 
 	client := getCollinsClient(c)
-	opts := queryBuildOptions(c, hostname, fromStdin)
-	size := c.Int("size")
+
+	// In the case that we were piped a ton of data from stdin we break it up
+	// so we do not trigger an error when querying collins. For more info on
+	// this see https://github.com/michaeljs1990/collins-go-cli/issues/28
+	opts := []collins.AssetFindOpts{}
+	if (fi.Mode() & os.ModeCharDevice) == 0 {
+		if c.Int("pipe-size") == 0 {
+			logAndDie("Setting pipe-size to zero is not valid.")
+		}
+		batchSize := c.Int("pipe-size")
+		var batches [][]string
+		for batchSize < len(fromStdin) {
+			fromStdin, batches = fromStdin[batchSize:], append(batches, fromStdin[0:batchSize:batchSize])
+		}
+		batches = append(batches, fromStdin)
+
+		for _, batch := range batches {
+			opts = append(opts, queryBuildOptions(c, hostname, batch))
+		}
+	} else {
+		opts = append(opts, queryBuildOptions(c, hostname, fromStdin))
+	}
 
 	// Kinda hacky but if limit is set we just set
 	// that as the page size and break after the first
 	// call to get assets.
+	size := c.Int("size")
 	if c.IsSet("limit") {
 		size = c.Int("limit")
 	}
 
-	opts.PageOpts = collins.PageOpts{
-		Size: size,
+	for _, opt := range opts {
+		opt.PageOpts = collins.PageOpts{
+			Size: size,
+		}
 	}
 
+	runs := 0
 	var allAssets []collins.Asset
 	for {
-		assets, resp, err := client.Assets.Find(&opts)
+		assets, resp, err := client.Assets.Find(&opts[runs])
 
 		if err != nil {
 			logAndDie(err.Error())
@@ -392,10 +422,12 @@ func queryRunCommand(c *cli.Context) error {
 			break
 		}
 
-		if resp.NextPage == resp.CurrentPage { // No more pages
+		if resp.NextPage == resp.CurrentPage && len(opts) == runs+1 { // No more pages
 			break
+		} else if resp.NextPage == resp.CurrentPage {
+			runs++
 		} else { // Fetch next page
-			opts.PageOpts.Page++
+			opts[runs].PageOpts.Page++
 		}
 	}
 
