@@ -14,8 +14,9 @@ The golang collins cli has a few features not availabe in the ruby client. In no
 5. `collins provision` has a wait flag for that pesky rate limiter
 6. `collins power` issues commands inside goroutines so bad BMCs don't slow you down
 7. If you have been using the collins ruby cli it should function 100% the same for basic workflows
-8. `collins query` has netagive matching `key-:valueidontwant`
-8. `collins query` takes a comma delimited list for all values `-n devnode,aaanode` will return both
+8. `collins query` has netagive matching `key:~valueidontwant`
+9. `collins query` takes a comma delimited list for all values `-n devnode,aaanode` will return both
+10. `collins query` flags all take an option ~ before any value to negate them.
 
 ## Config file
 
