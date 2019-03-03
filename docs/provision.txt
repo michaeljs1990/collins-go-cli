@@ -19,6 +19,11 @@ Provision a devnode
 
     collins provision -n devnode -p DEVELOPMENT -t M0001
 
+Provision a huge list of nodes and avoid erros from the rate limiter that is
+set set by your collins instance.
+
+    cat huge_list_of_tags | collins provision --wait 11 -n aaanode -p PROD
+
 Options
 =======
 
