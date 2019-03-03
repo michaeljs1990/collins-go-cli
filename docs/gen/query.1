@@ -203,6 +203,19 @@ By default all columns are seperated with a tab.
 This lets you specify the key to match against when you pipe to this
 command.
 When not set and you pipe to the command it will match against tag.
+.TP
+.B \f[C]-U\f[R] \f[I]VALUE\f[R], \f[C]--pipe-size\f[R] \f[I]VALUE\f[R]
+This takes an int for a value that is greater than zero and will limit
+the size of the CQL created by the value.
+An example would be piping a file to collins query with 10 values and
+setting a pipe-size of two.
+This would mean 5 requests are made to collins sice only two tags would
+be queried per request.
+This is a limitation we have to work with since the CQL is passed in the
+URL which has a limit of 4096 bytes.
+You can increase this size depending on the data set but by default only
+30 will be sent at a time so most users never have to think about this.
+Increasing this value can greatly increase performance however.
 .SS Robot options
 .TP
 .B \f[C]-l\f[R], \f[C]--link\f[R]
