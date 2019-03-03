@@ -9,7 +9,7 @@ The golang collins cli has a few features not availabe in the ruby client. In no
 
 1. JSON output format is a valid JSON dump
 2. YAML output format is valid YAML in all languages and not limited to ruby
-3. You can pipe ip's, tags, hostnames, or anything else to `collins query` to more info about them
+3. You can pipe IPs, tags, hostnames, or anything else to `collins query` to get more info about them
 4. Additional fields that are computed client side. See `func fieldToAssetStruct` or the docs for the full list
 5. `collins provision` has a wait flag for that pesky rate limiter
 6. `collins power` issues commands inside goroutines so bad BMCs don't slow you down
