@@ -304,7 +304,7 @@ func TestBuildOptionsQuery(t *testing.T) {
 		if out != expected {
 			t.Error("Expected ", expected, " got ", out)
 		}
-	}, []string{"cmd", "query", "-a", "test-:thing", "dev"})
+	}, []string{"cmd", "query", "-a", "test:~thing", "dev"})
 
 	queryContext(func(ctx *cli.Context) {
 		hitFatalError := false
@@ -327,6 +327,22 @@ func TestQueryBuildOptions(t *testing.T) {
 			t.Error("Building simple query options failed")
 		}
 	}, []string{"cmd", "query", "-n", "somenode", "-S", "allocated:running"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryBuildOptions(ctx, "", []string{})
+		expected := "(NODECLASS != somenode)"
+		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
+			t.Error("Building simple negative query options failed")
+		}
+	}, []string{"cmd", "query", "-n", "~somenode", "-S", "allocated:running"})
+
+	queryContext(func(ctx *cli.Context) {
+		out := queryBuildOptions(ctx, "", []string{})
+		expected := "((NODECLASS = somenode) OR (NODECLASS != someother))"
+		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
+			t.Error("Building complex negative query options failed")
+		}
+	}, []string{"cmd", "query", "-n", "somenode,~someother", "-S", "allocated:running"})
 
 	queryContext(func(ctx *cli.Context) {
 		out := queryBuildOptions(ctx, "", []string{})

@@ -74,7 +74,7 @@ func QuerySubcommand() cli.Command {
 			},
 			cli.StringSliceFlag{
 				Name:     "a, attribute",
-				Usage:    "Arbitrary attributes. ':'  or '-:' between key and value. : is a positive match and -: is a negative match",
+				Usage:    "Arbitrary attributes. ':'  or ':~' between key and value. : is a positive match and :~ is a negative match",
 				Category: "Query options",
 			},
 			cli.StringFlag{
@@ -175,7 +175,16 @@ func queryBuildOptions(c *cli.Context, hostname string, fromStdin []string) coll
 func cqlQuery(c *cli.Context, flag string, field string) string {
 	query := []string{}
 	for _, val := range strings.Split(c.String(flag), ",") {
-		query = append(query, "("+field+" = "+val+")")
+		// If the first value is a ~ in the field we are doing
+		// a negative match.
+		nmatch := (val[0] == "~"[0])
+		if nmatch && len(val) == 1 {
+			logAndDie("You tried to do a negative match but didn't pass in any value to do it on")
+		} else if nmatch {
+			query = append(query, "("+field+" != "+val[1:]+")")
+		} else {
+			query = append(query, "("+field+" = "+val+")")
+		}
 	}
 
 	// This isn't needed but keeps the resulting CQL from not looking so crazy
@@ -244,7 +253,7 @@ func buildOptionsQuery(c *cli.Context, hostname string, fromStdin []string) stri
 		for _, attr := range c.StringSlice("attribute") {
 			var attrSplit []string
 			equal := false
-			attrSplit = strings.SplitN(attr, "-:", 2)
+			attrSplit = strings.SplitN(attr, ":~", 2)
 			if len(attrSplit) != 2 {
 				attrSplit = strings.SplitN(attr, ":", 2)
 				equal = true
@@ -287,7 +296,7 @@ func queryGetColumns(c *cli.Context) []string {
 	if c.IsSet("attribute") || c.IsSet("a") {
 		for _, attr := range c.StringSlice("attribute") {
 			var attrSplit []string
-			attrSplit = strings.SplitN(attr, "-:", 2)
+			attrSplit = strings.SplitN(attr, ":~", 2)
 			if len(attrSplit) != 2 {
 				attrSplit = strings.SplitN(attr, ":", 2)
 			}
