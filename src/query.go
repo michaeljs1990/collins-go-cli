@@ -408,6 +408,12 @@ func queryRunCommand(c *cli.Context) error {
 		opts = append(opts, queryBuildOptions(c, hostname, fromStdin))
 	}
 
+	// Limit and pipe-size don't make sense to use together and will
+	// not do what you want so we don't allow it.
+	if c.IsSet("limit") && c.IsSet("pipe-size") {
+		logAndDie("--limit and --pipe-size can't be set at the same time")
+	}
+
 	// Kinda hacky but if limit is set we just set
 	// that as the page size and break after the first
 	// call to get assets.
@@ -416,8 +422,8 @@ func queryRunCommand(c *cli.Context) error {
 		size = c.Int("limit")
 	}
 
-	for _, opt := range opts {
-		opt.PageOpts = collins.PageOpts{
+	for i, _ := range opts {
+		opts[i].PageOpts = collins.PageOpts{
 			Size: size,
 		}
 	}
