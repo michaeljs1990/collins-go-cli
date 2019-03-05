@@ -28,11 +28,8 @@ username: blake
 password: test
 ```
 
-<aside class="warning">
-Note that unlike the ruby collins-cli gem you may not use symbols and strings interchangeably. If collins-go-cli
-blows up on the first run make sure you don't have `:host`, `:username`,or `:password` in your config file. Note
-that changing `:host` to `host` will still work in the ruby client as well so it's not a breaking change.
-<aside>
+| WARNING: unlike the ruby collins-cli gem you may not use symbols and strings interchangeably. If collins-go-cli blows up on the first run make sure you don't have `:host`, `:username`,or `:password` in your config file. Note that changing `:host` to `host` will still work in the ruby client as well so it's not a breaking change.|
+| --- |
 
 ## Install
 
