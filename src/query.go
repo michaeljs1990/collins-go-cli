@@ -144,18 +144,6 @@ func QuerySubcommand() cli.Command {
 func queryBuildOptions(c *cli.Context, hostname string, fromStdin []string) collins.AssetFindOpts {
 	opts := collins.AssetFindOpts{}
 
-	if c.IsSet("status") {
-		status := strings.Split(c.String("status"), ":")
-		if len(status) == 2 {
-			opts.State = status[1]
-		}
-		opts.Status = status[0]
-	}
-
-	if c.IsSet("type") {
-		opts.Type = c.String("type")
-	}
-
 	if c.IsSet("remote-lookup") {
 		opts.RemoteLookup = true
 	}
@@ -172,10 +160,10 @@ func queryBuildOptions(c *cli.Context, hostname string, fromStdin []string) coll
 }
 
 // Build a CQL query from the passed in flag taking into account comma seperated values.
-func cqlQuery(c *cli.Context, flag string, field string) string {
+func cqlQuery(c *cli.Context, flagVal string, field string) string {
 	query := []string{}
 	nmatchNum := 0
-	for _, val := range strings.Split(c.String(flag), ",") {
+	for _, val := range strings.Split(flagVal, ",") {
 		// If the first value is a ~ in the field we are doing
 		// a negative match.
 		nmatch := (val[0] == "~"[0])
@@ -228,28 +216,40 @@ func buildOptionsQuery(c *cli.Context, hostname string, fromStdin []string) stri
 		}
 	}
 
+	if c.IsSet("status") {
+		status := strings.Split(c.String("status"), ":")
+		if len(status) == 2 {
+			cql = append(cql, cqlQuery(c, status[1], "STATE"))
+		}
+		cql = append(cql, cqlQuery(c, status[0], "STATUS"))
+	}
+
+	if c.IsSet("type") {
+		cql = append(cql, cqlQuery(c, c.String("type"), "TYPE"))
+	}
+
 	if c.IsSet("tag") {
-		cql = append(cql, cqlQuery(c, "tag", "TAG"))
+		cql = append(cql, cqlQuery(c, c.String("tag"), "TAG"))
 	}
 
 	if c.IsSet("nodeclass") {
-		cql = append(cql, cqlQuery(c, "nodeclass", "NODECLASS"))
+		cql = append(cql, cqlQuery(c, c.String("nodeclass"), "NODECLASS"))
 	}
 
 	if c.IsSet("pool") {
-		cql = append(cql, cqlQuery(c, "pool", "POOL"))
+		cql = append(cql, cqlQuery(c, c.String("pool"), "POOL"))
 	}
 
 	if c.IsSet("role") {
-		cql = append(cql, cqlQuery(c, "role", "PRIMARY_ROLE"))
+		cql = append(cql, cqlQuery(c, c.String("role"), "PRIMARY_ROLE"))
 	}
 
 	if c.IsSet("secondary-role") {
-		cql = append(cql, cqlQuery(c, "secondary-role", "SECONDARY_ROLE"))
+		cql = append(cql, cqlQuery(c, c.String("secondary-role"), "SECONDARY_ROLE"))
 	}
 
 	if c.IsSet("ip-address") {
-		cql = append(cql, cqlQuery(c, "ip-address", "IP_ADDRESS"))
+		cql = append(cql, cqlQuery(c, c.String("ip-address"), "IP_ADDRESS"))
 	}
 
 	if hostname != "" {

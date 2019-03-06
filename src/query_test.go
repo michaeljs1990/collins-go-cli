@@ -322,43 +322,39 @@ func TestBuildOptionsQuery(t *testing.T) {
 func TestQueryBuildOptions(t *testing.T) {
 	queryContext(func(ctx *cli.Context) {
 		out := queryBuildOptions(ctx, "", []string{})
-		expected := "(NODECLASS = somenode)"
-		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
-			t.Error("Building simple query options failed")
+		expected := "(STATE = running) AND (STATUS = allocated) AND (NODECLASS = somenode)"
+		if out.Query != expected {
+			t.Error("Building simple query options failed got: " + out.Query)
 		}
 	}, []string{"cmd", "query", "-n", "somenode", "-S", "allocated:running"})
 
 	queryContext(func(ctx *cli.Context) {
 		out := queryBuildOptions(ctx, "", []string{})
-		expected := "(NODECLASS != somenode)"
-		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
-			t.Error("Building simple negative query options failed")
+		expected := "(STATE = running) AND (STATUS = allocated) AND (NODECLASS != somenode)"
+		if out.Query != expected {
+			t.Error("Building simple negative query options failed got: " + out.Query)
 		}
 	}, []string{"cmd", "query", "-n", "~somenode", "-S", "allocated:running"})
 
 	queryContext(func(ctx *cli.Context) {
 		out := queryBuildOptions(ctx, "", []string{})
-		expected := "((NODECLASS = somenode) OR (NODECLASS != someother))"
-		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
-			t.Error("Building complex negative query options failed")
+		expected := "(STATE = running) AND (STATUS = allocated) AND ((NODECLASS = somenode) OR (NODECLASS != someother))"
+		if out.Query != expected {
+			t.Error("Building complex negative query options failed got: " + out.Query)
 		}
 	}, []string{"cmd", "query", "-n", "somenode,~someother", "-S", "allocated:running"})
 
 	queryContext(func(ctx *cli.Context) {
 		out := queryBuildOptions(ctx, "", []string{})
-		expected := "((NODECLASS != somenode) AND (NODECLASS != someother))"
-		if out.Query != expected || out.Status != "allocated" || out.State != "running" {
-			t.Error("Building all negative query options failed")
+		expected := "(STATE = running) AND (STATUS = allocated) AND ((NODECLASS != somenode) AND (NODECLASS != someother))"
+		if out.Query != expected {
+			t.Error("Building all negative query options failed got: " + out.Query)
 		}
 	}, []string{"cmd", "query", "-n", "~somenode,~someother", "-S", "allocated:running"})
 
 	queryContext(func(ctx *cli.Context) {
 		out := queryBuildOptions(ctx, "", []string{})
-		expected := "(NODECLASS = somenode)"
-
-		if out.Type != "SOME_TYPE" {
-			t.Error("1 - Want: ", "SOME_TYPE", " Got: ", out.Type)
-		}
+		expected := "(TYPE = SOME_TYPE) AND (NODECLASS = somenode)"
 
 		if out.Query != expected {
 			t.Error("2 - Want: ", expected, " Got: ", out.Query)
