@@ -24,4 +24,4 @@ before_install:
 
 script:
   - bazel build //cmd/collins:collins
-  - bazel test //src:test
+  - bazel test //collins/commands:test

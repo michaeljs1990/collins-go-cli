@@ -1,6 +1,6 @@
 // Helper functions I pulled out of the go-collins library
 // to help with testing this client.
-package cmds
+package commands
 
 import (
 	"bytes"

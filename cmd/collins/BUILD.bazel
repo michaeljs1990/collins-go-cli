@@ -6,7 +6,7 @@ go_binary(
     pure = "on",
     srcs = ["main.go"],
     deps = [
-      "//src:library",
+      "//collins/commands:library",
       "@com_github_urfave_cli//:go_default_library",
     ],
     x_defs = {

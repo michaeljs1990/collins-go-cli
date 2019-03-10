@@ -17,7 +17,7 @@ go_library(
         "state.go",
         "util.go",
     ],
-    importpath = "cgit.xrt0x.com/xrt0x/collins-go-cli/src",
+    importpath = "cgit.xrt0x.com/xrt0x/collins-go-cli/collins/commands",
     visibility = ["//visibility:public"],
     deps = [
         "@com_github_logrusorgru_aurora//:go_default_library",
@@ -40,7 +40,7 @@ go_test(
         "assets/TestQueryCLIGetByAttribute.json",
         "assets/TestQueryCLIGetGPU.json",
     ],
-    embed = ["//src:library"],
+    embed = ["//collins/commands:library"],
     deps = [
         "@com_github_bouk_monkey//:go_default_library",
         "@com_github_urfave_cli//:go_default_library",
