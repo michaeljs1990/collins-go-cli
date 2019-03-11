@@ -60,4 +60,4 @@ $ bazel build //cmd/collins:collins
 
 ## Documentation
 
-All docs can be found in markdown under `docs/`.
+All docs can be found in markdown under `collins/docs/`.
