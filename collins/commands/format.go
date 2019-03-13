@@ -46,14 +46,14 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return asset.Metadata.Type
 	case "classification":
 		return asset.Classification.Tag
-  case "base_product":
-    return asset.Base.Product
-  case "base_vendor":
-    return asset.Base.Vendor
-  case "base_description":
-    return asset.Base.Description
-  case "base_serial":
-    return asset.Base.Serial
+	case "base_product":
+		return asset.Base.Product
+	case "base_vendor":
+		return asset.Base.Vendor
+	case "base_description":
+		return asset.Base.Description
+	case "base_serial":
+		return asset.Base.Serial
 	case "ipmi_address":
 		return asset.IPMI.Address
 	case "ip_address":
