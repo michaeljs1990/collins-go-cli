@@ -12,6 +12,7 @@ go_library(
         "modify.go",
         "output.go",
         "power.go",
+        "profiles.go",
         "provision.go",
         "query.go",
         "state.go",
