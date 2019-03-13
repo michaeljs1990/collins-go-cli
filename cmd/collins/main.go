@@ -49,6 +49,7 @@ func main() {
 	subCmds = append(subCmds, commands.IpamSubcommand())
 	subCmds = append(subCmds, commands.StateSubcommand())
 	subCmds = append(subCmds, commands.DatacenterSubcommand())
+	subCmds = append(subCmds, commands.ProfilesSubcommand())
 	app.Commands = subCmds
 
 	err := app.Run(os.Args)
