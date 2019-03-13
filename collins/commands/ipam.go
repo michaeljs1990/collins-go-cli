@@ -199,7 +199,7 @@ func ipamRunCommand(c *cli.Context) error {
 		}
 		renderPools(c, client, pools)
 	case c.IsSet("show-ipmi-pools"):
-		pools, _, err := client.IPAM.IpmiPools()
+		pools, _, err := client.IPAM.IPMIPools()
 		if err != nil {
 			logAndDie(err.Error())
 		}
