@@ -8,7 +8,7 @@ github.com/logrusorgru/aurora
 github.com/schallert/iso8601
 # github.com/urfave/cli v1.20.0 => github.com/michaeljs1990/cli v1.20.1-0.20190128030917-b0494d5188b4
 github.com/urfave/cli
-# gopkg.in/tumblr/go-collins.v0 v0.0.0-20190208222215-7e5500a55e4d
+# gopkg.in/tumblr/go-collins.v0 v0.0.0-20190208222215-7e5500a55e4d => github.com/michaeljs1990/go-collins v0.0.0-20190313043714-4d26a207b59e
 gopkg.in/tumblr/go-collins.v0/collins
 gopkg.in/tumblr/go-collins.v0/collins/sseclient
 # gopkg.in/yaml.v2 v2.2.2
