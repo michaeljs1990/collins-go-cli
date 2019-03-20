@@ -312,10 +312,7 @@ func queryGetColumns(c *cli.Context) []string {
 	if c.IsSet("attribute") || c.IsSet("a") {
 		for _, attr := range c.StringSlice("attribute") {
 			var attrSplit []string
-			attrSplit = strings.SplitN(attr, ":~", 2)
-			if len(attrSplit) != 2 {
-				attrSplit = strings.SplitN(attr, ":", 2)
-			}
+			attrSplit = strings.SplitN(attr, ":", 2)
 			if len(attrSplit) != 2 {
 				logAndDie("--attribute and -a requires attribute:value, missing :value")
 			}
