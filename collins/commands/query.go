@@ -271,26 +271,20 @@ func buildOptionsQuery(c *cli.Context, hostname string, fromStdin []string) stri
 		cql = append(cql, "(HOSTNAME = "+hostname+")")
 	}
 
+	// This is a little tricky since when attribute is passed we must first figure
+	// out what the key is and then form the query.
 	if c.IsSet("attribute") || c.IsSet("a") {
 		for _, attr := range c.StringSlice("attribute") {
 			var attrSplit []string
-			equal := false
-			attrSplit = strings.SplitN(attr, ":~", 2)
-			if len(attrSplit) != 2 {
-				attrSplit = strings.SplitN(attr, ":", 2)
-				equal = true
-			}
+			attrSplit = strings.SplitN(attr, ":", 2)
+
 			if len(attrSplit) != 2 {
 				logAndDie("--attribute and -a requires attribute:value, missing :value")
 			}
+
 			attrKey := strings.ToUpper(attrSplit[0])
 			attrValue := strings.ToUpper(attrSplit[1])
-
-			if equal {
-				cql = append(cql, "("+attrKey+" = "+attrValue+")")
-			} else {
-				cql = append(cql, "("+attrKey+" != "+attrValue+")")
-			}
+			cql = append(cql, cqlQuery(c, attrValue, attrKey))
 		}
 	}
 
