@@ -190,6 +190,10 @@ Format options {.options}
     - tag
     - status
     - state
+    - created
+    - created_on
+    - updated
+    - last_updated
     - classification
     - ip_address
     - ipmi_address
