@@ -72,6 +72,10 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return emptyOrValue(len(asset.CPUs), func() string {
 			return strconv.Itoa(asset.CPUs[0].Cores * len(asset.CPUs))
 		})
+	case "gpu_count":
+		return emptyOrValue(len(asset.GPUs), func() string {
+			return strconv.Itoa(len(asset.GPUs))
+		})
 	case "cpu_threads":
 		return emptyOrValue(len(asset.CPUs), func() string {
 			return strconv.Itoa(asset.CPUs[0].Threads * len(asset.CPUs))
