@@ -17,8 +17,9 @@ for arch in "${builds[@]}"; do
   bazel build --platforms=@io_bazel_rules_go//go/toolchain:$arch //cmd/collins:collins
 done
 
-mkdir -p releases
+releases="release-$(git describe)"
+mkdir -p ${releases}
 
 for arch in "${builds[@]}"; do
-  cp -f $(pwd)/bazel-bin/cmd/collins/${arch}_pure_stripped/collins $(pwd)/releases/collins_$arch
+  cp -f $(pwd)/bazel-bin/cmd/collins/${arch}_pure_stripped/collins $(pwd)/${releases}/collins_$arch
 done
