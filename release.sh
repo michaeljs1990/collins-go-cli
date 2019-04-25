@@ -17,7 +17,7 @@ for arch in "${builds[@]}"; do
   bazel build --platforms=@io_bazel_rules_go//go/toolchain:$arch //cmd/collins:collins
 done
 
-releases="release-$(git describe)"
+releases="release/$(git describe)"
 mkdir -p ${releases}
 
 for arch in "${builds[@]}"; do
