@@ -167,6 +167,20 @@ Query options {.options}
     - `--remote-lookup`
     :::
 
+`-F` *VALUE*, `--sort-field` *VALUE*
+
+:   Set a field name that you would like to sort by such as `tag`. Not all
+    fields are supported. The server will throw a 500 for fields which are not
+    supported.
+
+`-A`, `--sort-ascending`              
+
+:   Sort assets in ascending order
+   
+`-D`, `--sort-descending`
+
+:   Sort assets in descending order
+
 Format options {.options}
 ---------------
 
