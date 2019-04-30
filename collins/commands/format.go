@@ -211,9 +211,9 @@ func renderTable(separator string, showHeaders bool, columns []string, assets []
 			fields = append(fields, fieldToAssetStruct(column, asset))
 		}
 
-    // Cleanup the output a little bit so we don't have trailing tabs or spaces
-    // for assets that may be missing lots of information. See the following issue
-    // on github for more info https://github.com/michaeljs1990/collins-go-cli/issues/41
+		// Cleanup the output a little bit so we don't have trailing tabs or spaces
+		// for assets that may be missing lots of information. See the following issue
+		// on github for more info https://github.com/michaeljs1990/collins-go-cli/issues/41
 		line_to_print := fmt.Sprintf(formatter, fields...)
 		fmt.Println(strings.TrimSpace(line_to_print))
 	}
