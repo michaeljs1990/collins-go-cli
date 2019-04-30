@@ -191,6 +191,17 @@ The following flags can be used with \f[C]--query\f[R].
 .IP \[bu] 2
 \f[C]--remote-lookup\f[R]
 .RE
+.TP
+.B \f[C]-F\f[R] \f[I]VALUE\f[R], \f[C]--sort-field\f[R] \f[I]VALUE\f[R]
+Set a field name that you would like to sort by such as \f[C]tag\f[R].
+Not all fields are supported.
+The server will throw a 500 for fields which are not supported.
+.TP
+.B \f[C]-A\f[R], \f[C]--sort-ascending\f[R]
+Sort assets in ascending order
+.TP
+.B \f[C]-D\f[R], \f[C]--sort-descending\f[R]
+Sort assets in descending order
 .SS Format options
 .TP
 .B \f[C]-H\f[R], \f[C]--show-header\f[R]
