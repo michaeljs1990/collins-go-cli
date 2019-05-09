@@ -57,9 +57,10 @@ func powerActionByTag(wg *sync.WaitGroup, ctx *cli.Context, col *collins.Client,
 		debugLog("Trying to perform power action '" + ctx.String("power") + "' on " + tag)
 
 		var err error
-		msg := tag + " performing " + ctx.String("power") + " ... "
-		switch ctx.String("power") {
-		case "reboot", "rebootSoft":
+		action := strings.ToLower(ctx.String("power"))
+		msg := tag + " performing " + action + " ... "
+		switch action {
+		case "reboot", "rebootsoft":
 			_, err = col.Management.SoftReboot(tag)
 		case "reboothard":
 			_, err = col.Management.HardReboot(tag)
@@ -72,7 +73,7 @@ func powerActionByTag(wg *sync.WaitGroup, ctx *cli.Context, col *collins.Client,
 		case "verify":
 			_, err = col.Management.Verify(tag)
 		default:
-			logAndDie("Unknown power action rebootx, expecting one of reboot,rebootsoft,reboothard,on,off,poweron,poweroff,identify,verify")
+			logAndDie("Unknown power action '" + action + "' , expecting one of reboot,rebootsoft,reboothard,on,off,poweron,poweroff,identify,verify")
 		}
 
 		// We dont' use printSuccess or printError here since these are happening in a go routine
