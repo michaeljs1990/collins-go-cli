@@ -35,6 +35,7 @@ You can always install from the releases I have produced if you want however you
 using the `go get` method. My server can be a little slow sometimes but it works just fine if you wait.
 
 ```
+# Currently down for maintenance please download the pre built bins or git clone and build yourself
 go get -u cgit.xrt0x.com/xrt0x/collins-go-cli/cmd/collins
 ```
 
