@@ -1,11 +1,11 @@
-Collins Golang CLI
-==================
+## Collins Golang CLI
 
 Command line interface for interacting with https://tumblr.github.io/collins/
 
-## Whats good about this?
+### Why another collins client?
 
-The golang collins cli has a few features not availabe in the ruby client. In no particular order.
+Mostly for fun but also to make it very easy to distribute. Additionally I made a few improvements
+that I find very useful for working with large numbers of assets in collins.
 
 1. JSON output format is a valid JSON dump
 2. YAML output format is valid YAML in all languages and not limited to ruby
@@ -16,30 +16,16 @@ The golang collins cli has a few features not availabe in the ruby client. In no
 7. If you have been using the collins ruby cli it should function 100% the same for basic workflows
 8. `collins query` has negative matching `key:~valueidontwant` that is available for all flags `-n "~devnode"`
 
-## Config file
-
-In order to talk to collins you will need to create a `~/.collins.yml` file with the following fields.
-
-```
-host: http://10.0.0.5:9000
-username: blake
-password: test
-```
-
-| WARNING: unlike the ruby collins-cli gem you may not use symbols and strings interchangeably. If collins-go-cli blows up on the first run make sure you don't have `:host`, `:username`,or `:password` in your config file. Note that changing `:host` to `host` will still work in the ruby client as well so it's not a breaking change.|
-| --- |
-
-## Install
+### Install
 
 You can always install from the releases I have produced if you want however you can also stay up to date
 using the `go get` method. My server can be a little slow sometimes but it works just fine if you wait.
 
 ```
-# Currently down for maintenance please download the pre built bins or git clone and build yourself
 go get -u cgit.xrt0x.com/xrt0x/collins-go-cli/cmd/collins
 ```
 
-## Development
+### Development
 
 You can easily build this by cloning the repo and running `go build -mod=vendor ./cmd/collins`. Additionally
 the most recent tags will have binaries uploaded for most common and some uncommon platforms
@@ -59,6 +45,19 @@ following page for more info https://github.com/bazelbuild/rules_go/blob/master/
 $ bazel build //cmd/collins:collins
 ```
 
-## Documentation
+Setting up collins itself for testing and populating it is beyond the scope of this readme. If you would like to do that
+but don't know how to get started send me a message.
+
+### Config file
+
+In order to talk to collins you will need to create a `~/.collins.yml` file with the following fields.
+
+```
+host: http://10.0.0.5:9000
+username: blake
+password: test
+```
+
+### Documentation
 
 All docs can be found in markdown under `collins/docs/`.
