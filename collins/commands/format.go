@@ -60,6 +60,10 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 		return asset.Base.Serial
 	case "ipmi_address":
 		return asset.IPMI.Address
+	case "ipmi_password":
+		return asset.IPMI.Password
+	case "ipmi_username":
+		return asset.IPMI.Username
 	case "ip_address":
 		return emptyOrValue(len(asset.Addresses), func() string {
 			ips := []string{}

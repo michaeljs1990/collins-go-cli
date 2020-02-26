@@ -16,3 +16,5 @@ require (
 	gopkg.in/tumblr/go-collins.v0 v0.0.0-20190208222215-7e5500a55e4d
 	gopkg.in/yaml.v2 v2.2.2
 )
+
+go 1.13
