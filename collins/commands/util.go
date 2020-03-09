@@ -5,8 +5,10 @@ import (
 	"math"
 	"os"
 	"strconv"
+	"syscall"
 
 	cli "github.com/urfave/cli"
+	"golang.org/x/crypto/ssh/terminal"
 	collins "gopkg.in/tumblr/go-collins.v0/collins"
 )
 
@@ -69,6 +71,15 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 	}
 
 	collins, err := collins.NewClientFromYaml()
+	if collins.Password == "" {
+		fmt.Print("Enter Password: ")
+		bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+		if err != nil {
+			fmt.Println("error reading password from terminal")
+			logAndDie(err.Error())
+		}
+		collins.Password = string(bytePassword)
+	}
 	if err != nil {
 		fmt.Println("You can use COLLINS_CLIENT_CONFIG env or --config to set the location of your config")
 		logAndDie(err.Error())
