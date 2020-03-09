@@ -25,6 +25,7 @@ go_library(
         "@com_github_urfave_cli//:go_default_library",
         "@in_gopkg_tumblr_go_collins_v0//collins:go_default_library",
         "@in_gopkg_yaml_v2//:go_default_library",
+        "@org_golang_x_crypto//ssh/terminal:go_default_library",
     ],
 )
 
