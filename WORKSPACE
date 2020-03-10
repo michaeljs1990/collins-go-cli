@@ -102,9 +102,6 @@ go_repository(
 
 go_repository(
     name = "com_github_urfave_cli",
-    build_extra_args = ["-exclude=vendor"],
-    build_file_generation = "on",
-    build_file_proto_mode = "disable",
     importpath = "github.com/urfave/cli",
     remote = "https://github.com/michaeljs1990/cli",
     commit = "b0494d5188b484c900914767a3c791c2e93c0858",
