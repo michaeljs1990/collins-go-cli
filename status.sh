@@ -4,4 +4,4 @@
 # Vars with STABLE_* format cause builds to retrigger when evaluated
 # by bazel.
 echo "STABLE_GIT_COMMIT $(git rev-parse HEAD)"
-echo "STABLE_GIT_TAG $(git describe)"
+echo "STABLE_GIT_TAG $(git describe --tags)"
