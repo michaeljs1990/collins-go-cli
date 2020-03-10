@@ -12,6 +12,7 @@ require (
 	github.com/logrusorgru/aurora v0.0.0-20181002194514-a7b3b318ed4e
 	github.com/stretchr/testify v1.3.0 // indirect
 	github.com/urfave/cli v1.20.0
+	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/tumblr/go-collins.v0 v0.0.0-20190208222215-7e5500a55e4d
 	gopkg.in/yaml.v2 v2.2.2

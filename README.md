@@ -58,6 +58,8 @@ username: blake
 password: test
 ```
 
+**NOTE**: if you do not have the password saved in `~/.collins.yml`, the client will prompt for a password at runtime. But, this will error and fail, if the collins command is being piped from one collins command to next.
+
 ### Documentation
 
 All docs can be found in markdown under `collins/docs/`.
