@@ -74,6 +74,7 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 	if collins.Password == "" {
 		fmt.Print("Enter Password: ")
 		bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+    fmt.Println("")
 		if err != nil {
 			fmt.Println("error reading password from terminal")
 			logAndDie(err.Error())
