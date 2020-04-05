@@ -146,6 +146,14 @@ func TestAttributeDeleteStrings(t *testing.T) {
 		}
 	}, []string{"cmd", "modify"})
 
+	modifyContext(func(ctx *cli.Context) {
+		out := attributeDeleteStrings(ctx)
+		if out[0] != "hack" || out[1] != "some" || out[2] != "stuff" ||
+			out[3] != "hacker" || out[4] != "a" || out[5] != "s" {
+			t.Error("I could see how you might break this :|")
+		}
+	}, []string{"cmd", "modify", "-d", "hack,some,stuff", "-d", "hacker", "-d", "a,s"})
+
 }
 
 func TestAttributeUpdateOpts(t *testing.T) {

@@ -86,7 +86,11 @@ func attributeUpdateOpts(ctx *cli.Context) []collins.AssetUpdateOpts {
 
 func attributeDeleteStrings(ctx *cli.Context) []string {
 	if ctx.IsSet("d") || ctx.IsSet("delete-attribute") {
-		return ctx.StringSlice("delete-attribute")
+		var datts []string
+		for _, val := range ctx.StringSlice("delete-attribute") {
+			datts = append(datts, strings.Split(val, ",")...)
+		}
+		return datts
 	}
 
 	return []string{}
