@@ -1,31 +1,35 @@
-## Collins Golang CLI
+Collins Golang CLI
+==================
 
 Command line interface for interacting with https://tumblr.github.io/collins/
 
-### Why another collins client?
+## Install
 
-Mostly for fun but also to make it very easy to distribute. Additionally I made a few improvements
-that I find very useful for working with large numbers of assets in collins.
-
-1. JSON output format is a valid JSON dump
-2. YAML output format is valid YAML in all languages and not limited to ruby
-3. You can pipe IPs, tags, hostnames, or anything else to `collins query` to get more info about them
-4. Additional fields that are computed client side. See `func fieldToAssetStruct` or the docs for the full list
-5. `collins provision` has a wait flag for that pesky rate limiter
-6. `collins power` issues commands inside goroutines so bad BMCs don't slow you down
-7. If you have been using the collins ruby cli it should function 100% the same for basic workflows
-8. `collins query` has negative matching `key:~valueidontwant` that is available for all flags `-n "~devnode"`
-
-### Install
-
-You can always install from the releases I have produced if you want however you can also stay up to date
+You can always install from the releases page on github or if you want you can also stay up to date
 using the `go get` method. My server can be a little slow sometimes but it works just fine if you wait.
 
 ```
 go get -u cgit.xrt0x.com/xrt0x/collins-go-cli/cmd/collins
 ```
 
-### Development
+## Config file
+
+In order to talk to collins you will need to create a `~/.collins.yml` file with the following fields.
+
+```
+host: http://10.0.0.5:9000
+username: blake
+password: test
+```
+
+**NOTE**: if you do not have the password saved in `~/.collins.yml`, the client will prompt for a password
+at runtime. But, this will error and fail, if the collins command is being piped from one collins command to next.
+
+## Documentation
+
+All docs can be found in markdown under `collins/docs/`.
+
+## Development
 
 You can easily build this by cloning the repo and running `go build -mod=vendor ./cmd/collins`. Additionally
 the most recent tags will have binaries uploaded for most common and some uncommon platforms
@@ -47,19 +51,3 @@ $ bazel build //cmd/collins:collins
 
 Setting up collins itself for testing and populating it is beyond the scope of this readme. If you would like to do that
 but don't know how to get started send me a message.
-
-### Config file
-
-In order to talk to collins you will need to create a `~/.collins.yml` file with the following fields.
-
-```
-host: http://10.0.0.5:9000
-username: blake
-password: test
-```
-
-**NOTE**: if you do not have the password saved in `~/.collins.yml`, the client will prompt for a password at runtime. But, this will error and fail, if the collins command is being piped from one collins command to next.
-
-### Documentation
-
-All docs can be found in markdown under `collins/docs/`.
