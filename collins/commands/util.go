@@ -54,13 +54,25 @@ func Round(val float64, roundOn float64, places int) (newVal float64) {
 // BytesToHumanSize takes an int and treats it as if it was bytes
 // converting it to the largest human readable size.
 func BytesToHumanSize(size float64) string {
-	suffix := []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"}
+	suffix := []string{
+		"B", "KB", "MB",
+		"GB", "TB", "PB",
+		"EB", "ZB", "YB",
+	}
 
 	base := math.Log(size) / math.Log(1024)
 	getSize := Round(math.Pow(1024, base-math.Floor(base)), .5, 2)
-	getSuffix := suffix[int(math.Floor(base))]
-	return strconv.FormatFloat(getSize, 'f', -1, 64) + " " + string(getSuffix)
 
+	var getSuffix string
+	if int(math.Floor(base)) > len(suffix) {
+		// Wow you have more than a YB of storage/memory good for you
+		// your asset likely is messed up :P
+		getSuffix = "Unknown"
+	} else {
+		getSuffix = suffix[int(math.Floor(base))]
+	}
+
+	return strconv.FormatFloat(getSize, 'f', -1, 64) + " " + string(getSuffix)
 }
 
 func getCollinsClient(c *cli.Context) *collins.Client {
@@ -74,7 +86,7 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 	if collins.Password == "" {
 		fmt.Print("Enter Password: ")
 		bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
-    fmt.Println("")
+		fmt.Println("")
 		if err != nil {
 			fmt.Println("error reading password from terminal")
 			logAndDie(err.Error())

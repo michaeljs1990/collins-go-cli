@@ -548,3 +548,37 @@ func TestQueryCLIGetGPU(t *testing.T) {
 		}
 	}, []string{"cmd", "query", "-a", "gpu_vendor:nvidia", "-x", "gpu_product"})
 }
+
+// https://github.com/michaeljs1990/collins-go-cli/issues/50
+func TestQueryIssue50(t *testing.T) {
+	client := setup()
+	monkey.Patch(getCollinsClient, func(c *cli.Context) *collins.Client {
+		return client
+	})
+	defer teardown()
+
+	SetupGET(201, "/api/assets", "assets/TestQueryIssue50.json", t)
+
+	queryContext(func(ctx *cli.Context) {
+		c, o, w := captureStdout()
+		err := queryRunCommand(ctx)
+		result := returnStdout(c, o, w)
+		if err != nil {
+			t.Error(err.Error())
+		}
+
+		rows := map[int][]string{
+			0: []string{"tag30", "", "", "New", "", "", "", "0"},
+			1: []string{"tag31", "", "", "New", "", "", "", "80 TB"},
+		}
+
+		for i, line := range strings.Split(result, "\n") {
+			parts := strings.Split(line, "\t")
+			for idx, value := range parts {
+				if strings.TrimSpace(value) != rows[i][idx] {
+					t.Error("Expected ", value, " got ", rows[i][idx])
+				}
+			}
+		}
+	}, []string{"cmd", "query", "-x", "disk_storage_human"})
+}

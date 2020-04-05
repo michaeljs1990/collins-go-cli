@@ -53,4 +53,10 @@ func TestBytesToHumanSize(t *testing.T) {
 	if out != "1.3 PB" {
 		t.Error("Bytes to human was suppose to be 1.3 PB but was " + out)
 	}
+
+	// I don't want to support this use case
+	out = BytesToHumanSize(146163105792000000000000000000000)
+	if out != "115.3 Unknown" {
+		t.Error("Bytes to human was suppose to be 115.3 Unknown but was " + out)
+	}
 }

@@ -41,6 +41,7 @@ go_test(
         "assets/TestQueryCLIBasicWorkflow.json",
         "assets/TestQueryCLIGetByAttribute.json",
         "assets/TestQueryCLIGetGPU.json",
+        "assets/TestQueryIssue50.json",
     ],
     embed = ["//collins/commands:library"],
     deps = [

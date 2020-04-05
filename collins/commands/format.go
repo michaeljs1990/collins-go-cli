@@ -26,11 +26,11 @@ func formatAssets(format string, separator string, showHeaders bool, url string,
 	}
 }
 
-func emptyOrValue(sliceSize int, fn func() string) string {
+func emptyOrValue(sliceSize int, def string, fn func() string) string {
 	if sliceSize > 0 {
 		return fn()
 	} else {
-		return ""
+		return def
 	}
 }
 
@@ -65,7 +65,7 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 	case "ipmi_username":
 		return asset.IPMI.Username
 	case "ip_address":
-		return emptyOrValue(len(asset.Addresses), func() string {
+		return emptyOrValue(len(asset.Addresses), "", func() string {
 			ips := []string{}
 			for _, address := range asset.Addresses {
 				ips = append(ips, address.Address)
@@ -73,47 +73,47 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 			return strings.Join(ips, ",")
 		})
 	case "cpu_cores":
-		return emptyOrValue(len(asset.CPUs), func() string {
+		return emptyOrValue(len(asset.CPUs), "0", func() string {
 			return strconv.Itoa(asset.CPUs[0].Cores * len(asset.CPUs))
 		})
 	case "gpu_count":
-		return emptyOrValue(len(asset.GPUs), func() string {
+		return emptyOrValue(len(asset.GPUs), "0", func() string {
 			return strconv.Itoa(len(asset.GPUs))
 		})
 	case "cpu_threads":
-		return emptyOrValue(len(asset.CPUs), func() string {
+		return emptyOrValue(len(asset.CPUs), "0", func() string {
 			return strconv.Itoa(asset.CPUs[0].Threads * len(asset.CPUs))
 		})
 	case "cpu_speed_ghz":
-		return emptyOrValue(len(asset.CPUs), func() string {
+		return emptyOrValue(len(asset.CPUs), "0", func() string {
 			return strconv.FormatFloat(float64(asset.CPUs[0].SpeedGhz), 'f', 4, 32)
 		})
 	case "cpu_description":
-		return emptyOrValue(len(asset.CPUs), func() string {
+		return emptyOrValue(len(asset.CPUs), "", func() string {
 			return asset.CPUs[0].Description
 		})
 	case "gpu_description":
-		return emptyOrValue(len(asset.GPUs), func() string {
+		return emptyOrValue(len(asset.GPUs), "", func() string {
 			return asset.GPUs[0].Description
 		})
 	case "cpu_product":
-		return emptyOrValue(len(asset.CPUs), func() string {
+		return emptyOrValue(len(asset.CPUs), "", func() string {
 			return asset.CPUs[0].Product
 		})
 	case "gpu_product":
-		return emptyOrValue(len(asset.GPUs), func() string {
+		return emptyOrValue(len(asset.GPUs), "", func() string {
 			return asset.GPUs[0].Product
 		})
 	case "cpu_vendor":
-		return emptyOrValue(len(asset.CPUs), func() string {
+		return emptyOrValue(len(asset.CPUs), "", func() string {
 			return asset.CPUs[0].Vendor
 		})
 	case "gpu_vendor":
-		return emptyOrValue(len(asset.GPUs), func() string {
+		return emptyOrValue(len(asset.GPUs), "", func() string {
 			return asset.GPUs[0].Vendor
 		})
 	case "memory_size_bytes":
-		return emptyOrValue(len(asset.Memory), func() string {
+		return emptyOrValue(len(asset.Memory), "0", func() string {
 			bytes := 0
 			for _, v := range asset.Memory {
 				bytes = bytes + v.Size
@@ -121,7 +121,7 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 			return strconv.Itoa(bytes)
 		})
 	case "memory_size_total":
-		return emptyOrValue(len(asset.Memory), func() string {
+		return emptyOrValue(len(asset.Memory), "0", func() string {
 			var size float64
 			format := ""
 			for _, v := range asset.Memory {
@@ -133,15 +133,15 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 			return strconv.FormatFloat(size, 'f', 2, 64) + " " + format
 		})
 	case "memory_description":
-		return emptyOrValue(len(asset.Memory), func() string {
+		return emptyOrValue(len(asset.Memory), "", func() string {
 			return asset.Memory[0].Description
 		})
 	case "memory_banks_total":
-		return emptyOrValue(len(asset.Memory), func() string {
+		return emptyOrValue(len(asset.Memory), "0", func() string {
 			return strconv.Itoa(len(asset.Memory))
 		})
 	case "disk_storage_human":
-		return emptyOrValue(len(asset.Disks), func() string {
+		return emptyOrValue(len(asset.Disks), "0", func() string {
 			var size float64
 			for _, v := range asset.Disks {
 				size = size + float64(v.Size)
@@ -150,7 +150,7 @@ func fieldToAssetStruct(field string, asset collins.Asset) string {
 			return BytesToHumanSize(size)
 		})
 	case "disk_types":
-		return emptyOrValue(len(asset.Disks), func() string {
+		return emptyOrValue(len(asset.Disks), "", func() string {
 			disks := UniqueOrderedSet{}
 			for _, v := range asset.Disks {
 				disks = disks.Add(v.Description)
