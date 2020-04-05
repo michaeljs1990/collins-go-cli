@@ -13,7 +13,7 @@ golang.org/x/crypto/ssh/terminal
 # golang.org/x/sys v0.0.0-20190412213103-97732733099d
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# gopkg.in/tumblr/go-collins.v0 v0.0.0-20190208222215-7e5500a55e4d => github.com/michaeljs1990/go-collins v0.0.0-20190313043714-4d26a207b59e
+# gopkg.in/tumblr/go-collins.v0 v0.0.0-20190208222215-7e5500a55e4d => github.com/michaeljs1990/go-collins v0.0.0-20200405034455-daf3b4014fd6
 gopkg.in/tumblr/go-collins.v0/collins
 gopkg.in/tumblr/go-collins.v0/collins/sseclient
 # gopkg.in/yaml.v2 v2.2.2

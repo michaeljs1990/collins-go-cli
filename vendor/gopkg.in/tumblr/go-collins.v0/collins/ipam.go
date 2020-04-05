@@ -47,7 +47,8 @@ type AddressUpdateOpts struct {
 // AddressDeleteOpts contain options that are available when deleting an
 // address.
 type AddressDeleteOpts struct {
-	Pool string `url:"pool,omitempty"`
+	Pool    string `url:"pool,omitempty"`
+	Address string `url:"address,omitempty"`
 }
 
 // IPAMService.Allocate allocates one or more address to an asset. Pool can be

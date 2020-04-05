@@ -19,6 +19,8 @@ github.com/michaeljs1990/cli v1.20.1-0.20190128030917-b0494d5188b4 h1:b/8DnC9Cnc
 github.com/michaeljs1990/cli v1.20.1-0.20190128030917-b0494d5188b4/go.mod h1:YJXLzzMu1s99OObeSHv4l6vfcCHA15r5XTg8xoEAoaM=
 github.com/michaeljs1990/go-collins v0.0.0-20190313043714-4d26a207b59e h1:WVzrAv6IYlyuYagS59l7CVQQsyJ3X4wDHlEKM9G9FZo=
 github.com/michaeljs1990/go-collins v0.0.0-20190313043714-4d26a207b59e/go.mod h1:1YiHfliY28Fo9DBKioooRKj4f1ur+rI+TvGGm5ie6XE=
+github.com/michaeljs1990/go-collins v0.0.0-20200405034455-daf3b4014fd6 h1:IExO7Bsy7B7hMJOdkzFCZvpCkXcwykA4rOuwrG/KjlM=
+github.com/michaeljs1990/go-collins v0.0.0-20200405034455-daf3b4014fd6/go.mod h1:1YiHfliY28Fo9DBKioooRKj4f1ur+rI+TvGGm5ie6XE=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/schallert/iso8601 v0.0.0-20151102174922-d51701471974 h1:MlG1dDfLMkUe5bVS4ImeF9dDLqdi+Zs30kHeBLvehO0=

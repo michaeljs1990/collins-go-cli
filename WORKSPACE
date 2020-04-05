@@ -118,7 +118,7 @@ go_repository(
     name = "in_gopkg_tumblr_go_collins_v0",
     importpath = "gopkg.in/tumblr/go-collins.v0",
     remote = "https://github.com/michaeljs1990/go-collins",
-    commit = "4d26a207b59ebe9ae630134a8a759673261936ec",
+    commit = "daf3b4014fd660702454605ab6c08d7b903a9851",
     vcs = "git",
 )
 
