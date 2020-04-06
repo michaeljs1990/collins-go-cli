@@ -64,12 +64,21 @@ func BytesToHumanSize(size float64) string {
 	getSize := Round(math.Pow(1024, base-math.Floor(base)), .5, 2)
 
 	var getSuffix string
-	if int(math.Floor(base)) > len(suffix) {
+	if size == 0 {
+		// We use math.Log of size to get the base. In the case that size is 0
+		// math.Log is undefined and returns -Infinity. This handles that edge
+		// case by manually setting the suffix to the first one.
+		getSuffix = suffix[0]
+	} else if int(math.Floor(base)) > len(suffix) {
 		// Wow you have more than a YB of storage/memory good for you
 		// your asset likely is messed up :P
 		getSuffix = "Unknown"
 	} else {
 		getSuffix = suffix[int(math.Floor(base))]
+	}
+
+	if size == 0 {
+		return "0 " + string(getSuffix)
 	}
 
 	return strconv.FormatFloat(getSize, 'f', -1, 64) + " " + string(getSuffix)

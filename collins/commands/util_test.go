@@ -24,7 +24,12 @@ func TestUniqueOrderedSet(t *testing.T) {
 }
 
 func TestBytesToHumanSize(t *testing.T) {
-	out := BytesToHumanSize(12)
+	out := BytesToHumanSize(0)
+	if out != "0 B" {
+		t.Error("Bytes to human was suppose to be 0 B but was " + out)
+	}
+
+	out = BytesToHumanSize(12)
 	if out != "12 B" {
 		t.Error("Bytes to human was suppose to be 12 B but was " + out)
 	}
