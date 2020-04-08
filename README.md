@@ -1,9 +1,8 @@
-Collins Golang CLI
-==================
+<h1 align="center">Collins CLI</h1>
 
-Command line interface for interacting with https://tumblr.github.io/collins/
+<p align="center">Command line interface for interacting with https://tumblr.github.io/collins/</p>
 
-## Install
+### Install
 
 You can always install from the releases page on github or if you want you can also stay up to date
 using the `go get` method. My server can be a little slow sometimes but it works just fine if you wait.
@@ -12,7 +11,7 @@ using the `go get` method. My server can be a little slow sometimes but it works
 go get -u cgit.xrt0x.com/xrt0x/collins-go-cli/cmd/collins
 ```
 
-## Config file
+### Config file
 
 In order to talk to collins you will need to create a `~/.collins.yml` file with the following fields.
 
@@ -25,11 +24,11 @@ password: test
 **NOTE**: if you do not have the password saved in `~/.collins.yml`, the client will prompt for a password
 at runtime. But, this will error and fail, if the collins command is being piped from one collins command to next.
 
-## Documentation
+### Documentation
 
 All docs can be found in markdown under `collins/docs/`.
 
-## Development
+### Development
 
 You can easily build this by cloning the repo and running `go build -mod=vendor ./cmd/collins`. Additionally
 the most recent tags will have binaries uploaded for most common and some uncommon platforms
