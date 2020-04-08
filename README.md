@@ -2,6 +2,8 @@
 
 <p align="center">Command line interface for interacting with https://tumblr.github.io/collins/</p>
 
+<br/>
+
 ### Install
 
 You can always install from the releases page on github or if you want you can also stay up to date
