@@ -59,6 +59,11 @@ func ProvisionSubcommand() cli.Command {
 				Usage:    "Tags to work on, comma separated",
 				Category: "Provision options",
 			},
+			cli.StringSliceFlag{
+				Name:     "a, set-attribute",
+				Usage:    "Set attribute=value. : between key and value. attribute will be uppercased",
+				Category: "Modify options",
+			},
 		},
 		Action: provisionRunCommand,
 	}
@@ -83,6 +88,8 @@ func provisionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 	}
 
 	opts := provisionMakeOpts(ctx, tag)
+	attrs := attributeUpdateOpts(ctx)
+
 	profile := ctx.String("nodeclass")
 	contact := ctx.String("build-contact")
 	msg := tag + " provisioning with nodeclass:" + profile + " by " + contact + "... "
@@ -94,6 +101,22 @@ func provisionByTag(ctx *cli.Context, col *collins.Client, tag string) {
 		printError(err.Error())
 	} else {
 		printSuccess()
+	}
+
+	// Apply the options that we have set and try to output it in some kind
+	// of sane format for users to see what applied and what did not.
+	for _, attr := range attrs {
+		attrSplit := strings.SplitN(attr.Attribute, ";", 2)
+		msg := tag + " setting " + strings.Join(attrSplit, "=") + " ... "
+		fmt.Print(msg)
+
+		_, err := col.Assets.Update(tag, &attr)
+		if err != nil {
+			gotError = true
+			printError(err.Error())
+		} else {
+			printSuccess()
+		}
 	}
 }
 
