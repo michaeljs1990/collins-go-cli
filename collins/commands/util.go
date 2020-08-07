@@ -102,6 +102,11 @@ func getCollinsClient(c *cli.Context) *collins.Client {
 		}
 		collins.Password = string(bytePassword)
 	}
+
+	if collins.User == "" {
+		fmt.Println("No username is set for this request it will fail.")
+	}
+
 	if err != nil {
 		fmt.Println("You can use COLLINS_CLIENT_CONFIG env or --config to set the location of your config")
 		logAndDie(err.Error())
