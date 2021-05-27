@@ -6,12 +6,7 @@
 
 ### Install
 
-You can always install from the releases page on github or if you want you can also stay up to date
-using the `go get` method. My server can be a little slow sometimes but it works just fine if you wait.
-
-```
-go get -u cgit.xrt0x.com/xrt0x/collins-go-cli/cmd/collins
-```
+Checkout the github releases page.
 
 ### Config file
 
